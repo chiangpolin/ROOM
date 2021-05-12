@@ -1,0 +1,11 @@
+body {
+  margin: 0;
+}
+
+canvas {
+  background-color: grey;
+}
+
+#root {
+  background-color: grey;
+}
