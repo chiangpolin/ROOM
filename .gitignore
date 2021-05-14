@@ -103,7 +103,7 @@ dist
 # TernJS port file
 .tern-port
 
-## redux
+## react-redux
 # dependencies
 /node_modules
 /.pnp
@@ -121,8 +121,4 @@ dist
 .env.development.local
 .env.test.local
 .env.production.local
-
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
 
