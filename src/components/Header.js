@@ -1,30 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 
-const SearchBox = styled.form`
-  position: static;
-  padding: 0 20px 0 0;
-  width: 214px;
-  height: 40px;
-`;
-
-const SearchInput = styled.input`
-  position: static;
-  padding: 0 15px;
-  width: 100%;
-  height: 100%;
-  font-size: 16px;
-  border: 1px solid #979797;
-  border-radius: 20px;
-  background-position: top 5px right 5px;
-  background-size: 32px;
-  background-repeat: no-repeat;
-
-  :focus {
-    outline: none;
-  }
-`;
-
 const Navbar = styled.div`
   position: fixed;
   top: 0;
@@ -33,19 +9,21 @@ const Navbar = styled.div`
   align-items: center;
   justify-content: center;
   width: 100%;
-  height: 140px;
-  border-bottom: 40px solid #313538;
+  height: 60px;
+  border-bottom: 1px solid black;
   background-color: #ffffff;
 `;
 
 const NavbarBrand = styled.div`
   position: relative;
   z-index: 30;
+  display: flex;
+  align-items: center;
   margin: 0 auto 0 50px;
 `;
 
-const Logo = styled.img`
-  height: 48px;
+const Title = styled.h1`
+  margin: 0 0 0 15px;
 `;
 
 function Header() {
@@ -53,13 +31,17 @@ function Header() {
     <header>
       <Navbar>
         <NavbarBrand>
-          <a href="/">
-            <Logo />
-          </a>
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="32"
+            height="32"
+            fill="currentColor"
+            viewBox="0 0 16 16"
+          >
+            <path d="M8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4.5a.5.5 0 0 0 .5-.5v-4h2v4a.5.5 0 0 0 .5.5H14a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146zM2.5 14V7.707l5.5-5.5 5.5 5.5V14H10v-4a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 0-.5.5v4H2.5z" />
+          </svg>
+          <Title>ROOM</Title>
         </NavbarBrand>
-        <SearchBox>
-          <SearchInput type="text" name="tag" autoComplete="off" />
-        </SearchBox>
       </Navbar>
     </header>
   );

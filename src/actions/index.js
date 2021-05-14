@@ -2,6 +2,7 @@
 export const SET_USER = 'SET_USER';
 export const SET_PROJECTS = 'SET_PROJECTS';
 export const SET_PROJECT = 'SET_PROJECT';
+export const UPDATE_GROUPS = 'UPDATE_GROUPS';
 
 // actions
 export const setUser = (user) => ({
@@ -15,4 +16,8 @@ export const setProjects = (projects) => ({
 export const setProject = (project) => ({
   type: 'SET_PROJECT',
   project,
+});
+export const updateGroups = (group) => ({
+  type: 'UPDATE_GROUPS',
+  group,
 });
