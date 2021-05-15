@@ -3,6 +3,7 @@ export const SET_USER = 'SET_USER';
 export const SET_PROJECTS = 'SET_PROJECTS';
 export const SET_PROJECT = 'SET_PROJECT';
 export const UPDATE_GROUPS = 'UPDATE_GROUPS';
+export const CLICK_RENDER = 'CLICK_RENDER';
 
 // actions
 export const setUser = (user) => ({
@@ -20,4 +21,7 @@ export const setProject = (project) => ({
 export const updateGroups = (group) => ({
   type: 'UPDATE_GROUPS',
   group,
+});
+export const clickRender = () => ({
+  type: 'CLICK_RENDER',
 });

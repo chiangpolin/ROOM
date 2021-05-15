@@ -7,7 +7,7 @@ import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 
 const RenderingRiv = styled.div`
   width: 100%;
-  height: 600px;
+  height: 100%;
   background-color: grey;
 `;
 
@@ -37,7 +37,7 @@ function Rendering() {
       50,
       sizes.width / sizes.height,
       0.1,
-      1000
+      10000
     );
     camera.position.set(-500, 500, -500);
 
@@ -58,16 +58,9 @@ function Rendering() {
     controls.update();
 
     // onResize
-    window.addEventListener('resize', () => {
-      sizes.width = ref.current.clientWidth;
-      sizes.height = ref.current.clientHeight;
-
-      camera.aspect = sizes.width / sizes.height;
-      camera.updateProjectionMatrix();
-
-      renderer.setSize(sizes.width, sizes.height);
-      renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    });
+    window.addEventListener('resize', () =>
+      resizeRendering(ref, sizes, camera, renderer)
+    );
 
     const animate = function () {
       requestAnimationFrame(animate);
@@ -77,11 +70,26 @@ function Rendering() {
     animate();
 
     return () => {
-      ref.current.removeChild(ref.current.children[0]);
+      // ref.current.removeChild(ref.current.children[0]);
     };
   }, [groups]);
 
   return <RenderingRiv ref={ref} />;
+}
+
+function resizeRendering(ref, sizes, camera, renderer) {
+  if (ref.current === null) {
+    return;
+  }
+
+  sizes.width = ref.current.clientWidth;
+  sizes.height = ref.current.clientHeight;
+
+  camera.aspect = sizes.width / sizes.height;
+  camera.updateProjectionMatrix();
+
+  renderer.setSize(sizes.width, sizes.height);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
 }
 
 function loadModel(loader, url) {
@@ -91,7 +99,7 @@ function loadModel(loader, url) {
 }
 
 async function setModel(scene, loader, obj) {
-  const modelPath = await import(`../../models/${obj.file.gltfPath}`);
+  const modelPath = await import(`../../static/models/${obj.file.gltfPath}`);
   const model = await loadModel(loader, modelPath.default);
   const group = new THREE.Group();
   for (const [key, mesh] of Object.entries(model)) {

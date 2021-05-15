@@ -4,6 +4,9 @@ const initialState = {
   share_id: [],
   groups: [],
   isFetched: false,
+  render: {
+    isClicked: false,
+  },
 };
 
 const projectReducer = (state = initialState, action) => {
@@ -33,6 +36,14 @@ const projectReducer = (state = initialState, action) => {
           }
           return group;
         }),
+      };
+
+    case 'CLICK_RENDER':
+      return {
+        ...state,
+        render: {
+          isClicked: !state.render.isClicked,
+        },
       };
 
     default:

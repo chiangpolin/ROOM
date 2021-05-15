@@ -1,13 +1,13 @@
 import React, {useEffect, useRef} from 'react';
 import {useSelector} from 'react-redux';
 import {store} from '../../app/store';
-import {updateGroups} from '../../actions/index';
+import {updateGroups} from '../../app/actions/index';
 import styled from 'styled-components';
 import * as PIXI from 'pixi.js';
 
 const ProjectCanvasDiv = styled.div`
   width: 100%;
-  height: 600px;
+  height: 100%;
   background-color: lightgrey;
 `;
 
@@ -30,6 +30,8 @@ function ProjectCanvas() {
     });
     app.stage.x = app.renderer.width * 0.5;
     app.stage.y = app.renderer.height * 0.5;
+    app.stage.scale.x = 0.5;
+    app.stage.scale.y = 0.5;
     ref.current.appendChild(app.view);
 
     for (let i = 0; i < groups.length; i++) {
@@ -37,24 +39,33 @@ function ProjectCanvas() {
     }
 
     // onResize
-    window.addEventListener('resize', () => {
-      sizes.width = ref.current.clientWidth;
-      sizes.height = ref.current.clientHeight;
+    window.addEventListener('resize', () => resizeCanvas(ref, sizes, app));
 
-      app.renderer.resize(sizes.width, sizes.height);
-      app.stage.x = app.renderer.width * 0.5;
-      app.stage.y = app.renderer.height * 0.5;
-    });
     return () => {
       app.destroy(true, true);
+      window.removeEventListener('resize', () => resizeCanvas(ref, sizes, app));
     };
   }, []);
 
   return <ProjectCanvasDiv ref={ref} />;
 }
 
+function resizeCanvas(ref, sizes, app) {
+  if (ref.current === null) {
+    return;
+  }
+  sizes.width = ref.current.clientWidth;
+  sizes.height = ref.current.clientHeight;
+
+  app.renderer.resize(sizes.width, sizes.height);
+  app.stage.x = app.renderer.width * 0.5;
+  app.stage.y = app.renderer.height * 0.5;
+}
+
 async function createCanvasElement(app, obj) {
-  const svgPath = await import(`../../images/furnitures/${obj.file.svgPath}`);
+  const svgPath = await import(
+    `../../static/images/furnitures/${obj.file.svgPath}`
+  );
   const texture = PIXI.Texture.from(svgPath.default);
   texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
 
