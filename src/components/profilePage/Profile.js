@@ -1,12 +1,12 @@
 import React, {useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
+import {initFirebase, getUser, getProjects} from '../../app/utils/firebase.js';
+import {setUser, setProjects} from '../../app/actions/index';
 import styled from 'styled-components';
-import {initFirebase, getUser, getProjects} from '../../utils/firebase.js';
-import {setUser, setProjects} from '../../actions/index';
 
 const Main = styled.main`
-  margin-top: 140px;
-  padding: 30px 30px;
+  margin-top: 60px;
+  padding: 30px 50px;
 `;
 
 function Profile() {
