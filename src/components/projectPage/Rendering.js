@@ -8,7 +8,7 @@ import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 const RenderingRiv = styled.div`
   width: 100%;
   height: 100%;
-  background-color: grey;
+  background-color: #81c7d4;
 `;
 
 function Rendering() {
@@ -26,10 +26,10 @@ function Rendering() {
     };
 
     // Lights
-    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+    const directionalLight = new THREE.DirectionalLight(0xffffff, 0.2);
     scene.add(directionalLight);
 
-    const light = new THREE.HemisphereLight(0xffffbb, 0x080820, 1);
+    const light = new THREE.HemisphereLight(0xffffd5, 0x080820, 1);
     scene.add(light);
 
     // Camera
@@ -39,7 +39,7 @@ function Rendering() {
       0.1,
       10000
     );
-    camera.position.set(-500, 500, -500);
+    camera.position.set(-300, 300, 600);
 
     // Renderer
     const renderer = new THREE.WebGLRenderer({alpha: true});
@@ -49,6 +49,11 @@ function Rendering() {
 
     // Loader
     const loader = new GLTFLoader();
+    setModel(scene, loader, {
+      file: {gltfPath: 'room.gltf'},
+      position: {x: 0, y: 0},
+      rotation: {angle: 0},
+    });
     for (let i = 0; i < groups.length; i++) {
       setModel(scene, loader, groups[i]);
     }
@@ -71,6 +76,9 @@ function Rendering() {
 
     return () => {
       // ref.current.removeChild(ref.current.children[0]);
+      window.removeEventListener('resize', () =>
+        resizeRendering(ref, sizes, camera, renderer)
+      );
     };
   }, [groups]);
 
@@ -81,7 +89,6 @@ function resizeRendering(ref, sizes, camera, renderer) {
   if (ref.current === null) {
     return;
   }
-
   sizes.width = ref.current.clientWidth;
   sizes.height = ref.current.clientHeight;
 
@@ -106,7 +113,8 @@ async function setModel(scene, loader, obj) {
     group.add(mesh);
   }
   group.scale.set(1, 1, 1);
-  group.position.set(obj.position.y, 0, -obj.position.x);
+  group.position.set(obj.position.x, 0, obj.position.y);
+  group.rotation.set(0, -(obj.rotation.angle * Math.PI) / 180, 0);
   scene.add(group);
 }
 

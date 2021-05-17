@@ -4,6 +4,7 @@ import {store} from '../../app/store';
 import {updateGroups} from '../../app/actions/index';
 import styled from 'styled-components';
 import * as PIXI from 'pixi.js';
+import {SVGScene} from '@pixi-essentials/svg';
 
 const ProjectCanvasDiv = styled.div`
   width: 100%;
@@ -30,13 +31,20 @@ function ProjectCanvas() {
     });
     app.stage.x = app.renderer.width * 0.5;
     app.stage.y = app.renderer.height * 0.5;
-    app.stage.scale.x = 0.5;
-    app.stage.scale.y = 0.5;
+    app.stage.scale.x = 1;
+    app.stage.scale.y = 1;
     ref.current.appendChild(app.view);
 
+    createRoom(app, {
+      file: {svgPath: 'room.svg'},
+      position: {x: 0, y: 0},
+      rotation: {angle: 0},
+      dimension: {width: 500, height: 330},
+    });
     for (let i = 0; i < groups.length; i++) {
       createCanvasElement(app, groups[i]);
     }
+    // test(app);
 
     // onResize
     window.addEventListener('resize', () => resizeCanvas(ref, sizes, app));
@@ -62,10 +70,11 @@ function resizeCanvas(ref, sizes, app) {
   app.stage.y = app.renderer.height * 0.5;
 }
 
-async function createCanvasElement(app, obj) {
+async function createRoom(app, obj) {
   const svgPath = await import(
     `../../static/images/furnitures/${obj.file.svgPath}`
   );
+
   const texture = PIXI.Texture.from(svgPath.default);
   texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
 
@@ -77,6 +86,33 @@ async function createCanvasElement(app, obj) {
   element.id = obj.id;
   element.x = obj.position.x;
   element.y = obj.position.y;
+  element.width = obj.dimension.width;
+  element.height = obj.dimension.height;
+  element.angle = obj.rotation.angle;
+
+  app.stage.addChild(element);
+}
+
+async function createCanvasElement(app, obj) {
+  console.log(obj);
+  const svgPath = await import(
+    `../../static/images/furnitures/${obj.file.svgPath}`
+  );
+
+  const texture = PIXI.Texture.from(svgPath.default);
+  texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
+
+  const element = new PIXI.Sprite(texture);
+  element.interactive = true;
+  element.buttonMode = true;
+  element.anchor.set(0.5);
+  element.scale.set(1);
+  element.id = obj.id;
+  element.x = obj.position.x;
+  element.y = obj.position.y;
+  element.width = obj.dimension.width;
+  element.height = obj.dimension.height;
+  element.angle = obj.rotation.angle;
   element
     .on('pointerdown', onDragStart)
     .on('pointerup', onDragEnd)
@@ -105,6 +141,17 @@ function onDragMove() {
     this.x = newPosition.x;
     this.y = newPosition.y;
   }
+}
+
+async function test(app) {
+  const svgPayload = await fetch(
+    'https://upload.wikimedia.org/wikipedia/commons/f/fa/De_Groot_academic_genealogy.svg'
+  ).then((data) => data.text());
+  const svgDOM = new DOMParser().parseFromString(svgPayload, 'image/svg+xml');
+  const svgEl = svgDOM.documentElement;
+  const viewport = app.stage.addChild(new PIXI.Container());
+  viewport.addChild(new SVGScene(svgEl));
+  app.renderer.render(app.stage);
 }
 
 export {ProjectCanvas};
