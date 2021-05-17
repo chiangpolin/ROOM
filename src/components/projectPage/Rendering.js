@@ -5,7 +5,7 @@ import * as THREE from 'three';
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 
-const RenderingRiv = styled.div`
+const RenderingDiv = styled.div`
   width: 100%;
   height: 100%;
   background-color: #81c7d4;
@@ -82,7 +82,7 @@ function Rendering() {
     };
   }, [groups]);
 
-  return <RenderingRiv ref={ref} />;
+  return <RenderingDiv ref={ref} />;
 }
 
 function resizeRendering(ref, sizes, camera, renderer) {
