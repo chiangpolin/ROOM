@@ -1,7 +1,7 @@
 import React, {useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
 import {setProject, clickRender} from '../../app/actions/index';
-import {initFirebase, getProject} from '../../app/utils/firebase.js';
+import {getProject} from '../../app/utils/firebase.js';
 import {Rendering} from './Rendering.js';
 import {ProjectCanvas} from './ProjectCanvas.js';
 import {Sidebar} from './Sidebar.js';
@@ -45,7 +45,6 @@ function Project() {
   const project = useSelector((state) => state.project);
 
   useEffect(() => {
-    initFirebase();
     getProject('nVf5KIs32HDo5w5XYXrT').then((project) => {
       dispatch(setProject(project));
     });

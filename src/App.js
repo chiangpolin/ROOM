@@ -9,13 +9,12 @@ function App() {
   return (
     <Router>
       <div className="App">
+        <Header />
         <Switch>
           <Route path="/project">
-            <Header />
             <Project />
           </Route>
           <Route path="/profile">
-            <Header />
             <Profile />
           </Route>
           <Route path="/">

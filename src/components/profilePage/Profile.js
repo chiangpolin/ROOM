@@ -1,12 +1,40 @@
 import React, {useEffect} from 'react';
 import {useSelector, useDispatch} from 'react-redux';
-import {initFirebase, getUser, getProjects} from '../../app/utils/firebase.js';
+import {getUser, getProjects} from '../../app/utils/firebase.js';
 import {setUser, setProjects} from '../../app/actions/index';
+import {Sidebar} from './Sidebar.js';
 import styled from 'styled-components';
 
 const Main = styled.main`
-  margin-top: 60px;
-  padding: 30px 50px;
+  display: flex;
+  height: 100%;
+  padding-top: 60px;
+`;
+
+const Section = styled.section`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 300px);
+  padding: 30px 30px;
+`;
+
+const SideInfo = styled.div`
+  width: 240px;
+  border-right: 1px solid #1c1c1c;
+  padding: 15px 30px;
+`;
+
+const Container = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 15px 15px;
+`;
+
+const Item = styled.div`
+  width: 100%;
+  height: 150px;
+  background-color: #bdc0ba;
 `;
 
 function Profile() {
@@ -14,7 +42,6 @@ function Profile() {
   const profile = useSelector((state) => state.profile);
 
   useEffect(() => {
-    initFirebase();
     const fetchData = async () => {
       const [user, projects] = await Promise.all([
         getUser('KDXfrqkWaNIxctL9LZHd'),
@@ -30,13 +57,24 @@ function Profile() {
 
   return (
     <Main>
-      <div>{profile.name}</div>
-      <div>{profile.email}</div>
-      <section>
+      <Sidebar />
+      <SideInfo>
+        <div>{profile.name}</div>
+        <div>{profile.email}</div>
         {profile.projects.map((project, index) => (
           <p key={index}>{project.data.name}</p>
         ))}
-      </section>
+      </SideInfo>
+      <Section>
+        <Container>
+          <Item></Item>
+          <Item></Item>
+          <Item></Item>
+          <Item></Item>
+          <Item></Item>
+          <Item></Item>
+        </Container>
+      </Section>
     </Main>
   );
 }
