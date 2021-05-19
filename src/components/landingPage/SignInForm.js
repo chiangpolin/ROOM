@@ -1,5 +1,6 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled from 'styled-components';
+import {getUserId} from '../../app/utils/firebase.js';
 
 const Form = styled.div`
   display: flex;
@@ -18,12 +19,10 @@ const Form = styled.div`
   }
 `;
 
-const InputDiv = styled.div`
+const InputDiv = styled.label`
   margin: 5px;
-  p {
-    font-size: 14px;
-    color: #fffffb;
-  }
+  font-size: 16px;
+  color: #fffffb;
 `;
 
 const Input = styled.input`
@@ -47,7 +46,7 @@ const ButtonDiv = styled.div`
   margin: 5px;
 `;
 
-const ApiButtonDiv = styled.div`
+const ApiDiv = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 5px 5px;
@@ -72,26 +71,32 @@ const Button = styled.button`
     background-color: #fffffb;
   }
 `;
-
 function SignInForm() {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   return (
     <Form>
       <InputDiv>
-        <p>Name</p>
-        <Input></Input>
+        Email
+        <Input
+          type="text"
+          value={email}
+          onChange={(event) => handleChange(event, setEmail)}
+        ></Input>
       </InputDiv>
       <InputDiv>
-        <p>Email</p>
-        <Input></Input>
-      </InputDiv>
-      <InputDiv>
-        <p>Password</p>
-        <Input></Input>
+        Password
+        <Input
+          type="text"
+          value={password}
+          onChange={(event) => handleChange(event, setPassword)}
+        ></Input>
       </InputDiv>
       <ButtonDiv>
-        <Button>Sign Up</Button>
+        <Button onClick={() => handleSubmit(email)}>Sign In</Button>
       </ButtonDiv>
-      <ApiButtonDiv>
+      <ApiDiv>
         <Button>
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -116,9 +121,24 @@ function SignInForm() {
           </svg>
           <p>Facebook</p>
         </Button>
-      </ApiButtonDiv>
+      </ApiDiv>
     </Form>
   );
+}
+
+async function handleSubmit(email) {
+  const id = await getUserId(email);
+  if (id) {
+    localStorage.setItem('user_id', id);
+    window.location.href = './profile';
+  } else {
+    console.log('id not exist');
+    return;
+  }
+}
+
+function handleChange(event, setValue) {
+  setValue(event.target.value);
 }
 
 export {SignInForm};

@@ -1,11 +1,11 @@
-import React, {useEffect} from 'react';
+import React, {useState, useEffect} from 'react';
+import styled from 'styled-components';
 import {useSelector, useDispatch} from 'react-redux';
-import {setProject, clickRender} from '../../app/actions/index';
+import {setProject} from '../../app/actions/index';
 import {getProject} from '../../app/utils/firebase.js';
 import {Rendering} from './Rendering.js';
 import {ProjectCanvas} from './ProjectCanvas.js';
 import {Sidebar} from './Sidebar.js';
-import styled from 'styled-components';
 
 const Main = styled.main`
   display: flex;
@@ -42,10 +42,12 @@ const RenderButton = styled.button`
 
 function Project() {
   const dispatch = useDispatch();
+  const profile = useSelector((state) => state.profile);
   const project = useSelector((state) => state.project);
+  const [renderIsClicked, handleClickRender] = useState(false);
 
   useEffect(() => {
-    getProject('nVf5KIs32HDo5w5XYXrT').then((project) => {
+    getProject(profile.selectedProject.id).then((project) => {
       dispatch(setProject(project));
     });
   }, []);
@@ -54,8 +56,8 @@ function Project() {
     <Main>
       <Sidebar />
       <Section>
-        {project.render.isClicked ? <Rendering /> : <ProjectCanvas />}
-        <RenderButton onClick={() => dispatch(clickRender())}>
+        {renderIsClicked ? <Rendering /> : <ProjectCanvas />}
+        <RenderButton onClick={() => handleClickRender(!renderIsClicked)}>
           <svg
             xmlns="http://www.w3.org/2000/svg"
             width="32"

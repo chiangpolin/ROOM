@@ -1,7 +1,10 @@
 const initialState = {
-  name: 'User',
-  email: 'user@gmail.com',
+  name: '',
+  email: '',
   projects: [],
+  selectedProject: {id: '', name: '', author_id: '', isEditing: false},
+  sharedProjects: [],
+  filter: {shared: true, author: true},
 };
 
 const profileReducer = (state = initialState, action) => {
@@ -11,6 +14,47 @@ const profileReducer = (state = initialState, action) => {
 
     case 'SET_PROJECTS':
       return {...state, projects: action.projects};
+
+    case 'SET_SHARED_PROJECTS':
+      return {...state, sharedProjects: action.sharedProjects};
+
+    case 'FILTER_PROJECTS':
+      return {
+        ...state,
+        filter: {
+          shared: action.filter.shared,
+          author: action.filter.author,
+        },
+      };
+
+    case 'SELECT_PROJECT':
+      return {
+        ...state,
+        selectedProject: {
+          id: action.project.id,
+          name: action.project.name,
+          author_id: action.project.author_id,
+          isEditing: false,
+        },
+      };
+
+    case 'TOGGLE_EDIT_NAME':
+      return {
+        ...state,
+        selectedProject: {
+          ...state.selectedProject,
+          isEditing: !state.selectedProject.isEditing,
+        },
+      };
+
+    case 'UPDATE_EDIT_NAME':
+      return {
+        ...state,
+        selectedProject: {
+          ...state.selectedProject,
+          name: action.name,
+        },
+      };
 
     default:
       return state;

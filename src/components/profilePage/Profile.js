@@ -1,9 +1,16 @@
 import React, {useEffect} from 'react';
-import {useSelector, useDispatch} from 'react-redux';
-import {getUser, getProjects} from '../../app/utils/firebase.js';
-import {setUser, setProjects} from '../../app/actions/index';
-import {Sidebar} from './Sidebar.js';
 import styled from 'styled-components';
+import {useSelector, useDispatch} from 'react-redux';
+import {
+  getUser,
+  getProjects,
+  getSharedProjects,
+} from '../../app/utils/firebase.js';
+import {setUser, setProjects, setSharedProjects} from '../../app/actions/index';
+import {Sidebar} from './Sidebar.js';
+import {UserInfo} from './UserInfo.js';
+import {ProjectInfo} from './ProjectInfo.js';
+import {ProjectCard} from './ProjectCard.js';
 
 const Main = styled.main`
   display: flex;
@@ -15,14 +22,8 @@ const Section = styled.section`
   position: relative;
   display: flex;
   flex-direction: column;
-  width: calc(100% - 300px);
+  width: calc(100% - 360px);
   padding: 30px 30px;
-`;
-
-const SideInfo = styled.div`
-  width: 240px;
-  border-right: 1px solid #1c1c1c;
-  padding: 15px 30px;
 `;
 
 const Container = styled.div`
@@ -31,48 +32,53 @@ const Container = styled.div`
   grid-gap: 15px 15px;
 `;
 
-const Item = styled.div`
-  width: 100%;
-  height: 150px;
-  background-color: #bdc0ba;
-`;
-
 function Profile() {
   const dispatch = useDispatch();
   const profile = useSelector((state) => state.profile);
 
   useEffect(() => {
     const fetchData = async () => {
-      const [user, projects] = await Promise.all([
-        getUser('KDXfrqkWaNIxctL9LZHd'),
-        getProjects('KDXfrqkWaNIxctL9LZHd'),
+      const user_id = localStorage.getItem('user_id');
+      const [user, projects, sharedProjects] = await Promise.all([
+        getUser(user_id),
+        getProjects(user_id),
+        getSharedProjects(user_id),
       ]);
-      return {user, projects};
+      return {user, projects, sharedProjects};
     };
-    fetchData().then(({user, projects}) => {
+    fetchData().then(({user, projects, sharedProjects}) => {
       dispatch(setUser(user));
       dispatch(setProjects(projects));
+      dispatch(setSharedProjects(sharedProjects));
     });
   }, []);
 
   return (
     <Main>
       <Sidebar />
-      <SideInfo>
-        <div>{profile.name}</div>
-        <div>{profile.email}</div>
-        {profile.projects.map((project, index) => (
-          <p key={index}>{project.data.name}</p>
-        ))}
-      </SideInfo>
+      {profile.selectedProject.id === '' ? <UserInfo /> : <ProjectInfo />}
       <Section>
         <Container>
-          <Item></Item>
-          <Item></Item>
-          <Item></Item>
-          <Item></Item>
-          <Item></Item>
-          <Item></Item>
+          {profile.filter.author
+            ? profile.projects.map((project, index) => (
+                <ProjectCard
+                  key={project.id}
+                  id={project.id}
+                  name={project.data.name}
+                  author_id={project.data.author_id}
+                ></ProjectCard>
+              ))
+            : ''}
+          {profile.filter.shared
+            ? profile.sharedProjects.map((project, index) => (
+                <ProjectCard
+                  key={project.id}
+                  id={project.id}
+                  name={project.data.name}
+                  author_id={project.data.author_id}
+                ></ProjectCard>
+              ))
+            : ''}
         </Container>
       </Section>
     </Main>

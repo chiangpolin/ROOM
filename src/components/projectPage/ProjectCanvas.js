@@ -1,10 +1,10 @@
 import React, {useEffect, useRef} from 'react';
+import styled from 'styled-components';
 import {useSelector} from 'react-redux';
 import {store} from '../../app/store';
-import {updateGroups} from '../../app/actions/index';
-import styled from 'styled-components';
+import {updateGroup} from '../../app/actions/index';
 import * as PIXI from 'pixi.js';
-import {SVGScene} from '@pixi-essentials/svg';
+// import {SVGScene} from '@pixi-essentials/svg';
 
 const ProjectCanvasDiv = styled.div`
   width: 100%;
@@ -44,7 +44,6 @@ function ProjectCanvas() {
     for (let i = 0; i < groups.length; i++) {
       createCanvasElement(app, groups[i]);
     }
-    // test(app);
 
     // onResize
     window.addEventListener('resize', () => resizeCanvas(ref, sizes, app));
@@ -94,7 +93,6 @@ async function createRoom(app, obj) {
 }
 
 async function createCanvasElement(app, obj) {
-  console.log(obj);
   const svgPath = await import(
     `../../static/images/furnitures/${obj.file.svgPath}`
   );
@@ -132,7 +130,7 @@ function onDragEnd() {
   this.data = null;
   this.alpha = 1;
   this.dragging = false;
-  store.dispatch(updateGroups({id: this.id, position: {x: this.x, y: this.y}}));
+  store.dispatch(updateGroup({id: this.id, position: {x: this.x, y: this.y}}));
 }
 
 function onDragMove() {
@@ -143,15 +141,15 @@ function onDragMove() {
   }
 }
 
-async function test(app) {
-  const svgPayload = await fetch(
-    'https://upload.wikimedia.org/wikipedia/commons/f/fa/De_Groot_academic_genealogy.svg'
-  ).then((data) => data.text());
-  const svgDOM = new DOMParser().parseFromString(svgPayload, 'image/svg+xml');
-  const svgEl = svgDOM.documentElement;
-  const viewport = app.stage.addChild(new PIXI.Container());
-  viewport.addChild(new SVGScene(svgEl));
-  app.renderer.render(app.stage);
-}
+// async function test(app) {
+//   const svgPayload = await fetch(
+//     'https://upload.wikimedia.org/wikipedia/commons/f/fa/De_Groot_academic_genealogy.svg'
+//   ).then((data) => data.text());
+//   const svgDOM = new DOMParser().parseFromString(svgPayload, 'image/svg+xml');
+//   const svgEl = svgDOM.documentElement;
+//   const viewport = app.stage.addChild(new PIXI.Container());
+//   viewport.addChild(new SVGScene(svgEl));
+//   app.renderer.render(app.stage);
+// }
 
 export {ProjectCanvas};

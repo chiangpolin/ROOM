@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import {SignInForm} from './SignInForm.js';
+// import {SignUpForm} from './SignUpForm.js';
 import room from '../../static/images/unit.png';
 
 const Main = styled.main`
@@ -8,7 +9,7 @@ const Main = styled.main`
   align-items: center;
   justify-content: center;
   height: 100%;
-  padding-top: 60px;
+  padding: 60px 0 0;
   background-color: #81c7d4;
 `;
 
@@ -65,7 +66,7 @@ function Landing() {
       <Div>
         <VisionDiv>
           <Content>
-            <SubText>Plan and Draw with designers</SubText>
+            <SubText>Plan and Draw with Designers</SubText>
             <SubText>Anywhere, and Everywhere,</SubText>
             <MainText>Your ROOM Ideas.</MainText>
           </Content>
