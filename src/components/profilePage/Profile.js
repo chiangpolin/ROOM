@@ -10,11 +10,13 @@ import {
   setUser,
   setProjects,
   setSharedProjects,
+  selectProject,
 } from '../../app/actions/index.js';
 import {ProfileBar} from './ProfileBar.js';
 import {UserInfo} from './UserInfo.js';
 import {ProjectInfo} from './ProjectInfo.js';
 import {ProjectCard} from './ProjectCard.js';
+import {Modal} from './Modal.js';
 
 function Profile() {
   const dispatch = useDispatch();
@@ -35,6 +37,7 @@ function Profile() {
       dispatch(setProjects(projects));
       dispatch(setSharedProjects(sharedProjects));
     });
+    dispatch(selectProject({id: '', name: '', author_id: ''}));
   }, []);
 
   return (
@@ -65,6 +68,7 @@ function Profile() {
             : ''}
         </Container>
       </Section>
+      {profile.toggleShareProject ? <Modal /> : ''}
     </Main>
   );
 }
@@ -81,6 +85,7 @@ const Section = styled.section`
   flex-direction: column;
   width: calc(100% - 360px);
   padding: 30px 30px;
+  overflow-y: scroll;
 `;
 
 const Container = styled.div`

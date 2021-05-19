@@ -1,12 +1,14 @@
 import React, {useState} from 'react';
 import styled from 'styled-components';
+import {useHistory} from 'react-router-dom';
 import {getUserId} from '../../app/utils/firebase.js';
 import {ReactComponent as GoogleIcon} from '../../static/images/icons/google.svg';
 import {ReactComponent as FacebookIcon} from '../../static/images/icons/facebook.svg';
 
 function Form(props) {
+  let history = useHistory();
   const [name, setName] = useState('');
-  const [email, setEmail] = useState('');
+  const [email, setEmail] = useState('test1@gmail.com');
   const [password, setPassword] = useState('');
 
   return (
@@ -43,7 +45,7 @@ function Form(props) {
         {props.type === 'sign-up' ? (
           <Button>Sign Up</Button>
         ) : (
-          <Button onClick={() => handleSubmit(email)}>Sign In</Button>
+          <Button onClick={() => handleSubmit(history, email)}>Sign In</Button>
         )}
       </Buttons>
       <TPLButtons>
@@ -60,11 +62,11 @@ function Form(props) {
   );
 }
 
-async function handleSubmit(email) {
+async function handleSubmit(history, email) {
   const id = await getUserId(email);
   if (id) {
     localStorage.setItem('user_id', id);
-    window.location.href = './profile';
+    history.push('/profile');
   } else {
     console.log('id not exist');
     return;

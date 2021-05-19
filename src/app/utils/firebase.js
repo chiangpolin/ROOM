@@ -37,6 +37,29 @@ export function getUserId(email) {
   });
 }
 
+export function getUserByEmail(email) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('users')
+      .where('email', '==', email)
+      .get()
+      .then((querySnapshot) => {
+        const users = [];
+        querySnapshot.forEach((doc) => {
+          users.push({id: doc.id, data: doc.data()});
+        });
+        if (users.length > 0) {
+          resolve(users[0]);
+        } else {
+          resolve('');
+        }
+      })
+      .catch((error) => {
+        console.log('Error getting documents: ', error);
+      });
+  });
+}
+
 export function getUser(id) {
   const db = firebase.firestore();
   return new Promise((resolve) => {
@@ -120,7 +143,8 @@ export function postProject(data) {
       .add({
         name: data.name,
         author_id: data.id,
-        shared_id: [],
+        share_id: [],
+        groups: data.groups,
       })
       .then((docRef) => {
         resolve(docRef.id);
@@ -139,6 +163,46 @@ export function putProject(id, data) {
       .set(
         {
           name: data.name,
+        },
+        {merge: true}
+      )
+      .then(() => {
+        resolve('success');
+      })
+      .catch((error) => {
+        console.error('Error writing document: ', error);
+      });
+  });
+}
+
+export function putSharedId(id, data) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(id)
+      .set(
+        {
+          share_id: data.share_id,
+        },
+        {merge: true}
+      )
+      .then(() => {
+        resolve('success');
+      })
+      .catch((error) => {
+        console.error('Error writing document: ', error);
+      });
+  });
+}
+
+export function putProjectGroups(id, data) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(id)
+      .set(
+        {
+          groups: data.groups,
         },
         {merge: true}
       )

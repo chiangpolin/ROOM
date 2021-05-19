@@ -3,8 +3,16 @@ const initialState = {
   email: '',
   projects: [],
   sharedProjects: [],
-  selectedProject: {id: '', name: '', author_id: '', isEditing: false},
+  selectedProject: {
+    id: '',
+    name: '',
+    author_id: '',
+    isEditing: false,
+  },
   filter: {shared: true, author: true},
+  toggleShareProject: false,
+  searchTarget: {id: '', name: '', photo: ''},
+  selectedTarget: {id: '', name: '', photo: ''},
 };
 
 const profileReducer = (state = initialState, action) => {
@@ -54,6 +62,32 @@ const profileReducer = (state = initialState, action) => {
           ...state.selectedProject,
           name: action.name,
         },
+      };
+
+    case 'TOGGLE_SHARE_PROJECT':
+      return {
+        ...state,
+        toggleShareProject: true,
+      };
+
+    case 'CLOSE_SHARE_PROJECT':
+      return {
+        ...state,
+        searchTarget: {id: '', name: '', photo: ''},
+        selectedTarget: {id: '', name: '', photo: ''},
+        toggleShareProject: false,
+      };
+
+    case 'SET_SEARCH_TARGET':
+      return {
+        ...state,
+        searchTarget: action.target,
+      };
+
+    case 'SELECT_TARGET':
+      return {
+        ...state,
+        selectedTarget: action.target,
       };
 
     default:

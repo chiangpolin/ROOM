@@ -1,28 +1,42 @@
 import React from 'react';
 import styled from 'styled-components';
-import {Link} from 'react-router-dom';
+import {Link, useLocation} from 'react-router-dom';
 import {useSelector, useDispatch} from 'react-redux';
 import {
+  getProject,
   getProjects,
   postProject,
   deleteProject,
+  putProject,
+  putProjectGroups,
 } from '../app/utils/firebase.js';
-import {setProjects, selectProject} from '../app/actions/index';
+import {
+  setProjects,
+  selectProject,
+  toggleShareProject,
+} from '../app/actions/index';
 import {ReactComponent as ListIcon} from '../static/images/icons/list.svg';
 import {ReactComponent as DoorIcon} from '../static/images/icons/door-open-fill.svg';
 import {ReactComponent as FolderPlusIcon} from '../static/images/icons/folder-plus.svg';
+import {ReactComponent as FolderSymlinkIcon} from '../static/images/icons/folder-symlink.svg';
+import {ReactComponent as StickiesIcon} from '../static/images/icons/stickies.svg';
 import {ReactComponent as TrashIcon} from '../static/images/icons/trash.svg';
-import {ReactComponent as PersonIcon} from '../static/images/icons/person.svg';
+import {ReactComponent as SdCardIcon} from '../static/images/icons/sd-card.svg';
+import {ReactComponent as PersonIcon} from '../static/images/icons/person-circle.svg';
 
 function Header() {
+  let location = useLocation();
   const dispatch = useDispatch();
   const profile = useSelector((state) => state.profile);
+  const project = useSelector((state) => state.project);
 
   return (
     <header>
       <Navbar>
         <List>
-          <ListIcon width="24" height="24" />
+          <ListButton>
+            <ListIcon width="24" height="24" />
+          </ListButton>
         </List>
         <Link to="/" style={{color: '#1C1C1C', textDecoration: 'none'}}>
           <NavbarBrand>
@@ -31,27 +45,78 @@ function Header() {
           </NavbarBrand>
         </Link>
         <Nav>
-          <NavControllers>
-            <Button onClick={() => addNewProject(dispatch)} disabled={false}>
-              <FolderPlusIcon width="24" height="24" />
-            </Button>
-            <Button
-              onClick={() =>
-                deleteSelectedProject(dispatch, profile.selectedProject.id)
-              }
-              disabled={profile.selectedProject.id === ''}
-            >
-              <TrashIcon width="24" height="24" />
-            </Button>
-          </NavControllers>
-          <NavLinks>
-            <Link
-              to="/profile"
-              style={{color: '#1C1C1C', textDecoration: 'none'}}
-            >
-              <PersonIcon width="32" height="32" />
-            </Link>
-          </NavLinks>
+          {location.pathname === '/profile' ? (
+            <NavControllers>
+              <Button
+                onClick={() => addNewProject(dispatch)}
+                disabled={!profile.filter.author}
+              >
+                <FolderPlusIcon width="24" height="24" />
+              </Button>
+              <Button
+                onClick={() => handleToggleShare(dispatch)}
+                disabled={
+                  profile.selectedProject.id === '' ||
+                  profile.selectedProject.author_id !==
+                    localStorage.getItem('user_id')
+                }
+              >
+                <FolderSymlinkIcon width="24" height="24" />
+              </Button>
+              <Button
+                onClick={() =>
+                  cloneSelectedProject(dispatch, profile.selectedProject.id)
+                }
+                disabled={profile.selectedProject.id === ''}
+              >
+                <StickiesIcon width="24" height="24" />
+              </Button>
+              <Button
+                onClick={() =>
+                  deleteSelectedProject(dispatch, profile.selectedProject.id)
+                }
+                disabled={
+                  profile.selectedProject.id === '' ||
+                  profile.selectedProject.author_id !==
+                    localStorage.getItem('user_id')
+                }
+              >
+                <TrashIcon width="24" height="24" />
+              </Button>
+            </NavControllers>
+          ) : location.pathname.indexOf('/project') > -1 ? (
+            <NavControllers>
+              <Button
+                onClick={() =>
+                  updateSelectedProject(
+                    profile.selectedProject.id,
+                    project.groups
+                  )
+                }
+                disabled={
+                  profile.selectedProject.author_id !==
+                  localStorage.getItem('user_id')
+                }
+              >
+                <SdCardIcon width="24" height="24" />
+              </Button>
+            </NavControllers>
+          ) : (
+            ''
+          )}
+          {location.pathname !== '/profile' &&
+          localStorage.getItem('user_id') !== null ? (
+            <NavLinks>
+              <Link
+                to="/profile"
+                style={{color: '#1C1C1C', textDecoration: 'none'}}
+              >
+                <PersonIcon width="24" height="24" />
+              </Link>
+            </NavLinks>
+          ) : (
+            ''
+          )}
         </Nav>
       </Navbar>
     </header>
@@ -63,9 +128,26 @@ async function addNewProject(dispatch) {
   await postProject({
     id: user_id,
     name: 'Untitled',
+    groups: [],
   });
   const projects = await getProjects(user_id);
   dispatch(setProjects(projects));
+}
+
+async function cloneSelectedProject(dispatch, id) {
+  const user_id = localStorage.getItem('user_id');
+  const project = await getProject(id);
+  await postProject({
+    id: user_id,
+    name: `${project.name}-clone`,
+    groups: project.groups,
+  });
+  const projects = await getProjects(user_id);
+  dispatch(setProjects(projects));
+}
+
+async function updateSelectedProject(id, groups) {
+  await putProjectGroups(id, {groups: groups});
 }
 
 async function deleteSelectedProject(dispatch, id) {
@@ -74,6 +156,10 @@ async function deleteSelectedProject(dispatch, id) {
   const projects = await getProjects(user_id);
   dispatch(setProjects(projects));
   dispatch(selectProject(''));
+}
+
+function handleToggleShare(dispatch) {
+  dispatch(toggleShareProject());
 }
 
 const Navbar = styled.div`
@@ -105,6 +191,15 @@ const List = styled.div`
   justify-content: center;
 `;
 
+const ListButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+`;
+
 const Title = styled.h1`
   margin: 0 0 0 10px;
   font-family: 'Open Sans', sans-serif;
@@ -120,14 +215,14 @@ const NavLinks = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
-  margin: 0 20px 0 0;
+  margin: 0 20px 0 10px;
 `;
 
 const NavControllers = styled.div`
-  margin: 0 30px 0 0;
+  margin: 0 20px 0 0;
 `;
 const Button = styled.button`
-  margin: 10px;
+  margin: 0 0 0 30px;
   border: none;
   cursor: pointer;
   background-color: transparent;

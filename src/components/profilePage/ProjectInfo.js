@@ -36,18 +36,22 @@ function ProjectInfo() {
         )}
         <IdText>{profile.selectedProject.author_id}</IdText>
         <IdText>{profile.selectedProject.id}</IdText>
-        <Button
-          primary
-          disabled={!profile.selectedProject.isEditing}
-          onClick={() => {
-            handleClickUpdate(profile.selectedProject.id, name);
-          }}
-        >
-          Update
-        </Button>
-        <Button danger disabled={true}>
-          Delete
-        </Button>
+        {profile.selectedProject.author_id ===
+        localStorage.getItem('user_id') ? (
+          <Buttons>
+            <Button
+              success
+              disabled={!profile.selectedProject.isEditing}
+              onClick={() => {
+                handleClickUpdate(profile.selectedProject.id, name);
+              }}
+            >
+              Update
+            </Button>
+          </Buttons>
+        ) : (
+          <Buttons></Buttons>
+        )}
       </Content>
     </Div>
   );
@@ -94,6 +98,8 @@ const IdText = styled.p`
   font-size: 16px;
 `;
 
+const Buttons = styled.div``;
+
 const Button = styled.button`
   width: 60px;
   height: 20px;
@@ -116,6 +122,16 @@ const Button = styled.button`
       background-color: #d9534f;
       border: 1px solid #d9534f;
     `}
+
+    ${(props) =>
+    props.success &&
+    css`
+      color: white;
+      background-color: #5cb85c;
+      border: 1px solid #5cb85c;
+    `}
+
+    
 
     ${(props) =>
     props.disabled &&

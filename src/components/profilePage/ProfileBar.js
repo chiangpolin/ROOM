@@ -27,7 +27,9 @@ function ProfileBar() {
       >
         <PeopleIcon width="24" height="24" />
       </SideButton>
-      <SideButton>
+      <SideButton
+        onClick={() => dispatch(filterProjects({shared: false, author: false}))}
+      >
         <ImagesIcon width="24" height="24" />
       </SideButton>
     </Div>
@@ -39,12 +41,13 @@ const Div = styled.div`
   border-right: 1px solid #1c1c1c;
 `;
 
-const SideButton = styled.div`
+const SideButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
   width: 60px;
   height: 60px;
+  border: none;
   border-right: 1px solid #1c1c1c;
   background-color: white;
 
