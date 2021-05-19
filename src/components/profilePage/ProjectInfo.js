@@ -1,12 +1,12 @@
 import React, {useState} from 'react';
 import styled, {css} from 'styled-components';
 import {useSelector} from 'react-redux';
-import {store} from '../../app/store';
+import {store} from '../../app/store/index.js';
 import {
   setProjects,
   toggleEditName,
   updateEditName,
-} from '../../app/actions/index';
+} from '../../app/actions/index.js';
 import {getProjects, putProject} from '../../app/utils/firebase.js';
 
 function ProjectInfo() {

@@ -6,7 +6,11 @@ import {
   getProjects,
   getSharedProjects,
 } from '../../app/utils/firebase.js';
-import {setUser, setProjects, setSharedProjects} from '../../app/actions/index';
+import {
+  setUser,
+  setProjects,
+  setSharedProjects,
+} from '../../app/actions/index.js';
 import {ProfileBar} from './ProfileBar.js';
 import {UserInfo} from './UserInfo.js';
 import {ProjectInfo} from './ProjectInfo.js';

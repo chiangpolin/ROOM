@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import {useSelector} from 'react-redux';
-import avatar from '../../static/images/profile-avatar.png';
+import avatar from '../../static/images/backgrounds/profile-avatar.png';
 
 function UserInfo() {
   const profile = useSelector((state) => state.profile);

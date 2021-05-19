@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'styled-components';
 import {Form} from './Form.js';
 // import {SignUpForm} from './SignUpForm.js';
-import room from '../../static/images/unit.png';
+import room from '../../static/images/backgrounds/room.png';
 
 function Landing() {
   return (

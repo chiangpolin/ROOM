@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import {useDispatch} from 'react-redux';
-import {filterProjects} from '../../app/actions/index';
+import {filterProjects} from '../../app/actions/index.js';
 import {ReactComponent as FolderIcon} from '../../static/images/icons/folder.svg';
 import {ReactComponent as PersonSquareIcon} from '../../static/images/icons/person-square.svg';
 import {ReactComponent as PeopleIcon} from '../../static/images/icons/people.svg';

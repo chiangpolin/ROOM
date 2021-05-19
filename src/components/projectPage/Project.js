@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import {useParams} from 'react-router';
 import {useDispatch} from 'react-redux';
-import {setProject} from '../../app/actions/index';
+import {setProject} from '../../app/actions/index.js';
 import {getProject} from '../../app/utils/firebase.js';
 import {ProjectBar} from './ProjectBar.js';
 import {ProjectCanvas} from './ProjectCanvas.js';
