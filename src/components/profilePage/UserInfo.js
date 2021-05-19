@@ -3,6 +3,22 @@ import styled from 'styled-components';
 import {useSelector} from 'react-redux';
 import avatar from '../../static/images/profile-avatar.png';
 
+function UserInfo() {
+  const profile = useSelector((state) => state.profile);
+
+  return (
+    <Div>
+      <ImgDiv>
+        <Img src={avatar} />
+      </ImgDiv>
+      <Content>
+        <NameText>{profile.name}</NameText>
+        <EmailText>{profile.email}</EmailText>
+      </Content>
+    </Div>
+  );
+}
+
 const Div = styled.div`
   width: 300px;
   border-right: 1px solid #1c1c1c;
@@ -33,19 +49,4 @@ const EmailText = styled.p`
   font-size: 16px;
 `;
 
-function UserInfo() {
-  const profile = useSelector((state) => state.profile);
-
-  return (
-    <Div>
-      <ImgDiv>
-        <Img src={avatar} />
-      </ImgDiv>
-      <Content>
-        <NameText>{profile.name}</NameText>
-        <EmailText>{profile.email}</EmailText>
-      </Content>
-    </Div>
-  );
-}
 export {UserInfo};

@@ -7,39 +7,6 @@ import {Rendering} from './Rendering.js';
 import {ProjectCanvas} from './ProjectCanvas.js';
 import {Sidebar} from './Sidebar.js';
 
-const Main = styled.main`
-  display: flex;
-  height: 100%;
-  padding-top: 60px;
-`;
-
-const Section = styled.section`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: calc(100% - 60px);
-`;
-
-const RenderButton = styled.button`
-  position: absolute;
-  right: 30px;
-  bottom: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 50px;
-  height: 50px;
-  border: 0;
-  border-radius: 25px;
-  background-color: white;
-
-  :hover {
-    cursor: pointer;
-    color: white;
-    background-color: black;
-  }
-`;
-
 function Project() {
   const dispatch = useDispatch();
   const profile = useSelector((state) => state.profile);
@@ -77,5 +44,38 @@ function Project() {
     </Main>
   );
 }
+
+const Main = styled.main`
+  display: flex;
+  height: 100%;
+  padding-top: 60px;
+`;
+
+const Section = styled.section`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 60px);
+`;
+
+const RenderButton = styled.button`
+  position: absolute;
+  right: 30px;
+  bottom: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 50px;
+  height: 50px;
+  border: 0;
+  border-radius: 25px;
+  background-color: white;
+
+  :hover {
+    cursor: pointer;
+    color: white;
+    background-color: black;
+  }
+`;
 
 export {Project};

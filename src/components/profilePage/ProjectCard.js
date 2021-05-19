@@ -4,25 +4,6 @@ import {useSelector, useDispatch} from 'react-redux';
 import {Link} from 'react-router-dom';
 import {selectProject} from '../../app/actions/index.js';
 
-const Item = styled.div`
-  width: 100%;
-  border: none;
-  background-color: '#ffffff';
-
-  ${(props) =>
-    props.primary &&
-    css`
-      border: 3px solid #1c1c1c;
-    `}
-`;
-
-const ItemImg = styled.img`
-  width: 100%;
-  height: 150px;
-  background-color: #bdc0ba;
-  cursor: pointer;
-`;
-
 function ProjectCard(props) {
   const dispatch = useDispatch();
   const profile = useSelector((state) => state.profile);
@@ -52,5 +33,24 @@ function ProjectCard(props) {
     </Item>
   );
 }
+
+const Item = styled.div`
+  width: 100%;
+  border: none;
+  background-color: '#ffffff';
+
+  ${(props) =>
+    props.primary &&
+    css`
+      border: 3px solid #1c1c1c;
+    `}
+`;
+
+const ItemImg = styled.img`
+  width: 100%;
+  height: 150px;
+  background-color: #bdc0ba;
+  cursor: pointer;
+`;
 
 export {ProjectCard};

@@ -12,26 +12,6 @@ import {UserInfo} from './UserInfo.js';
 import {ProjectInfo} from './ProjectInfo.js';
 import {ProjectCard} from './ProjectCard.js';
 
-const Main = styled.main`
-  display: flex;
-  height: 100%;
-  padding-top: 60px;
-`;
-
-const Section = styled.section`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: calc(100% - 360px);
-  padding: 30px 30px;
-`;
-
-const Container = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 15px 15px;
-`;
-
 function Profile() {
   const dispatch = useDispatch();
   const profile = useSelector((state) => state.profile);
@@ -84,5 +64,25 @@ function Profile() {
     </Main>
   );
 }
+
+const Main = styled.main`
+  display: flex;
+  height: 100%;
+  padding-top: 60px;
+`;
+
+const Section = styled.section`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 360px);
+  padding: 30px 30px;
+`;
+
+const Container = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 15px 15px;
+`;
 
 export {Profile};

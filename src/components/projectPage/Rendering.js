@@ -5,12 +5,6 @@ import * as THREE from 'three';
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 
-const RenderingDiv = styled.div`
-  width: 100%;
-  height: 100%;
-  background-color: #81c7d4;
-`;
-
 function Rendering() {
   const ref = useRef(null);
   const groups = useSelector((state) => state.project.groups);
@@ -117,5 +111,11 @@ async function setModel(scene, loader, obj) {
   group.rotation.set(0, -(obj.rotation.angle * Math.PI) / 180, 0);
   scene.add(group);
 }
+
+const RenderingDiv = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: #81c7d4;
+`;
 
 export {Rendering};
