@@ -11,7 +11,7 @@ function App() {
       <div className="App">
         <Header />
         <Switch>
-          <Route path="/project">
+          <Route path="/project/:id">
             <Project />
           </Route>
           <Route path="/profile">

@@ -25,7 +25,7 @@ function ProjectCard(props) {
         }
       }}
     >
-      <Link to="/project">
+      <Link to={`/project/${props.id}`}>
         <ItemImg />
       </Link>
       <p>{props.name}</p>

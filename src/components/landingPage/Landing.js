@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import {SignInForm} from './SignInForm.js';
+import {Form} from './Form.js';
 // import {SignUpForm} from './SignUpForm.js';
 import room from '../../static/images/unit.png';
 
@@ -17,7 +17,7 @@ function Landing() {
           <Img src={room}></Img>
         </VisionDiv>
         <AuthDiv>
-          <SignInForm />
+          <Form type={'sign-in'} />
         </AuthDiv>
       </Div>
     </Main>

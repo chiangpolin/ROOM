@@ -6,7 +6,7 @@ import {ReactComponent as EaselIcon} from '../../static/images/icons/easel.svg';
 import {ReactComponent as PaletteIcon} from '../../static/images/icons/palette.svg';
 import {ReactComponent as CameraIcon} from '../../static/images/icons/camera-reels.svg';
 
-function Sidebar() {
+function ProjectBar() {
   return (
     <Div>
       <SideButton>
@@ -49,4 +49,4 @@ const SideButton = styled.div`
   }
 `;
 
-export {Sidebar};
+export {ProjectBar};

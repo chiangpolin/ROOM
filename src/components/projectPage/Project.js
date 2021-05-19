@@ -1,27 +1,29 @@
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
-import {useSelector, useDispatch} from 'react-redux';
+import {useParams} from 'react-router';
+import {useDispatch} from 'react-redux';
 import {setProject} from '../../app/actions/index';
 import {getProject} from '../../app/utils/firebase.js';
-import {Rendering} from './Rendering.js';
+import {ProjectBar} from './ProjectBar.js';
 import {ProjectCanvas} from './ProjectCanvas.js';
-import {Sidebar} from './Sidebar.js';
+import {Rendering} from './Rendering.js';
 
 function Project() {
+  let {id} = useParams();
   const dispatch = useDispatch();
-  const profile = useSelector((state) => state.profile);
-  const project = useSelector((state) => state.project);
+  const [isFetched, setIsFetched] = useState(false);
   const [renderIsClicked, handleClickRender] = useState(false);
 
   useEffect(() => {
-    getProject(profile.selectedProject.id).then((project) => {
+    getProject(id).then((project) => {
       dispatch(setProject(project));
+      setIsFetched(true);
     });
   }, []);
 
-  return project.isFetched ? (
+  return isFetched ? (
     <Main>
-      <Sidebar />
+      <ProjectBar />
       <Section>
         {renderIsClicked ? <Rendering /> : <ProjectCanvas />}
         <RenderButton onClick={() => handleClickRender(!renderIsClicked)}>

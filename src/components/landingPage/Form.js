@@ -4,32 +4,49 @@ import {getUserId} from '../../app/utils/firebase.js';
 import {ReactComponent as GoogleIcon} from '../../static/images/icons/google.svg';
 import {ReactComponent as FacebookIcon} from '../../static/images/icons/facebook.svg';
 
-function SignInForm() {
+function Form(props) {
+  const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
 
   return (
-    <Form>
-      <InputDiv>
+    <Div>
+      {props.type === 'sign-up' ? (
+        <Label>
+          Name
+          <Input
+            type="text"
+            value={name}
+            onChange={(event) => handleChange(event, setName)}
+          ></Input>
+        </Label>
+      ) : (
+        ''
+      )}
+      <Label>
         Email
         <Input
           type="text"
           value={email}
           onChange={(event) => handleChange(event, setEmail)}
         ></Input>
-      </InputDiv>
-      <InputDiv>
+      </Label>
+      <Label>
         Password
         <Input
           type="text"
           value={password}
           onChange={(event) => handleChange(event, setPassword)}
         ></Input>
-      </InputDiv>
-      <ButtonDiv>
-        <Button onClick={() => handleSubmit(email)}>Sign In</Button>
-      </ButtonDiv>
-      <TPLDiv>
+      </Label>
+      <Buttons>
+        {props.type === 'sign-up' ? (
+          <Button>Sign Up</Button>
+        ) : (
+          <Button onClick={() => handleSubmit(email)}>Sign In</Button>
+        )}
+      </Buttons>
+      <TPLButtons>
         <Button>
           <GoogleIcon width="16" height="16" />
           <p>Google</p>
@@ -38,8 +55,8 @@ function SignInForm() {
           <FacebookIcon width="24" hieght="24" />
           <p>Facebook</p>
         </Button>
-      </TPLDiv>
-    </Form>
+      </TPLButtons>
+    </Div>
   );
 }
 
@@ -58,7 +75,7 @@ function handleChange(event, setValue) {
   setValue(event.target.value);
 }
 
-const Form = styled.div`
+const Div = styled.div`
   display: flex;
   flex-direction: column;
   width: 300px;
@@ -75,7 +92,7 @@ const Form = styled.div`
   }
 `;
 
-const InputDiv = styled.label`
+const Label = styled.label`
   margin: 5px;
   font-size: 16px;
   color: #fffffb;
@@ -93,20 +110,6 @@ const Input = styled.input`
   :focus {
     outline: none !important;
   }
-`;
-
-const ButtonDiv = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 5px;
-`;
-
-const TPLDiv = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  grid-gap: 5px 5px;
-  margin: auto 5px 5px 5px;
 `;
 
 const Button = styled.button`
@@ -128,4 +131,18 @@ const Button = styled.button`
   }
 `;
 
-export {SignInForm};
+const Buttons = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 5px;
+`;
+
+const TPLButtons = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 5px 5px;
+  margin: auto 5px 5px 5px;
+`;
+
+export {Form};

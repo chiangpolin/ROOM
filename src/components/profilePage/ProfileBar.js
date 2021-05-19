@@ -7,7 +7,7 @@ import {ReactComponent as PersonSquareIcon} from '../../static/images/icons/pers
 import {ReactComponent as PeopleIcon} from '../../static/images/icons/people.svg';
 import {ReactComponent as ImagesIcon} from '../../static/images/icons/images.svg';
 
-function Sidebar() {
+function ProfileBar() {
   const dispatch = useDispatch();
 
   return (
@@ -55,4 +55,4 @@ const SideButton = styled.div`
   }
 `;
 
-export {Sidebar};
+export {ProfileBar};

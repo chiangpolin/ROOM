@@ -2,8 +2,8 @@ const initialState = {
   name: '',
   email: '',
   projects: [],
-  selectedProject: {id: '', name: '', author_id: '', isEditing: false},
   sharedProjects: [],
+  selectedProject: {id: '', name: '', author_id: '', isEditing: false},
   filter: {shared: true, author: true},
 };
 
