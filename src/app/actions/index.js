@@ -1,27 +1,50 @@
 // action types
 export const SET_USER = 'SET_USER';
-export const SET_PROJECTS = 'SET_PROJECTS';
 export const SET_PROJECT = 'SET_PROJECT';
-export const UPDATE_GROUPS = 'UPDATE_GROUPS';
-export const CLICK_RENDER = 'CLICK_RENDER';
+export const SET_PROJECTS = 'SET_PROJECTS';
+export const SET_SHARED_PROJECTS = 'SET_SHARED_PROJECTS';
+export const FILTER_PROJECTS = 'FILTER_PROJECTS';
+export const TOGGLE_EDIT_NAME = 'TOGGLE_EDIT_NAME';
+export const UPDATE_EDIT_NAME = 'UPDATE_EDIT_NAME';
+
+export const UPDATE_GROUP = 'UPDATE_GROUP';
 
 // actions
 export const setUser = (user) => ({
   type: 'SET_USER',
   user,
 });
-export const setProjects = (projects) => ({
-  type: 'SET_PROJECTS',
-  projects,
-});
 export const setProject = (project) => ({
   type: 'SET_PROJECT',
   project,
 });
-export const updateGroups = (group) => ({
-  type: 'UPDATE_GROUPS',
+export const setProjects = (projects) => ({
+  type: 'SET_PROJECTS',
+  projects,
+});
+export const setSharedProjects = (sharedProjects) => ({
+  type: 'SET_SHARED_PROJECTS',
+  sharedProjects,
+});
+export const filterProjects = (filter) => ({
+  type: 'FILTER_PROJECTS',
+  filter,
+});
+export const selectProject = (project) => ({
+  type: 'SELECT_PROJECT',
+  project,
+});
+
+export const updateGroup = (group) => ({
+  type: 'UPDATE_GROUP',
   group,
 });
-export const clickRender = () => ({
-  type: 'CLICK_RENDER',
+
+export const toggleEditName = () => ({
+  type: 'TOGGLE_EDIT_NAME',
+});
+
+export const updateEditName = (name) => ({
+  type: 'UPDATE_EDIT_NAME',
+  name,
 });
