@@ -6,31 +6,17 @@ import {
   getProjects,
   getSharedProjects,
 } from '../../app/utils/firebase.js';
-import {setUser, setProjects, setSharedProjects} from '../../app/actions/index';
-import {Sidebar} from './Sidebar.js';
+import {
+  setUser,
+  setProjects,
+  setSharedProjects,
+  selectProject,
+} from '../../app/actions/index.js';
+import {ProfileBar} from './ProfileBar.js';
 import {UserInfo} from './UserInfo.js';
 import {ProjectInfo} from './ProjectInfo.js';
 import {ProjectCard} from './ProjectCard.js';
-
-const Main = styled.main`
-  display: flex;
-  height: 100%;
-  padding-top: 60px;
-`;
-
-const Section = styled.section`
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  width: calc(100% - 360px);
-  padding: 30px 30px;
-`;
-
-const Container = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  grid-gap: 15px 15px;
-`;
+import {Modal} from './Modal.js';
 
 function Profile() {
   const dispatch = useDispatch();
@@ -51,11 +37,12 @@ function Profile() {
       dispatch(setProjects(projects));
       dispatch(setSharedProjects(sharedProjects));
     });
+    dispatch(selectProject({id: '', name: '', author_id: ''}));
   }, []);
 
   return (
     <Main>
-      <Sidebar />
+      <ProfileBar />
       {profile.selectedProject.id === '' ? <UserInfo /> : <ProjectInfo />}
       <Section>
         <Container>
@@ -81,8 +68,30 @@ function Profile() {
             : ''}
         </Container>
       </Section>
+      {profile.toggleShareProject ? <Modal /> : ''}
     </Main>
   );
 }
+
+const Main = styled.main`
+  display: flex;
+  height: 100%;
+  padding-top: 60px;
+`;
+
+const Section = styled.section`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: calc(100% - 360px);
+  padding: 30px 30px;
+  overflow-y: scroll;
+`;
+
+const Container = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 15px 15px;
+`;
 
 export {Profile};

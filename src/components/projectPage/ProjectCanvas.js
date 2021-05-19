@@ -1,16 +1,10 @@
 import React, {useEffect, useRef} from 'react';
 import styled from 'styled-components';
 import {useSelector} from 'react-redux';
-import {store} from '../../app/store';
-import {updateGroup} from '../../app/actions/index';
+import {store} from '../../app/store/index.js';
+import {updateGroup} from '../../app/actions/index.js';
 import * as PIXI from 'pixi.js';
 // import {SVGScene} from '@pixi-essentials/svg';
-
-const ProjectCanvasDiv = styled.div`
-  width: 100%;
-  height: 100%;
-  background-color: lightgrey;
-`;
 
 function ProjectCanvas() {
   const ref = useRef(null);
@@ -151,5 +145,11 @@ function onDragMove() {
 //   viewport.addChild(new SVGScene(svgEl));
 //   app.renderer.render(app.stage);
 // }
+
+const ProjectCanvasDiv = styled.div`
+  width: 100%;
+  height: 100%;
+  background-color: lightgrey;
+`;
 
 export {ProjectCanvas};

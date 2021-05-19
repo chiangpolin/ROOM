@@ -8,20 +8,18 @@ import {Project} from './components/projectPage/Project.js';
 function App() {
   return (
     <Router>
-      <div className="App">
-        <Header />
-        <Switch>
-          <Route path="/project">
-            <Project />
-          </Route>
-          <Route path="/profile">
-            <Profile />
-          </Route>
-          <Route path="/">
-            <Landing />
-          </Route>
-        </Switch>
-      </div>
+      <Header />
+      <Switch>
+        <Route path="/project/:id">
+          <Project />
+        </Route>
+        <Route path="/profile">
+          <Profile />
+        </Route>
+        <Route path="/">
+          <Landing />
+        </Route>
+      </Switch>
     </Router>
   );
 }

@@ -1,8 +1,28 @@
 import React from 'react';
 import styled from 'styled-components';
-import {SignInForm} from './SignInForm.js';
+import {Form} from './Form.js';
 // import {SignUpForm} from './SignUpForm.js';
-import room from '../../static/images/unit.png';
+import room from '../../static/images/backgrounds/room.png';
+
+function Landing() {
+  return (
+    <Main>
+      <Div>
+        <VisionDiv>
+          <Content>
+            <SubText>Plan and Draw with Designers</SubText>
+            <SubText>Anywhere, and Everywhere,</SubText>
+            <MainText>Your ROOM Ideas.</MainText>
+          </Content>
+          <Img src={room}></Img>
+        </VisionDiv>
+        <AuthDiv>
+          <Form type={'sign-in'} />
+        </AuthDiv>
+      </Div>
+    </Main>
+  );
+}
 
 const Main = styled.main`
   display: flex;
@@ -59,25 +79,5 @@ const AuthDiv = styled.div`
   align-items: center;
   justify-content: center;
 `;
-
-function Landing() {
-  return (
-    <Main>
-      <Div>
-        <VisionDiv>
-          <Content>
-            <SubText>Plan and Draw with Designers</SubText>
-            <SubText>Anywhere, and Everywhere,</SubText>
-            <MainText>Your ROOM Ideas.</MainText>
-          </Content>
-          <Img src={room}></Img>
-        </VisionDiv>
-        <AuthDiv>
-          <SignInForm />
-        </AuthDiv>
-      </Div>
-    </Main>
-  );
-}
 
 export {Landing};

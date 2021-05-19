@@ -1,7 +1,7 @@
 import {configureStore} from '@reduxjs/toolkit';
-import landingReducer from './reducers/landingReducer';
-import profileReducer from './reducers/profileReducer';
-import projectReducer from './reducers/projectReducer';
+import landingReducer from '../reducers/landingReducer';
+import profileReducer from '../reducers/profileReducer';
+import projectReducer from '../reducers/projectReducer';
 
 export const store = configureStore(
   {

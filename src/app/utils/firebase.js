@@ -1,7 +1,7 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore';
 
-function initFirebase() {
+export function initFirebase() {
   const firebaseConfig = {
     apiKey: 'AIzaSyBFm5jjCzty19UxMkhaFt2dwklncPg68yc',
     authDomain: 'room-801fb.firebaseapp.com',
@@ -14,7 +14,7 @@ function initFirebase() {
   firebase.initializeApp(firebaseConfig);
 }
 
-function getUserId(email) {
+export function getUserId(email) {
   const db = firebase.firestore();
   return new Promise((resolve) => {
     db.collection('users')
@@ -37,7 +37,30 @@ function getUserId(email) {
   });
 }
 
-function getUser(id) {
+export function getUserByEmail(email) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('users')
+      .where('email', '==', email)
+      .get()
+      .then((querySnapshot) => {
+        const users = [];
+        querySnapshot.forEach((doc) => {
+          users.push({id: doc.id, data: doc.data()});
+        });
+        if (users.length > 0) {
+          resolve(users[0]);
+        } else {
+          resolve('');
+        }
+      })
+      .catch((error) => {
+        console.log('Error getting documents: ', error);
+      });
+  });
+}
+
+export function getUser(id) {
   const db = firebase.firestore();
   return new Promise((resolve) => {
     db.collection('users')
@@ -56,7 +79,7 @@ function getUser(id) {
   });
 }
 
-function getProjects(userId) {
+export function getProjects(userId) {
   const db = firebase.firestore();
   return new Promise((resolve) => {
     db.collection('projects')
@@ -75,7 +98,7 @@ function getProjects(userId) {
   });
 }
 
-function getSharedProjects(userId) {
+export function getSharedProjects(userId) {
   const db = firebase.firestore();
   return new Promise((resolve) => {
     db.collection('projects')
@@ -94,7 +117,7 @@ function getSharedProjects(userId) {
   });
 }
 
-function getProject(id) {
+export function getProject(id) {
   const db = firebase.firestore();
   return new Promise((resolve) => {
     db.collection('projects')
@@ -113,14 +136,15 @@ function getProject(id) {
   });
 }
 
-function postProject(data) {
+export function postProject(data) {
   const db = firebase.firestore();
   return new Promise((resolve) => {
     db.collection('projects')
       .add({
         name: data.name,
         author_id: data.id,
-        shared_id: [],
+        share_id: [],
+        groups: data.groups,
       })
       .then((docRef) => {
         resolve(docRef.id);
@@ -131,7 +155,7 @@ function postProject(data) {
   });
 }
 
-function putProject(id, data) {
+export function putProject(id, data) {
   const db = firebase.firestore();
   return new Promise((resolve) => {
     db.collection('projects')
@@ -151,7 +175,47 @@ function putProject(id, data) {
   });
 }
 
-function deleteProject(id) {
+export function putSharedId(id, data) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(id)
+      .set(
+        {
+          share_id: data.share_id,
+        },
+        {merge: true}
+      )
+      .then(() => {
+        resolve('success');
+      })
+      .catch((error) => {
+        console.error('Error writing document: ', error);
+      });
+  });
+}
+
+export function putProjectGroups(id, data) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(id)
+      .set(
+        {
+          groups: data.groups,
+        },
+        {merge: true}
+      )
+      .then(() => {
+        resolve('success');
+      })
+      .catch((error) => {
+        console.error('Error writing document: ', error);
+      });
+  });
+}
+
+export function deleteProject(id) {
   const db = firebase.firestore();
   return new Promise((resolve) => {
     db.collection('projects')
@@ -165,15 +229,3 @@ function deleteProject(id) {
       });
   });
 }
-
-export {
-  initFirebase,
-  getUser,
-  getUserId,
-  getProject,
-  getProjects,
-  getSharedProjects,
-  postProject,
-  putProject,
-  deleteProject,
-};
