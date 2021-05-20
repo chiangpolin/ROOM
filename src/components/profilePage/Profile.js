@@ -14,7 +14,7 @@ import {
 } from '../../app/actions/index.js';
 import {ProfileBar} from './ProfileBar.js';
 import {UserInfo} from './UserInfo.js';
-import {ProjectInfo} from './ProjectInfo.js';
+import {CardInfo} from './CardInfo.js';
 import {ProjectCard} from './ProjectCard.js';
 import {Modal} from './Modal.js';
 
@@ -37,13 +37,15 @@ function Profile() {
       dispatch(setProjects(projects));
       dispatch(setSharedProjects(sharedProjects));
     });
+
     dispatch(selectProject({id: '', name: '', author_id: ''}));
+    // eslint-disable-next-line
   }, []);
 
   return (
     <Main>
       <ProfileBar />
-      {profile.selectedProject.id === '' ? <UserInfo /> : <ProjectInfo />}
+      {profile.selectedProject.id === '' ? <UserInfo /> : <CardInfo />}
       <Section>
         <Container>
           {profile.filter.author

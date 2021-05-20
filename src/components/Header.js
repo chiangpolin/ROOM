@@ -7,7 +7,6 @@ import {
   getProjects,
   postProject,
   deleteProject,
-  putProject,
   putProjectGroups,
 } from '../app/utils/firebase.js';
 import {
@@ -109,7 +108,10 @@ function Header() {
             <NavLinks>
               <Link
                 to="/profile"
-                style={{color: '#1C1C1C', textDecoration: 'none'}}
+                style={{
+                  color: '#1C1C1C',
+                  textDecoration: 'none',
+                }}
               >
                 <PersonIcon width="24" height="24" />
               </Link>

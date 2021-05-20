@@ -100,9 +100,10 @@ function loadModel(loader, url) {
 }
 
 async function setModel(scene, loader, obj) {
-  const modelPath = await import(`../../static/models/${obj.file.gltfPath}`);
+  const modelPath = await import(`../../../static/models/${obj.file.gltfPath}`);
   const model = await loadModel(loader, modelPath.default);
   const group = new THREE.Group();
+  // eslint-disable-next-line
   for (const [key, mesh] of Object.entries(model)) {
     group.add(mesh);
   }

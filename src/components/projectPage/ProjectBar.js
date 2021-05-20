@@ -1,5 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
+import {useDispatch} from 'react-redux';
+import {setInfo} from '../../app/actions/index.js';
 import {ReactComponent as GearIcon} from '../../static/images/icons/gear.svg';
 import {ReactComponent as InfoSquareIcon} from '../../static/images/icons/info-square.svg';
 import {ReactComponent as EaselIcon} from '../../static/images/icons/easel.svg';
@@ -7,21 +9,23 @@ import {ReactComponent as PaletteIcon} from '../../static/images/icons/palette.s
 import {ReactComponent as CameraIcon} from '../../static/images/icons/camera-reels.svg';
 
 function ProjectBar() {
+  const dispatch = useDispatch();
+
   return (
     <Div>
-      <SideButton>
+      <SideButton onClick={() => dispatch(setInfo('settings'))}>
         <GearIcon width="24" height="24" />
       </SideButton>
-      <SideButton>
+      <SideButton onClick={() => dispatch(setInfo('canvas'))}>
         <InfoSquareIcon width="24" height="24" />
       </SideButton>
-      <SideButton>
+      <SideButton onClick={() => dispatch(setInfo('furniture'))}>
         <EaselIcon width="24" height="24" />
       </SideButton>
-      <SideButton>
+      <SideButton onClick={() => dispatch(setInfo('walls'))}>
         <PaletteIcon width="24" height="24" />
       </SideButton>
-      <SideButton>
+      <SideButton onClick={() => dispatch(setInfo('camera'))}>
         <CameraIcon width="24" height="24" />
       </SideButton>
     </Div>
