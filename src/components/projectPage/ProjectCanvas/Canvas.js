@@ -1,14 +1,16 @@
-import React, {useEffect, useRef} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import styled from 'styled-components';
 import {useSelector} from 'react-redux';
-import {store} from '../../app/store/index.js';
-import {updateGroup} from '../../app/actions/index.js';
+import {store} from '../../../app/store/index.js';
+import {selectGroup, updateGroup} from '../../../app/actions/index.js';
 import * as PIXI from 'pixi.js';
 // import {SVGScene} from '@pixi-essentials/svg';
 
-function ProjectCanvas() {
+function Canvas() {
+  const [DOMapp, setDOMapp] = useState('');
   const ref = useRef(null);
   const groups = useSelector((state) => state.project.groups);
+  const instruction = useSelector((state) => state.project.instruction);
 
   useEffect(() => {
     // Sizes
@@ -23,6 +25,7 @@ function ProjectCanvas() {
       height: sizes.height,
       backgroundAlpha: 0,
     });
+
     app.stage.x = app.renderer.width * 0.5;
     app.stage.y = app.renderer.height * 0.5;
     app.stage.scale.x = 1;
@@ -39,6 +42,8 @@ function ProjectCanvas() {
       createCanvasElement(app, groups[i]);
     }
 
+    setDOMapp(app);
+
     // onResize
     window.addEventListener('resize', () => resizeCanvas(ref, sizes, app));
 
@@ -46,7 +51,36 @@ function ProjectCanvas() {
       app.destroy(true, true);
       window.removeEventListener('resize', () => resizeCanvas(ref, sizes, app));
     };
+    // eslint-disable-next-line
   }, []);
+
+  useEffect(() => {
+    if (DOMapp) {
+      switch (instruction.type) {
+        case 'new':
+          createCanvasElement(DOMapp, instruction.group);
+          break;
+
+        case 'delete':
+          for (let i = 0; i < DOMapp.stage.children.length; i++)
+            if (DOMapp.stage.children[i].id === instruction.group.id) {
+              DOMapp.stage.removeChild(DOMapp.stage.children[i]);
+            }
+          break;
+
+        case 'rotate':
+          for (let i = 0; i < DOMapp.stage.children.length; i++)
+            if (DOMapp.stage.children[i].id === instruction.group.id) {
+              DOMapp.stage.children[i].angle = instruction.group.rotation.angle;
+            }
+          break;
+
+        default:
+          console.log('Instruction type is not defined');
+      }
+    }
+    // eslint-disable-next-line
+  }, [instruction]);
 
   return <ProjectCanvasDiv ref={ref} />;
 }
@@ -65,7 +99,7 @@ function resizeCanvas(ref, sizes, app) {
 
 async function createRoom(app, obj) {
   const svgPath = await import(
-    `../../static/images/furnitures/${obj.file.svgPath}`
+    `../../../static/images/furniture/${obj.file.svgPath}`
   );
 
   const texture = PIXI.Texture.from(svgPath.default);
@@ -88,7 +122,7 @@ async function createRoom(app, obj) {
 
 async function createCanvasElement(app, obj) {
   const svgPath = await import(
-    `../../static/images/furnitures/${obj.file.svgPath}`
+    `../../../static/images/furniture/${obj.file.svgPath}`
   );
 
   const texture = PIXI.Texture.from(svgPath.default);
@@ -100,6 +134,9 @@ async function createCanvasElement(app, obj) {
   element.anchor.set(0.5);
   element.scale.set(1);
   element.id = obj.id;
+  element.name = obj.name;
+  element.type = obj.type;
+  element.file = obj.file;
   element.x = obj.position.x;
   element.y = obj.position.y;
   element.width = obj.dimension.width;
@@ -109,7 +146,8 @@ async function createCanvasElement(app, obj) {
     .on('pointerdown', onDragStart)
     .on('pointerup', onDragEnd)
     .on('pointerupoutside', onDragEnd)
-    .on('pointermove', onDragMove);
+    .on('pointermove', onDragMove)
+    .on('click', onClick);
 
   app.stage.addChild(element);
 }
@@ -135,6 +173,20 @@ function onDragMove() {
   }
 }
 
+function onClick() {
+  store.dispatch(
+    selectGroup({
+      name: this.name,
+      id: this.id,
+      type: this.type,
+      position: {x: this.x, y: this.y},
+      rotation: {angle: this.angle},
+      dimension: {width: this.width, height: this.height},
+      file: this.file,
+    })
+  );
+}
+
 // async function test(app) {
 //   const svgPayload = await fetch(
 //     'https://upload.wikimedia.org/wikipedia/commons/f/fa/De_Groot_academic_genealogy.svg'
@@ -152,4 +204,4 @@ const ProjectCanvasDiv = styled.div`
   background-color: lightgrey;
 `;
 
-export {ProjectCanvas};
+export {Canvas};

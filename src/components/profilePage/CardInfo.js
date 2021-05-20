@@ -9,7 +9,7 @@ import {
 } from '../../app/actions/index.js';
 import {getProjects, putProject} from '../../app/utils/firebase.js';
 
-function ProjectInfo() {
+function CardInfo() {
   const profile = useSelector((state) => state.profile);
   const [name, setName] = useState('');
 
@@ -131,8 +131,6 @@ const Button = styled.button`
       border: 1px solid #5cb85c;
     `}
 
-    
-
     ${(props) =>
     props.disabled &&
     css`
@@ -140,4 +138,4 @@ const Button = styled.button`
     `}
 `;
 
-export {ProjectInfo};
+export {CardInfo};

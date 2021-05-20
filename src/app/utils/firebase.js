@@ -1,5 +1,6 @@
 import firebase from 'firebase/app';
 import 'firebase/firestore';
+import 'firebase/auth';
 
 export function initFirebase() {
   const firebaseConfig = {
@@ -12,6 +13,25 @@ export function initFirebase() {
     measurementId: 'G-SKW8MVZEKL',
   };
   firebase.initializeApp(firebaseConfig);
+}
+
+export function login() {
+  const email = 'polin.chiang1996@gmail.com';
+  const password = 'CKMB31colorguard';
+
+  firebase
+    .auth()
+    .signInWithEmailAndPassword(email, password)
+    .then((userCredential) => {
+      // Signed in
+      console.log(userCredential.user.email);
+      console.log(userCredential.user.refreshToken);
+      console.log(userCredential.user.uid);
+      // ...
+    })
+    .catch((error) => {
+      console.log(error.code, error.message);
+    });
 }
 
 export function getUserId(email) {
@@ -226,6 +246,46 @@ export function deleteProject(id) {
       })
       .catch((error) => {
         console.error('Error removing document: ', error);
+      });
+  });
+}
+
+export function getSettingsByName(name) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('settings')
+      .where('name', '==', name)
+      .get()
+      .then((querySnapshot) => {
+        const settings = [];
+        querySnapshot.forEach((doc) => {
+          settings.push({id: doc.id, data: doc.data()});
+        });
+        if (settings.length > 0) {
+          resolve(settings[0]);
+        } else {
+          resolve('');
+        }
+      })
+      .catch((error) => {
+        console.log('Error getting documents: ', error);
+      });
+  });
+}
+
+export function postSettings(data) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('settings')
+      .add({
+        name: data.name,
+        furniture: data.furniture,
+      })
+      .then((docRef) => {
+        resolve(docRef.id);
+      })
+      .catch((error) => {
+        console.error('Error adding document: ', error);
       });
   });
 }

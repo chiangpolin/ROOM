@@ -2,11 +2,12 @@ import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import {useParams} from 'react-router';
 import {useDispatch} from 'react-redux';
-import {setProject} from '../../app/actions/index.js';
-import {getProject} from '../../app/utils/firebase.js';
+import {setProject, setInfo, initSettings} from '../../app/actions/index.js';
+import {getProject, getSettingsByName} from '../../app/utils/firebase.js';
 import {ProjectBar} from './ProjectBar.js';
-import {ProjectCanvas} from './ProjectCanvas.js';
-import {Rendering} from './Rendering.js';
+import {InfoBar} from './ProjectInfo/InfoBar.js';
+import {Canvas} from './ProjectCanvas/Canvas.js';
+import {Rendering} from './ProjectCanvas/Rendering.js';
 import {ReactComponent as CameraIcon} from '../../static/images/icons/camera.svg';
 
 function Project() {
@@ -18,25 +19,35 @@ function Project() {
   useEffect(() => {
     getProject(id).then((project) => {
       dispatch(setProject(project));
+      dispatch(setInfo('canvas'));
       setIsFetched(true);
     });
+    getSettingsByName('default').then((settings) =>
+      dispatch(initSettings(settings.data))
+    );
+    // eslint-disable-next-line
   }, []);
 
-  return isFetched ? (
-    <Main>
-      <ProjectBar />
-      <Section>
-        {renderIsClicked ? <Rendering /> : <ProjectCanvas />}
-        <RenderButton onClick={() => handleClickRender(!renderIsClicked)}>
-          <CameraIcon width="32" height="32" />
-        </RenderButton>
-      </Section>
-    </Main>
-  ) : (
-    <Main>
-      <section></section>
-    </Main>
-  );
+  if (isFetched) {
+    return (
+      <Main>
+        <ProjectBar />
+        <InfoBar />
+        <Section>
+          {renderIsClicked ? <Rendering /> : <Canvas />}
+          <RenderButton onClick={() => handleClickRender(!renderIsClicked)}>
+            <CameraIcon width="32" height="32" />
+          </RenderButton>
+        </Section>
+      </Main>
+    );
+  } else {
+    return (
+      <Main>
+        <section></section>
+      </Main>
+    );
+  }
 }
 
 const Main = styled.main`
@@ -49,7 +60,7 @@ const Section = styled.section`
   position: relative;
   display: flex;
   flex-direction: column;
-  width: calc(100% - 60px);
+  width: calc(100% - 360px);
 `;
 
 const RenderButton = styled.button`

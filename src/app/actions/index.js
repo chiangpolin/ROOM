@@ -12,7 +12,14 @@ export const CLOSE_SHARE_PROJECT = 'CLOSE_SHARE_PROJECT';
 export const SET_SEARCH_TARGET = 'SET_SEARCH_TARGET';
 export const SELECT_TARGET = 'SELECT_TARGET';
 
+export const SET_INFO = 'SET_INFO';
+export const INIT_SETTINGS = 'INIT_SETTINGS';
+export const SELECT_GROUP = 'SELECT_GROUP';
+export const ADD_NEW_GROUP = 'ADD_NEW_GROUP';
 export const UPDATE_GROUP = 'UPDATE_GROUP';
+export const UPDATE_GROUP_ROTATION = 'UPDATE_GROUP_ROTATION';
+export const DELETE_GROUP = 'DELETE_GROUP';
+export const SET_INSTRUCTION = 'SET_INSTRUCTION';
 
 // actions
 export const setUser = (user) => ({
@@ -61,7 +68,37 @@ export const selectTarget = (target) => ({
   target,
 });
 
+export const initSettings = (settings) => ({
+  type: 'INIT_SETTINGS',
+  settings,
+});
+export const setInfo = (info) => ({
+  type: 'SET_INFO',
+  info,
+});
+export const selectGroup = (group) => ({
+  type: 'SELECT_GROUP',
+  group,
+});
+export const addNewGroup = (group) => ({
+  type: 'ADD_NEW_GROUP',
+  group,
+});
 export const updateGroup = (group) => ({
   type: 'UPDATE_GROUP',
   group,
+});
+export const updateGroupRotation = (group, instruction) => ({
+  type: 'UPDATE_GROUP_ROTATION',
+  group,
+  instruction,
+});
+export const deleteGroup = (group, instruction) => ({
+  type: 'DELETE_GROUP',
+  group,
+  instruction,
+});
+export const setInstruction = (instruction) => ({
+  type: 'SET_INSTRUCTION',
+  instruction,
 });
