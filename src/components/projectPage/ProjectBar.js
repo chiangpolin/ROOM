@@ -7,6 +7,7 @@ import {ReactComponent as InfoSquareIcon} from '../../static/images/icons/info-s
 import {ReactComponent as EaselIcon} from '../../static/images/icons/easel.svg';
 import {ReactComponent as PaletteIcon} from '../../static/images/icons/palette.svg';
 import {ReactComponent as CameraIcon} from '../../static/images/icons/camera-reels.svg';
+import {ReactComponent as BricksIcon} from '../../static/images/icons/bricks.svg';
 
 function ProjectBar() {
   const dispatch = useDispatch();
@@ -19,11 +20,14 @@ function ProjectBar() {
       <SideButton onClick={() => dispatch(setInfo('canvas'))}>
         <InfoSquareIcon width="24" height="24" />
       </SideButton>
+      <SideButton onClick={() => dispatch(setInfo('wall'))}>
+        <PaletteIcon width="24" height="24" />
+      </SideButton>
       <SideButton onClick={() => dispatch(setInfo('furniture'))}>
         <EaselIcon width="24" height="24" />
       </SideButton>
-      <SideButton onClick={() => dispatch(setInfo('walls'))}>
-        <PaletteIcon width="24" height="24" />
+      <SideButton onClick={() => dispatch(setInfo('floor'))}>
+        <BricksIcon width="24" height="24" />
       </SideButton>
       <SideButton onClick={() => dispatch(setInfo('camera'))}>
         <CameraIcon width="24" height="24" />

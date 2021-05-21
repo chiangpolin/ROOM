@@ -10,7 +10,6 @@ import {
 function GroupInfo() {
   const dispatch = useDispatch();
   const project = useSelector((state) => state.project);
-  console.log(project);
 
   return (
     <Div>

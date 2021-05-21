@@ -10,6 +10,7 @@ function Canvas() {
   const [DOMapp, setDOMapp] = useState('');
   const ref = useRef(null);
   const groups = useSelector((state) => state.project.groups);
+  const room = useSelector((state) => state.project.room);
   const instruction = useSelector((state) => state.project.instruction);
 
   useEffect(() => {
@@ -32,12 +33,7 @@ function Canvas() {
     app.stage.scale.y = 1;
     ref.current.appendChild(app.view);
 
-    createRoom(app, {
-      file: {svgPath: 'room.svg'},
-      position: {x: 0, y: 0},
-      rotation: {angle: 0},
-      dimension: {width: 500, height: 330},
-    });
+    createRoom(app, room);
     for (let i = 0; i < groups.length; i++) {
       createCanvasElement(app, groups[i]);
     }
@@ -111,6 +107,9 @@ async function createRoom(app, obj) {
   element.anchor.set(0.5);
   element.scale.set(1);
   element.id = obj.id;
+  element.name = obj.name;
+  element.type = obj.type;
+  element.file = obj.file;
   element.x = obj.position.x;
   element.y = obj.position.y;
   element.width = obj.dimension.width;

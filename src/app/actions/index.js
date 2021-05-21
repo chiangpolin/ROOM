@@ -20,6 +20,9 @@ export const UPDATE_GROUP = 'UPDATE_GROUP';
 export const UPDATE_GROUP_ROTATION = 'UPDATE_GROUP_ROTATION';
 export const DELETE_GROUP = 'DELETE_GROUP';
 export const SET_INSTRUCTION = 'SET_INSTRUCTION';
+export const SET_ROOM_COLOR = 'SET_ROOM_COLOR';
+export const SET_FLOOR_TEXTURE = 'SET_FLOOR_TEXTURE';
+export const SET_CAMERA_POSITION = 'SET_CAMERA_POSITION';
 
 // actions
 export const setUser = (user) => ({
@@ -101,4 +104,16 @@ export const deleteGroup = (group, instruction) => ({
 export const setInstruction = (instruction) => ({
   type: 'SET_INSTRUCTION',
   instruction,
+});
+export const setRoomColor = (color) => ({
+  type: 'SET_ROOM_COLOR',
+  color,
+});
+export const setFloorTexture = (path) => ({
+  type: 'SET_FLOOR_TEXTURE',
+  path,
+});
+export const setCameraPosition = (position) => ({
+  type: 'SET_CAMERA_POSITION',
+  position,
 });
