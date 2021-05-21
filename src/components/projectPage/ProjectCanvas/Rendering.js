@@ -8,6 +8,9 @@ import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 function Rendering() {
   const ref = useRef(null);
   const groups = useSelector((state) => state.project.groups);
+  const room = useSelector((state) => state.project.room);
+  const floor = useSelector((state) => state.project.floor);
+  const defaultCamera = useSelector((state) => state.project.camera);
 
   useEffect(() => {
     //Scene
@@ -33,7 +36,11 @@ function Rendering() {
       0.1,
       10000
     );
-    camera.position.set(-300, 300, 600);
+    camera.position.set(
+      defaultCamera.position.x,
+      defaultCamera.position.z_index,
+      defaultCamera.position.y
+    );
 
     // Renderer
     const renderer = new THREE.WebGLRenderer({alpha: true});
@@ -42,14 +49,12 @@ function Rendering() {
     ref.current.appendChild(renderer.domElement);
 
     // Loader
-    const loader = new GLTFLoader();
-    setModel(scene, loader, {
-      file: {gltfPath: 'room.gltf'},
-      position: {x: 0, y: 0},
-      rotation: {angle: 0},
-    });
+    const glftLoader = new GLTFLoader();
+    const textureLoader = new THREE.TextureLoader();
+    setModel(scene, glftLoader, room);
+    setFloor(scene, textureLoader, floor);
     for (let i = 0; i < groups.length; i++) {
-      setModel(scene, loader, groups[i]);
+      setModel(scene, glftLoader, groups[i]);
     }
 
     // Controls
@@ -74,6 +79,7 @@ function Rendering() {
         resizeRendering(ref, sizes, camera, renderer)
       );
     };
+    // eslint-disable-next-line
   }, [groups]);
 
   return <RenderingDiv ref={ref} />;
@@ -99,17 +105,49 @@ function loadModel(loader, url) {
   });
 }
 
+async function setFloor(scene, loader, floor) {
+  const texturePath = await import(
+    `../../../static/images/texture/${floor.path}`
+  );
+  const texture = loader.load(texturePath.default);
+  texture.wrapS = THREE.RepeatWrapping;
+  texture.wrapT = THREE.RepeatWrapping;
+  texture.repeat.set(4, 4);
+
+  const geometry1 = new THREE.BoxGeometry(470, 2, 300);
+  const material1 = new THREE.MeshBasicMaterial({color: 0xffffff});
+  const mesh1 = new THREE.Mesh(geometry1, material1);
+  mesh1.material.map = texture;
+  scene.add(mesh1);
+}
+
 async function setModel(scene, loader, obj) {
   const modelPath = await import(`../../../static/models/${obj.file.gltfPath}`);
   const model = await loadModel(loader, modelPath.default);
   const group = new THREE.Group();
-  // eslint-disable-next-line
-  for (const [key, mesh] of Object.entries(model)) {
-    group.add(mesh);
+
+  switch (obj.type) {
+    case 'room':
+      // eslint-disable-next-line
+      for (const [key, mesh] of Object.entries(model)) {
+        mesh.material.color = new THREE.Color(
+          `rgb(${obj.color.r}, ${obj.color.g}, ${obj.color.b})`
+        );
+        group.add(mesh);
+      }
+      break;
+
+    default:
+      // eslint-disable-next-line
+      for (const [key, mesh] of Object.entries(model)) {
+        group.add(mesh);
+      }
   }
+
   group.scale.set(1, 1, 1);
   group.position.set(obj.position.x, 0, obj.position.y);
   group.rotation.set(0, -(obj.rotation.angle * Math.PI) / 180, 0);
+
   scene.add(group);
 }
 

@@ -3,8 +3,9 @@ import styled from 'styled-components';
 import {useSelector} from 'react-redux';
 import {SettingsInfo} from './SettingsInfo.js';
 import {CanvasInfo} from './CanvasInfo.js';
+import {WallInfo} from './WallInfo.js';
 import {FurnitureInfo} from './FurnitureInfo.js';
-import {WallsInfo} from './WallsInfo.js';
+import {FloorInfo} from './FloorInfo.js';
 import {CameraInfo} from './CameraInfo.js';
 import {GroupInfo} from './GroupInfo.js';
 
@@ -16,10 +17,12 @@ function InfoBar() {
       return <SettingsInfo></SettingsInfo>;
     case 'canvas':
       return <CanvasInfo></CanvasInfo>;
+    case 'wall':
+      return <WallInfo></WallInfo>;
     case 'furniture':
       return <FurnitureInfo></FurnitureInfo>;
-    case 'walls':
-      return <WallsInfo></WallsInfo>;
+    case 'floor':
+      return <FloorInfo></FloorInfo>;
     case 'camera':
       return <CameraInfo></CameraInfo>;
     case 'group':

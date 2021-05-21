@@ -41,6 +41,7 @@ function postSettings(data) {
       .add({
         name: data.name,
         furniture: data.furniture,
+        floor: data.floor,
       })
       .then((docRef) => {
         resolve(docRef.id);
@@ -52,11 +53,76 @@ function postSettings(data) {
 }
 
 async function update() {
-  const settings = await getSettingsByName('default');
-  console.log(settings);
+  // const settings = await getSettingsByName('default');
+  // console.log(settings);
 
   const data = {
     name: 'default',
+    floor: [
+      {
+        name: 'Kitchen Wood',
+        id: '',
+        type: 'floor',
+        position: {x: 0, y: 0},
+        rotation: {angle: 0},
+        dimension: {width: 0, height: 0},
+        path: 'kitchen-wood.jpg',
+      },
+      {
+        name: 'Grained Wood',
+        id: '',
+        type: 'floor',
+        position: {x: 0, y: 0},
+        rotation: {angle: 0},
+        dimension: {width: 0, height: 0},
+        path: 'grained-wood.jpg',
+      },
+      {
+        name: 'Brown Mud',
+        id: '',
+        type: 'floor',
+        position: {x: 0, y: 0},
+        rotation: {angle: 0},
+        dimension: {width: 0, height: 0},
+        path: 'brown-mud.jpg',
+      },
+      {
+        name: 'Beach',
+        id: '',
+        type: 'floor',
+        position: {x: 0, y: 0},
+        rotation: {angle: 0},
+        dimension: {width: 0, height: 0},
+        path: 'beach.jpg',
+      },
+      {
+        name: 'Marble',
+        id: '',
+        type: 'floor',
+        position: {x: 0, y: 0},
+        rotation: {angle: 0},
+        dimension: {width: 0, height: 0},
+        path: 'marble.jpg',
+      },
+      {
+        name: 'Rock',
+        id: '',
+        type: 'floor',
+        position: {x: 0, y: 0},
+        rotation: {angle: 0},
+        dimension: {width: 0, height: 0},
+        path: 'rock.jpg',
+      },
+      {
+        name: 'Tiled Floor',
+        id: '',
+        type: 'floor',
+        position: {x: 0, y: 0},
+        rotation: {angle: 0},
+        dimension: {width: 0, height: 0},
+        path: 'tiled-floor.jpg',
+      },
+    ],
     furniture: [
       {
         name: 'bed',
@@ -119,4 +185,4 @@ async function update() {
 }
 
 initFirebase();
-// update();
+update();

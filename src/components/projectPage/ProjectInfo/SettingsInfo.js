@@ -5,7 +5,7 @@ function SettingsInfo() {
   return (
     <Div>
       <Content>
-        <NameText>Settings</NameText>
+        <NameText></NameText>
       </Content>
     </Div>
   );

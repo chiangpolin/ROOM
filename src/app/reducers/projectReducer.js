@@ -12,8 +12,11 @@ const initialState = {
     dimension: {width: 0, height: 0},
     file: {svgPath: '', gltfPath: ''},
   },
+  room: {},
+  floor: {},
+  camera: {},
   info: '',
-  settings: {furniture: []},
+  settings: {furniture: [], floor: []},
   instruction: {type: '', group: {}},
 };
 
@@ -26,6 +29,9 @@ const projectReducer = (state = initialState, action) => {
         author_id: action.project.author_id,
         share_id: action.project.share_id,
         groups: action.project.groups,
+        room: action.project.room,
+        floor: action.project.floor,
+        camera: action.project.camera,
       };
     case 'SELECT_GROUP':
       return {
@@ -106,6 +112,24 @@ const projectReducer = (state = initialState, action) => {
           type: action.instruction.type,
           group: action.instruction.group,
         },
+      };
+
+    case 'SET_ROOM_COLOR':
+      return {
+        ...state,
+        room: {...state.room, color: action.color},
+      };
+
+    case 'SET_FLOOR_TEXTURE':
+      return {
+        ...state,
+        floor: {...state.floor, path: action.path},
+      };
+
+    case 'SET_CAMERA_POSITION':
+      return {
+        ...state,
+        camera: {...state.camera, position: action.position},
       };
 
     default:
