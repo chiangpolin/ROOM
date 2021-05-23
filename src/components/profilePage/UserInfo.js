@@ -4,7 +4,7 @@ import {useSelector} from 'react-redux';
 import avatar from '../../static/images/backgrounds/profile-avatar.png';
 
 function UserInfo() {
-  const profile = useSelector((state) => state.profile);
+  const {name, email} = useSelector((state) => state.profile);
 
   return (
     <Div>
@@ -12,8 +12,8 @@ function UserInfo() {
         <Img src={avatar} />
       </ImgDiv>
       <Content>
-        <NameText>{profile.name}</NameText>
-        <EmailText>{profile.email}</EmailText>
+        <NameText>{name}</NameText>
+        <EmailText>{email}</EmailText>
       </Content>
     </Div>
   );

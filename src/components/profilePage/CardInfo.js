@@ -1,17 +1,17 @@
 import React, {useState} from 'react';
 import styled, {css} from 'styled-components';
-import {useSelector} from 'react-redux';
-import {store} from '../../app/store/index.js';
+import {useSelector, useDispatch} from 'react-redux';
 import {
-  setProjects,
-  toggleEditName,
-  updateEditName,
+  toggleProjectName,
+  setProjectName,
+  updateProjectName,
 } from '../../app/actions/index.js';
-import {getProjects, putProject} from '../../app/utils/firebase.js';
 
 function CardInfo() {
-  const profile = useSelector((state) => state.profile);
+  const user_id = localStorage.getItem('user_id');
   const [name, setName] = useState('');
+  const {selectedProject} = useSelector((state) => state.profile);
+  const dispatch = useDispatch();
 
   return (
     <Div>
@@ -19,31 +19,29 @@ function CardInfo() {
         <Img />
       </ImgDiv>
       <Content>
-        {profile.selectedProject.isEditing ? (
+        {selectedProject.isEditing ? (
           <input
             value={name}
             onChange={(event) => handleChange(event, setName)}
           ></input>
         ) : (
           <NameText
-            onClick={() => {
-              setName(profile.selectedProject.name);
-              store.dispatch(toggleEditName());
-            }}
+            onClick={() =>
+              handleToggleName(dispatch, selectedProject.name, setName)
+            }
           >
-            {profile.selectedProject.name}
+            {selectedProject.name}
           </NameText>
         )}
-        <IdText>{profile.selectedProject.author_id}</IdText>
-        <IdText>{profile.selectedProject.id}</IdText>
-        {profile.selectedProject.author_id ===
-        localStorage.getItem('user_id') ? (
+        <IdText>{selectedProject.author_id}</IdText>
+        <IdText>{selectedProject.id}</IdText>
+        {selectedProject.author_id === user_id ? (
           <Buttons>
             <Button
               success
-              disabled={!profile.selectedProject.isEditing}
+              disabled={!selectedProject.isEditing}
               onClick={() => {
-                handleClickUpdate(profile.selectedProject.id, name);
+                handleClickUpdate(dispatch, name, user_id, selectedProject.id);
               }}
             >
               Update
@@ -61,12 +59,14 @@ function handleChange(event, setValue) {
   setValue(event.target.value);
 }
 
-async function handleClickUpdate(id, name) {
-  store.dispatch(toggleEditName());
-  store.dispatch(updateEditName(name));
-  await putProject(id, {name: name});
-  const projects = await getProjects(localStorage.getItem('user_id'));
-  store.dispatch(setProjects(projects));
+function handleToggleName(dispatch, name, setName) {
+  setName(name);
+  dispatch(toggleProjectName());
+}
+
+function handleClickUpdate(dispatch, name, user_id, project_id) {
+  dispatch(setProjectName(name));
+  dispatch(updateProjectName(name, user_id, project_id));
 }
 
 const Div = styled.div`

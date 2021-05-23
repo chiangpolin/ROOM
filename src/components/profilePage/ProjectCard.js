@@ -1,18 +1,18 @@
 import React from 'react';
 import styled, {css} from 'styled-components';
-import {useSelector, useDispatch} from 'react-redux';
 import {Link} from 'react-router-dom';
+import {useSelector, useDispatch} from 'react-redux';
 import {selectProject} from '../../app/actions/index.js';
 
 function ProjectCard(props) {
+  const {selectedProject} = useSelector((state) => state.profile);
   const dispatch = useDispatch();
-  const profile = useSelector((state) => state.profile);
 
   return (
     <Item
-      primary={profile.selectedProject.id === props.id}
+      primary={selectedProject.id === props.id}
       onClick={() => {
-        if (profile.selectedProject.id === props.id) {
+        if (selectedProject.id === props.id) {
           dispatch(selectProject({id: '', name: '', author_id: ''}));
         } else {
           dispatch(
@@ -42,7 +42,7 @@ const Item = styled.div`
   ${(props) =>
     props.primary &&
     css`
-      border: 3px solid #1c1c1c;
+      border: 1px solid #1c1c1c;
     `}
 `;
 

@@ -175,7 +175,7 @@ export function postProject(data) {
   });
 }
 
-export function putProject(id, data) {
+export function putProjectName(id, data) {
   const db = firebase.firestore();
   return new Promise((resolve) => {
     db.collection('projects')
@@ -195,7 +195,7 @@ export function putProject(id, data) {
   });
 }
 
-export function putSharedId(id, data) {
+export function putProjectShareId(id, data) {
   const db = firebase.firestore();
   return new Promise((resolve) => {
     db.collection('projects')

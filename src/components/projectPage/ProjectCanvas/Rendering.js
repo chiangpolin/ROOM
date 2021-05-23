@@ -7,9 +7,7 @@ import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 
 function Rendering() {
   const ref = useRef(null);
-  const groups = useSelector((state) => state.project.groups);
-  const room = useSelector((state) => state.project.room);
-  const floor = useSelector((state) => state.project.floor);
+  const {groups, room, floor} = useSelector((state) => state.project);
   const defaultCamera = useSelector((state) => state.project.camera);
 
   useEffect(() => {

@@ -1,17 +1,7 @@
 import React, {useEffect} from 'react';
 import styled from 'styled-components';
 import {useSelector, useDispatch} from 'react-redux';
-import {
-  getUser,
-  getProjects,
-  getSharedProjects,
-} from '../../app/utils/firebase.js';
-import {
-  setUser,
-  setProjects,
-  setSharedProjects,
-  selectProject,
-} from '../../app/actions/index.js';
+import {selectProject, fetchProfileData} from '../../app/actions/index.js';
 import {ProfileBar} from './ProfileBar.js';
 import {UserInfo} from './UserInfo.js';
 import {CardInfo} from './CardInfo.js';
@@ -19,37 +9,24 @@ import {ProjectCard} from './ProjectCard.js';
 import {Modal} from './Modal.js';
 
 function Profile() {
+  const {selectedProject, filter, projects, sharedProjects, shareIsToggled} =
+    useSelector((state) => state.profile);
   const dispatch = useDispatch();
-  const profile = useSelector((state) => state.profile);
 
   useEffect(() => {
-    const fetchData = async () => {
-      const user_id = localStorage.getItem('user_id');
-      const [user, projects, sharedProjects] = await Promise.all([
-        getUser(user_id),
-        getProjects(user_id),
-        getSharedProjects(user_id),
-      ]);
-      return {user, projects, sharedProjects};
-    };
-    fetchData().then(({user, projects, sharedProjects}) => {
-      dispatch(setUser(user));
-      dispatch(setProjects(projects));
-      dispatch(setSharedProjects(sharedProjects));
-    });
-
     dispatch(selectProject({id: '', name: '', author_id: ''}));
+    dispatch(fetchProfileData(localStorage.getItem('user_id')));
     // eslint-disable-next-line
   }, []);
 
   return (
     <Main>
       <ProfileBar />
-      {profile.selectedProject.id === '' ? <UserInfo /> : <CardInfo />}
+      {selectedProject.id === '' ? <UserInfo /> : <CardInfo />}
       <Section>
         <Container>
-          {profile.filter.author
-            ? profile.projects.map((project, index) => (
+          {filter.author
+            ? projects.map((project) => (
                 <ProjectCard
                   key={project.id}
                   id={project.id}
@@ -58,8 +35,8 @@ function Profile() {
                 ></ProjectCard>
               ))
             : ''}
-          {profile.filter.shared
-            ? profile.sharedProjects.map((project, index) => (
+          {filter.shared
+            ? sharedProjects.map((project) => (
                 <ProjectCard
                   key={project.id}
                   id={project.id}
@@ -70,7 +47,7 @@ function Profile() {
             : ''}
         </Container>
       </Section>
-      {profile.toggleShareProject ? <Modal /> : ''}
+      {shareIsToggled ? <Modal /> : ''}
     </Main>
   );
 }

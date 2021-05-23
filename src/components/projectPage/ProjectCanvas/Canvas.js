@@ -2,16 +2,14 @@ import React, {useState, useEffect, useRef} from 'react';
 import styled from 'styled-components';
 import {useSelector} from 'react-redux';
 import {store} from '../../../app/store/index.js';
-import {selectGroup, updateGroup} from '../../../app/actions/index.js';
+import {selectGroup, setGroupPosition} from '../../../app/actions/index.js';
 import * as PIXI from 'pixi.js';
 // import {SVGScene} from '@pixi-essentials/svg';
 
 function Canvas() {
   const [DOMapp, setDOMapp] = useState('');
   const ref = useRef(null);
-  const groups = useSelector((state) => state.project.groups);
-  const room = useSelector((state) => state.project.room);
-  const instruction = useSelector((state) => state.project.instruction);
+  const {groups, room, instruction} = useSelector((state) => state.project);
 
   useEffect(() => {
     // Sizes
@@ -53,11 +51,11 @@ function Canvas() {
   useEffect(() => {
     if (DOMapp) {
       switch (instruction.type) {
-        case 'new':
+        case 'add':
           createCanvasElement(DOMapp, instruction.group);
           break;
 
-        case 'delete':
+        case 'remove':
           for (let i = 0; i < DOMapp.stage.children.length; i++)
             if (DOMapp.stage.children[i].id === instruction.group.id) {
               DOMapp.stage.removeChild(DOMapp.stage.children[i]);
@@ -161,7 +159,9 @@ function onDragEnd() {
   this.data = null;
   this.alpha = 1;
   this.dragging = false;
-  store.dispatch(updateGroup({id: this.id, position: {x: this.x, y: this.y}}));
+  store.dispatch(
+    setGroupPosition({id: this.id, position: {x: this.x, y: this.y}})
+  );
 }
 
 function onDragMove() {

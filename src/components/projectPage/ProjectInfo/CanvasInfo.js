@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import {useSelector} from 'react-redux';
 
 function CanvasInfo() {
-  const project = useSelector((state) => state.project);
+  const {name, author_id} = useSelector((state) => state.project);
 
   return (
     <Div>
@@ -11,8 +11,8 @@ function CanvasInfo() {
         <Img />
       </ImgDiv>
       <Content>
-        <NameText>{project.name}</NameText>
-        <AuthorText>{project.author_id}</AuthorText>
+        <NameText>{name}</NameText>
+        <AuthorText>{author_id}</AuthorText>
       </Content>
     </Div>
   );

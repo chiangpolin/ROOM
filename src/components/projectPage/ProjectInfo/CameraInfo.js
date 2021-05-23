@@ -1,11 +1,11 @@
 import React from 'react';
 import styled from 'styled-components';
 import {useSelector, useDispatch} from 'react-redux';
-import {setCameraPosition} from '../../../app/actions';
+import {setCameraPosition} from '../../../app/actions/index.js';
 
 function CameraInfo() {
+  const defaultCamera = useSelector((state) => state.project.camera);
   const dispatch = useDispatch();
-  const camera = useSelector((state) => state.project.camera);
 
   return (
     <Div>
@@ -13,14 +13,14 @@ function CameraInfo() {
         <Img />
       </ImgDiv>
       <Content>
-        <NameText>{camera.name}</NameText>
+        <NameText>{defaultCamera.name}</NameText>
         <InputDiv>
           x:
           <Input
             type="number"
-            value={camera.position.x}
+            value={defaultCamera.position.x}
             onChange={(event) =>
-              handlePositionChange(event, dispatch, camera, 'x')
+              handlePositionChange(event, dispatch, defaultCamera, 'x')
             }
           ></Input>
         </InputDiv>
@@ -28,9 +28,9 @@ function CameraInfo() {
           y:
           <Input
             type="number"
-            value={camera.position.y}
+            value={defaultCamera.position.y}
             onChange={(event) =>
-              handlePositionChange(event, dispatch, camera, 'y')
+              handlePositionChange(event, dispatch, defaultCamera, 'y')
             }
           ></Input>
         </InputDiv>
@@ -38,9 +38,9 @@ function CameraInfo() {
           z_index:
           <Input
             type="number"
-            value={camera.position.z_index}
+            value={defaultCamera.position.z_index}
             onChange={(event) =>
-              handlePositionChange(event, dispatch, camera, 'z')
+              handlePositionChange(event, dispatch, defaultCamera, 'z')
             }
           ></Input>
         </InputDiv>
