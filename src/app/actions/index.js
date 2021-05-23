@@ -1,119 +1,210 @@
-// action types
-export const SET_USER = 'SET_USER';
-export const SET_PROJECT = 'SET_PROJECT';
-export const SET_PROJECTS = 'SET_PROJECTS';
-export const SET_SHARED_PROJECTS = 'SET_SHARED_PROJECTS';
-export const FILTER_PROJECTS = 'FILTER_PROJECTS';
-export const SELECT_PROJECT = 'SELECT_PROJECT';
-export const TOGGLE_EDIT_NAME = 'TOGGLE_EDIT_NAME';
-export const UPDATE_EDIT_NAME = 'UPDATE_EDIT_NAME';
-export const TOGGLE_SHARE_PROJECT = 'TOGGLE_SHARE_PROJECT';
-export const CLOSE_SHARE_PROJECT = 'CLOSE_SHARE_PROJECT';
-export const SET_SEARCH_TARGET = 'SET_SEARCH_TARGET';
-export const SELECT_TARGET = 'SELECT_TARGET';
+import * as actionTypes from './actionTypes';
+import * as firebase from '../../app/utils/firebase.js';
 
-export const SET_INFO = 'SET_INFO';
-export const INIT_SETTINGS = 'INIT_SETTINGS';
-export const SELECT_GROUP = 'SELECT_GROUP';
-export const ADD_NEW_GROUP = 'ADD_NEW_GROUP';
-export const UPDATE_GROUP = 'UPDATE_GROUP';
-export const UPDATE_GROUP_ROTATION = 'UPDATE_GROUP_ROTATION';
-export const DELETE_GROUP = 'DELETE_GROUP';
-export const SET_INSTRUCTION = 'SET_INSTRUCTION';
-export const SET_ROOM_COLOR = 'SET_ROOM_COLOR';
-export const SET_FLOOR_TEXTURE = 'SET_FLOOR_TEXTURE';
-export const SET_CAMERA_POSITION = 'SET_CAMERA_POSITION';
+// thunk
+export const fetchProfileData = (user_id) => async (dispatch) => {
+  const [user, projects, sharedProjects] = await Promise.all([
+    firebase.getUser(user_id),
+    firebase.getProjects(user_id),
+    firebase.getSharedProjects(user_id),
+  ]);
 
-// actions
+  dispatch(setUser(user));
+  dispatch(setProjects(projects));
+  dispatch(setSharedProjects(sharedProjects));
+};
+
+export const fetchProjectData = (project_id) => async (dispatch) => {
+  const [project, settings] = await Promise.all([
+    firebase.getProject(project_id),
+    firebase.getSettingsByName('default'),
+  ]);
+
+  dispatch(setProject(project));
+  dispatch(setInfo('canvas'));
+  dispatch(setSettings(settings.data));
+};
+
+export const fetchSearchTarget = (email) => async (dispatch) => {
+  const user = await firebase.getUserByEmail(email);
+  if (!user) {
+    window.alert('user not exist');
+    return;
+  }
+  dispatch(
+    setSearchTarget({id: user.id, name: user.data.name, photo: user.data.photo})
+  );
+};
+
+export const createProject = (user_id) => async (dispatch) => {
+  await firebase.postProject({
+    id: user_id,
+    name: 'Untitled',
+    groups: [],
+  });
+  const projects = await firebase.getProjects(user_id);
+  dispatch(setProjects(projects));
+};
+
+export const cloneProject = (user_id, project_id) => async (dispatch) => {
+  const project = await firebase.getProject(project_id);
+  await firebase.postProject({
+    id: user_id,
+    name: `${project.name}-clone`,
+    groups: project.groups,
+  });
+  const projects = await firebase.getProjects(user_id);
+  dispatch(setProjects(projects));
+};
+
+export const shareProject = (project_id, target_id) => async (dispatch) => {
+  const {share_id} = await firebase.getProject(project_id);
+  for (let i = 0; i < share_id.length; i++) {
+    if (share_id[i] === target_id) {
+      window.alert('project is already shared!!');
+      return;
+    }
+  }
+  share_id.push(target_id);
+  firebase.putProjectShareId(project_id, {share_id: share_id});
+  dispatch(closeShare());
+};
+
+export const updateProjectName =
+  (name, user_id, project_id) => async (dispatch) => {
+    await firebase.putProjectName(project_id, {name: name});
+    const projects = await firebase.getProjects(user_id);
+    dispatch(setProjects(projects));
+  };
+
+export const updateProjectGroups = (groups, project_id) => async () => {
+  await firebase.putProjectGroups(project_id, {groups: groups});
+};
+
+export const deleteProject = (user_id, project_id) => async (dispatch) => {
+  await firebase.deleteProject(project_id);
+  const projects = await firebase.getProjects(user_id);
+  dispatch(setProjects(projects));
+  dispatch(selectProject(''));
+};
+
+// user
 export const setUser = (user) => ({
-  type: 'SET_USER',
+  type: actionTypes.SET_USER,
   user,
 });
-export const setProject = (project) => ({
-  type: 'SET_PROJECT',
-  project,
-});
-export const setProjects = (projects) => ({
-  type: 'SET_PROJECTS',
-  projects,
-});
-export const setSharedProjects = (sharedProjects) => ({
-  type: 'SET_SHARED_PROJECTS',
-  sharedProjects,
-});
-export const filterProjects = (filter) => ({
-  type: 'FILTER_PROJECTS',
-  filter,
-});
-export const selectProject = (project) => ({
-  type: 'SELECT_PROJECT',
-  project,
-});
-export const toggleEditName = () => ({
-  type: 'TOGGLE_EDIT_NAME',
-});
-export const updateEditName = (name) => ({
-  type: 'UPDATE_EDIT_NAME',
-  name,
-});
-export const toggleShareProject = () => ({
-  type: 'TOGGLE_SHARE_PROJECT',
-});
-export const closeShareProject = () => ({
-  type: 'CLOSE_SHARE_PROJECT',
-});
+
 export const setSearchTarget = (target) => ({
-  type: 'SET_SEARCH_TARGET',
-  target,
-});
-export const selectTarget = (target) => ({
-  type: 'SELECT_TARGET',
+  type: actionTypes.SET_SEARCH_TARGET,
   target,
 });
 
-export const initSettings = (settings) => ({
-  type: 'INIT_SETTINGS',
+export const selectSearchTarget = (target) => ({
+  type: actionTypes.SELECT_SEARCH_TARGET,
+  target,
+});
+
+// projects
+export const setProjects = (projects) => ({
+  type: actionTypes.SET_PROJECTS,
+  projects,
+});
+
+export const setSharedProjects = (sharedProjects) => ({
+  type: actionTypes.SET_SHARED_PROJECTS,
+  sharedProjects,
+});
+
+export const filterProjects = (filter) => ({
+  type: actionTypes.FILTER_PROJECTS,
+  filter,
+});
+
+// project
+export const setProject = (project) => ({
+  type: actionTypes.SET_PROJECT,
+  project,
+});
+
+export const selectProject = (project) => ({
+  type: actionTypes.SELECT_PROJECT,
+  project,
+});
+
+export const setProjectName = (name) => ({
+  type: actionTypes.SET_PROJECT_NAME,
+  name,
+});
+
+export const toggleProjectName = () => ({
+  type: actionTypes.TOGGLE_PROJECT_NAME,
+});
+
+export const toggleShare = () => ({
+  type: actionTypes.TOGGLE_SHARE,
+});
+
+export const closeShare = () => ({
+  type: actionTypes.CLOSE_SHARE,
+});
+
+// settings
+export const setSettings = (settings) => ({
+  type: actionTypes.SET_SETTINGS,
   settings,
 });
+
+// info
 export const setInfo = (info) => ({
-  type: 'SET_INFO',
+  type: actionTypes.SET_INFO,
   info,
 });
+
+// group
+export const addGroup = (group) => ({
+  type: actionTypes.ADD_GROUP,
+  group,
+});
+
+export const removeGroup = (group, instruction) => ({
+  type: actionTypes.REMOVE_GROUP,
+  group,
+  instruction,
+});
+
 export const selectGroup = (group) => ({
-  type: 'SELECT_GROUP',
+  type: actionTypes.SELECT_GROUP,
   group,
 });
-export const addNewGroup = (group) => ({
-  type: 'ADD_NEW_GROUP',
+
+export const setGroupPosition = (group) => ({
+  type: actionTypes.SET_GROUP_POSITION,
   group,
 });
-export const updateGroup = (group) => ({
-  type: 'UPDATE_GROUP',
-  group,
-});
-export const updateGroupRotation = (group, instruction) => ({
-  type: 'UPDATE_GROUP_ROTATION',
+
+export const setGroupRotation = (group, instruction) => ({
+  type: actionTypes.SET_GROUP_ROTATION,
   group,
   instruction,
 });
-export const deleteGroup = (group, instruction) => ({
-  type: 'DELETE_GROUP',
-  group,
-  instruction,
-});
-export const setInstruction = (instruction) => ({
-  type: 'SET_INSTRUCTION',
-  instruction,
-});
+
 export const setRoomColor = (color) => ({
-  type: 'SET_ROOM_COLOR',
+  type: actionTypes.SET_ROOM_COLOR,
   color,
 });
+
 export const setFloorTexture = (path) => ({
-  type: 'SET_FLOOR_TEXTURE',
+  type: actionTypes.SET_FLOOR_TEXTURE,
   path,
 });
+
 export const setCameraPosition = (position) => ({
-  type: 'SET_CAMERA_POSITION',
+  type: actionTypes.SET_CAMERA_POSITION,
   position,
+});
+
+// instruction
+export const setInstruction = (instruction) => ({
+  type: actionTypes.SET_INSTRUCTION,
+  instruction,
 });

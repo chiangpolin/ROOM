@@ -2,28 +2,26 @@ import React, {useState} from 'react';
 import styled, {css} from 'styled-components';
 import {useSelector, useDispatch} from 'react-redux';
 import {
-  closeShareProject,
-  selectTarget,
-  setSearchTarget,
+  closeShare,
+  fetchSearchTarget,
+  selectSearchTarget,
+  shareProject,
 } from '../../app/actions/index.js';
-import {
-  getUserByEmail,
-  getProject,
-  putSharedId,
-} from '../../app/utils/firebase.js';
 import {ReactComponent as X} from '../../static/images/icons/x.svg';
 import {ReactComponent as SearchIcon} from '../../static/images/icons/search.svg';
 
 function Modal() {
-  const dispatch = useDispatch();
-  const profile = useSelector((state) => state.profile);
   const [email, setEmail] = useState('');
+  const {searchTarget, selectedTarget, selectedProject} = useSelector(
+    (state) => state.profile
+  );
+  const dispatch = useDispatch();
 
   return (
     <Div>
       <Mask></Mask>
       <ModalBody>
-        <Button onClick={() => dispatch(closeShareProject())}>
+        <Button onClick={() => dispatch(closeShare())}>
           <X width="24" height="24" />
         </Button>
         <Content>
@@ -37,20 +35,22 @@ function Modal() {
               <SearchIcon />
             </SearchButton>
           </SearchBar>
-          {profile.searchTarget.id ? (
+          {searchTarget.id ? (
             <Target
-              primary={profile.searchTarget.id === profile.selectedTarget.id}
-              onClick={() => dispatch(selectTarget(profile.searchTarget))}
+              primary={searchTarget.id === selectedTarget.id}
+              onClick={() => dispatch(selectSearchTarget(searchTarget))}
             >
               <TargetImg></TargetImg>
-              <TargetName>{profile.searchTarget.name}</TargetName>
+              <TargetName>{searchTarget.name}</TargetName>
             </Target>
           ) : (
             ''
           )}
           <ShareButton
-            onClick={() => handleClickShare(dispatch, profile)}
-            disabled={profile.selectedTarget.id === ''}
+            onClick={() =>
+              handleClickShare(dispatch, selectedProject.id, selectedTarget.id)
+            }
+            disabled={selectedTarget.id === ''}
           >
             Share
           </ShareButton>
@@ -64,28 +64,12 @@ function handleChange(event, setValue) {
   setValue(event.target.value);
 }
 
-async function handleSubmit(dispatch, email) {
-  const user = await getUserByEmail(email);
-  if (!user) {
-    window.alert('user not exist');
-    return;
-  }
-  dispatch(
-    setSearchTarget({id: user.id, name: user.data.name, photo: user.data.photo})
-  );
+function handleSubmit(dispatch, email) {
+  dispatch(fetchSearchTarget(email));
 }
 
-async function handleClickShare(dispatch, profile) {
-  const project = await getProject(profile.selectedProject.id);
-  for (let i = 0; i < project.share_id.length; i++) {
-    if (project.share_id[i] === profile.selectedTarget.id) {
-      window.alert('project is shared!!');
-      return;
-    }
-  }
-  project.share_id.push(profile.selectedTarget.id);
-  putSharedId(profile.selectedProject.id, {share_id: project.share_id});
-  dispatch(closeShareProject());
+function handleClickShare(dispatch, project_id, target_id) {
+  dispatch(shareProject(project_id, target_id));
 }
 
 const Div = styled.div`

@@ -68,7 +68,7 @@ async function handleSubmit(history, email) {
     localStorage.setItem('user_id', id);
     history.push('/profile');
   } else {
-    console.log('id not exist');
+    alert('id not exist');
     return;
   }
 }

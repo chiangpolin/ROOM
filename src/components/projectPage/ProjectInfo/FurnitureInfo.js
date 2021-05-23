@@ -1,16 +1,17 @@
 import React from 'react';
 import styled from 'styled-components';
 import {useSelector, useDispatch} from 'react-redux';
-import {addNewGroup, setInstruction} from '../../../app/actions';
+import {addGroup, setInstruction} from '../../../app/actions/index.js';
+import {_uuid} from '../../../app/utils/index.js';
 
 function FurnitureInfo() {
+  const {settings} = useSelector((state) => state.project);
   const dispatch = useDispatch();
-  const project = useSelector((state) => state.project);
 
   return (
     <Div>
       <Container>
-        {project.settings.furniture.map((item, index) => (
+        {settings.furniture.map((item, index) => (
           <Item key={index} onClick={() => handleClick(dispatch, item)}>
             <ItemImg></ItemImg>
             <ItemText>{item.name}</ItemText>
@@ -35,30 +36,8 @@ function handleClick(dispatch, item) {
     rotation: item.rotation,
   };
 
-  dispatch(addNewGroup(group));
-  dispatch(setInstruction({type: 'new', group}));
-}
-
-function _uuid() {
-  function s4() {
-    return Math.floor((1 + Math.random()) * 0x10000)
-      .toString(16)
-      .substring(1);
-  }
-  return (
-    s4() +
-    s4() +
-    '-' +
-    s4() +
-    '-' +
-    s4() +
-    '-' +
-    s4() +
-    '-' +
-    s4() +
-    s4() +
-    s4()
-  );
+  dispatch(addGroup(group));
+  dispatch(setInstruction({type: 'add', group}));
 }
 
 const Div = styled.div`

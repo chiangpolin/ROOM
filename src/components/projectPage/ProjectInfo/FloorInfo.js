@@ -1,16 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
 import {useSelector, useDispatch} from 'react-redux';
-import {setFloorTexture} from '../../../app/actions';
+import {setFloorTexture} from '../../../app/actions/index.js';
 
 function FloorInfo() {
+  const {settings} = useSelector((state) => state.project);
   const dispatch = useDispatch();
-  const project = useSelector((state) => state.project);
 
   return (
     <Div>
       <Container>
-        {project.settings.floor.map((item, index) => (
+        {settings.floor.map((item, index) => (
           <Item key={index} onClick={() => handleTextureChange(dispatch, item)}>
             <ItemImg src={item.main_image}></ItemImg>
             <ItemText>{item.name}</ItemText>

@@ -18,10 +18,23 @@ const initialState = {
   info: '',
   settings: {furniture: [], floor: []},
   instruction: {type: '', group: {}},
+  dataIsFetched: false,
 };
 
 const projectReducer = (state = initialState, action) => {
   switch (action.type) {
+    case 'SET_SETTINGS':
+      return {
+        ...state,
+        settings: action.settings,
+      };
+
+    case 'SET_INFO':
+      return {
+        ...state,
+        info: action.info,
+      };
+
     case 'SET_PROJECT':
       return {
         ...state,
@@ -32,7 +45,25 @@ const projectReducer = (state = initialState, action) => {
         room: action.project.room,
         floor: action.project.floor,
         camera: action.project.camera,
+        dataIsFetched: true,
       };
+
+    case 'ADD_GROUP':
+      return {
+        ...state,
+        groups: [...state.groups, action.group],
+      };
+
+    case 'REMOVE_GROUP':
+      return {
+        ...state,
+        groups: state.groups.filter((group) => group.id !== action.group.id),
+        instruction: {
+          type: action.instruction.type,
+          group: action.instruction.group,
+        },
+      };
+
     case 'SELECT_GROUP':
       return {
         ...state,
@@ -40,13 +71,7 @@ const projectReducer = (state = initialState, action) => {
         info: 'group',
       };
 
-    case 'ADD_NEW_GROUP':
-      return {
-        ...state,
-        groups: [...state.groups, action.group],
-      };
-
-    case 'UPDATE_GROUP':
+    case 'SET_GROUP_POSITION':
       return {
         ...state,
         groups: state.groups.map((group) => {
@@ -63,7 +88,7 @@ const projectReducer = (state = initialState, action) => {
         }),
       };
 
-    case 'UPDATE_GROUP_ROTATION':
+    case 'SET_GROUP_ROTATION':
       return {
         ...state,
         groups: state.groups.map((group) => {
@@ -77,37 +102,6 @@ const projectReducer = (state = initialState, action) => {
           }
           return group;
         }),
-        instruction: {
-          type: action.instruction.type,
-          group: action.instruction.group,
-        },
-      };
-
-    case 'DELETE_GROUP':
-      return {
-        ...state,
-        groups: state.groups.filter((group) => group.id !== action.group.id),
-        instruction: {
-          type: action.instruction.type,
-          group: action.instruction.group,
-        },
-      };
-
-    case 'SET_INFO':
-      return {
-        ...state,
-        info: action.info,
-      };
-
-    case 'INIT_SETTINGS':
-      return {
-        ...state,
-        settings: action.settings,
-      };
-
-    case 'SET_INSTRUCTION':
-      return {
-        ...state,
         instruction: {
           type: action.instruction.type,
           group: action.instruction.group,
@@ -130,6 +124,15 @@ const projectReducer = (state = initialState, action) => {
       return {
         ...state,
         camera: {...state.camera, position: action.position},
+      };
+
+    case 'SET_INSTRUCTION':
+      return {
+        ...state,
+        instruction: {
+          type: action.instruction.type,
+          group: action.instruction.group,
+        },
       };
 
     default:

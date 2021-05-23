@@ -3,16 +3,11 @@ import styled from 'styled-components';
 import {Link, useLocation} from 'react-router-dom';
 import {useSelector, useDispatch} from 'react-redux';
 import {
-  getProject,
-  getProjects,
-  postProject,
+  toggleShare,
+  createProject,
+  cloneProject,
+  updateProjectGroups,
   deleteProject,
-  putProjectGroups,
-} from '../app/utils/firebase.js';
-import {
-  setProjects,
-  selectProject,
-  toggleShareProject,
 } from '../app/actions/index';
 import {ReactComponent as ListIcon} from '../static/images/icons/list.svg';
 import {ReactComponent as DoorIcon} from '../static/images/icons/door-open-fill.svg';
@@ -24,10 +19,11 @@ import {ReactComponent as SdCardIcon} from '../static/images/icons/sd-card.svg';
 import {ReactComponent as PersonIcon} from '../static/images/icons/person-circle.svg';
 
 function Header() {
+  const user_id = localStorage.getItem('user_id');
   let location = useLocation();
+  const {selectedProject, filter} = useSelector((state) => state.profile);
+  const {groups} = useSelector((state) => state.project);
   const dispatch = useDispatch();
-  const profile = useSelector((state) => state.profile);
-  const project = useSelector((state) => state.project);
 
   return (
     <header>
@@ -47,37 +43,35 @@ function Header() {
           {location.pathname === '/profile' ? (
             <NavControllers>
               <Button
-                onClick={() => addNewProject(dispatch)}
-                disabled={!profile.filter.author}
+                onClick={() => handleClickCreate(dispatch, user_id)}
+                disabled={!filter.author}
               >
                 <FolderPlusIcon width="24" height="24" />
               </Button>
               <Button
                 onClick={() => handleToggleShare(dispatch)}
                 disabled={
-                  profile.selectedProject.id === '' ||
-                  profile.selectedProject.author_id !==
-                    localStorage.getItem('user_id')
+                  selectedProject.id === '' ||
+                  selectedProject.author_id !== user_id
                 }
               >
                 <FolderSymlinkIcon width="24" height="24" />
               </Button>
               <Button
                 onClick={() =>
-                  cloneSelectedProject(dispatch, profile.selectedProject.id)
+                  handleClickClone(dispatch, user_id, selectedProject.id)
                 }
-                disabled={profile.selectedProject.id === ''}
+                disabled={selectedProject.id === ''}
               >
                 <StickiesIcon width="24" height="24" />
               </Button>
               <Button
                 onClick={() =>
-                  deleteSelectedProject(dispatch, profile.selectedProject.id)
+                  handleClickDelete(dispatch, user_id, selectedProject.id)
                 }
                 disabled={
-                  profile.selectedProject.id === '' ||
-                  profile.selectedProject.author_id !==
-                    localStorage.getItem('user_id')
+                  selectedProject.id === '' ||
+                  selectedProject.author_id !== user_id
                 }
               >
                 <TrashIcon width="24" height="24" />
@@ -87,15 +81,9 @@ function Header() {
             <NavControllers>
               <Button
                 onClick={() =>
-                  updateSelectedProject(
-                    profile.selectedProject.id,
-                    project.groups
-                  )
+                  handleClickUpdate(dispatch, selectedProject.id, groups)
                 }
-                disabled={
-                  profile.selectedProject.author_id !==
-                  localStorage.getItem('user_id')
-                }
+                disabled={selectedProject.author_id !== user_id}
               >
                 <SdCardIcon width="24" height="24" />
               </Button>
@@ -103,8 +91,7 @@ function Header() {
           ) : (
             ''
           )}
-          {location.pathname !== '/profile' &&
-          localStorage.getItem('user_id') !== null ? (
+          {location.pathname !== '/profile' && user_id !== null ? (
             <NavLinks>
               <Link
                 to="/profile"
@@ -125,43 +112,24 @@ function Header() {
   );
 }
 
-async function addNewProject(dispatch) {
-  const user_id = localStorage.getItem('user_id');
-  await postProject({
-    id: user_id,
-    name: 'Untitled',
-    groups: [],
-  });
-  const projects = await getProjects(user_id);
-  dispatch(setProjects(projects));
-}
-
-async function cloneSelectedProject(dispatch, id) {
-  const user_id = localStorage.getItem('user_id');
-  const project = await getProject(id);
-  await postProject({
-    id: user_id,
-    name: `${project.name}-clone`,
-    groups: project.groups,
-  });
-  const projects = await getProjects(user_id);
-  dispatch(setProjects(projects));
-}
-
-async function updateSelectedProject(id, groups) {
-  await putProjectGroups(id, {groups: groups});
-}
-
-async function deleteSelectedProject(dispatch, id) {
-  const user_id = localStorage.getItem('user_id');
-  await deleteProject(id);
-  const projects = await getProjects(user_id);
-  dispatch(setProjects(projects));
-  dispatch(selectProject(''));
-}
-
 function handleToggleShare(dispatch) {
-  dispatch(toggleShareProject());
+  dispatch(toggleShare());
+}
+
+async function handleClickCreate(dispatch, user_id) {
+  dispatch(createProject(user_id));
+}
+
+async function handleClickClone(dispatch, user_id, project_id) {
+  dispatch(cloneProject(user_id, project_id));
+}
+
+async function handleClickDelete(dispatch, user_id, project_id) {
+  dispatch(deleteProject(user_id, project_id));
+}
+
+async function handleClickUpdate(dispatch, groups, project_id) {
+  dispatch(updateProjectGroups(project_id, groups));
 }
 
 const Navbar = styled.div`

@@ -10,9 +10,9 @@ import {CameraInfo} from './CameraInfo.js';
 import {GroupInfo} from './GroupInfo.js';
 
 function InfoBar() {
-  const project = useSelector((state) => state.project);
+  const {info} = useSelector((state) => state.project);
 
-  switch (project.info) {
+  switch (info) {
     case 'settings':
       return <SettingsInfo></SettingsInfo>;
     case 'canvas':

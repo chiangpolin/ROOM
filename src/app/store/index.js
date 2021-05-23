@@ -1,7 +1,8 @@
-import {configureStore} from '@reduxjs/toolkit';
+import {configureStore, getDefaultMiddleware} from '@reduxjs/toolkit';
 import landingReducer from '../reducers/landingReducer';
 import profileReducer from '../reducers/profileReducer';
 import projectReducer from '../reducers/projectReducer';
+import thunk from 'redux-thunk';
 
 export const store = configureStore(
   {
@@ -10,6 +11,7 @@ export const store = configureStore(
       profile: profileReducer,
       project: projectReducer,
     },
+    middleware: [thunk, ...getDefaultMiddleware()],
   },
   window.__REDUX_DEVTOOLS_EXTENSION__ && window.__REDUX_DEVTOOLS_EXTENSION__()
 );

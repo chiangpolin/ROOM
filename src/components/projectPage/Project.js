@@ -1,34 +1,26 @@
 import React, {useState, useEffect} from 'react';
 import styled from 'styled-components';
 import {useParams} from 'react-router';
-import {useDispatch} from 'react-redux';
-import {setProject, setInfo, initSettings} from '../../app/actions/index.js';
-import {getProject, getSettingsByName} from '../../app/utils/firebase.js';
+import {useDispatch, useSelector} from 'react-redux';
+import {fetchProjectData} from '../../app/actions/index.js';
+import {ReactComponent as CameraIcon} from '../../static/images/icons/camera.svg';
 import {ProjectBar} from './ProjectBar.js';
 import {InfoBar} from './ProjectInfo/InfoBar.js';
 import {Canvas} from './ProjectCanvas/Canvas.js';
 import {Rendering} from './ProjectCanvas/Rendering.js';
-import {ReactComponent as CameraIcon} from '../../static/images/icons/camera.svg';
 
 function Project() {
-  let {id} = useParams();
-  const dispatch = useDispatch();
-  const [isFetched, setIsFetched] = useState(false);
   const [renderIsClicked, handleClickRender] = useState(false);
+  let {id} = useParams();
+  const {dataIsFetched} = useSelector((state) => state.project);
+  const dispatch = useDispatch();
 
   useEffect(() => {
-    getProject(id).then((project) => {
-      dispatch(setProject(project));
-      dispatch(setInfo('canvas'));
-      setIsFetched(true);
-    });
-    getSettingsByName('default').then((settings) =>
-      dispatch(initSettings(settings.data))
-    );
+    dispatch(fetchProjectData(id));
     // eslint-disable-next-line
   }, []);
 
-  if (isFetched) {
+  if (dataIsFetched) {
     return (
       <Main>
         <ProjectBar />

@@ -2,14 +2,14 @@ import React from 'react';
 import styled, {css} from 'styled-components';
 import {useSelector, useDispatch} from 'react-redux';
 import {
-  deleteGroup,
   selectGroup,
-  updateGroupRotation,
-} from '../../../app/actions';
+  removeGroup,
+  setGroupRotation,
+} from '../../../app/actions/index.js';
 
 function GroupInfo() {
+  const {selectedGroup} = useSelector((state) => state.project);
   const dispatch = useDispatch();
-  const project = useSelector((state) => state.project);
 
   return (
     <Div>
@@ -17,17 +17,17 @@ function GroupInfo() {
         <Img />
       </ImgDiv>
       <Content>
-        <NameText>{project.selectedGroup.name}</NameText>
-        <IdText>{project.selectedGroup.id}</IdText>
+        <NameText>{selectedGroup.name}</NameText>
+        <IdText>{selectedGroup.id}</IdText>
         <Button
           primary
-          onClick={() => handleClickRotate(dispatch, project.selectedGroup)}
+          onClick={() => handleClickRotate(dispatch, selectedGroup)}
         >
           Rotate
         </Button>
         <Button
           danger
-          onClick={() => handleClickDelete(dispatch, project.selectedGroup)}
+          onClick={() => handleClickDelete(dispatch, selectedGroup)}
         >
           Delete
         </Button>
@@ -40,7 +40,7 @@ function handleClickRotate(dispatch, group) {
   const newAngle = group.rotation.angle + 90;
   const newGroup = {...group, rotation: {angle: newAngle}};
   dispatch(
-    updateGroupRotation(newGroup, {
+    setGroupRotation(newGroup, {
       type: 'rotate',
       group: newGroup,
     })
@@ -49,7 +49,7 @@ function handleClickRotate(dispatch, group) {
 }
 
 function handleClickDelete(dispatch, group) {
-  dispatch(deleteGroup(group, {type: 'delete', group}));
+  dispatch(removeGroup(group, {type: 'remove', group}));
 }
 
 const Div = styled.div`

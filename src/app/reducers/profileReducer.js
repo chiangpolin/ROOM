@@ -10,7 +10,7 @@ const initialState = {
     isEditing: false,
   },
   filter: {shared: true, author: true},
-  toggleShareProject: false,
+  shareIsToggled: false,
   searchTarget: {id: '', name: '', photo: ''},
   selectedTarget: {id: '', name: '', photo: ''},
 };
@@ -19,6 +19,18 @@ const profileReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'SET_USER':
       return {...state, name: action.user.name, email: action.user.email};
+
+    case 'SET_SEARCH_TARGET':
+      return {
+        ...state,
+        searchTarget: action.target,
+      };
+
+    case 'SELECT_SEARCH_TARGET':
+      return {
+        ...state,
+        selectedTarget: action.target,
+      };
 
     case 'SET_PROJECTS':
       return {...state, projects: action.projects};
@@ -46,48 +58,37 @@ const profileReducer = (state = initialState, action) => {
         },
       };
 
-    case 'TOGGLE_EDIT_NAME':
-      return {
-        ...state,
-        selectedProject: {
-          ...state.selectedProject,
-          isEditing: !state.selectedProject.isEditing,
-        },
-      };
-
-    case 'UPDATE_EDIT_NAME':
+    case 'SET_PROJECT_NAME':
       return {
         ...state,
         selectedProject: {
           ...state.selectedProject,
           name: action.name,
+          isEditing: false,
         },
       };
 
-    case 'TOGGLE_SHARE_PROJECT':
+    case 'TOGGLE_PROJECT_NAME':
       return {
         ...state,
-        toggleShareProject: true,
+        selectedProject: {
+          ...state.selectedProject,
+          isEditing: true,
+        },
       };
 
-    case 'CLOSE_SHARE_PROJECT':
+    case 'TOGGLE_SHARE':
+      return {
+        ...state,
+        shareIsToggled: true,
+      };
+
+    case 'CLOSE_SHARE':
       return {
         ...state,
         searchTarget: {id: '', name: '', photo: ''},
         selectedTarget: {id: '', name: '', photo: ''},
-        toggleShareProject: false,
-      };
-
-    case 'SET_SEARCH_TARGET':
-      return {
-        ...state,
-        searchTarget: action.target,
-      };
-
-    case 'SELECT_TARGET':
-      return {
-        ...state,
-        selectedTarget: action.target,
+        shareIsToggled: false,
       };
 
     default:
