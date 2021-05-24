@@ -2,136 +2,141 @@ const initialState = {
   name: '',
   author_id: '',
   share_id: [],
+  walls: [],
+  furnitures: [],
+  selectedFurniture: {},
+  floors: [],
+  cameras: [],
   groups: [],
-  selectedGroup: {
-    name: '',
-    id: '',
-    type: '',
-    position: {x: 0, y: 0},
-    rotation: {angle: 0},
-    dimension: {width: 0, height: 0},
-    file: {svgPath: '', gltfPath: ''},
-  },
-  room: {},
-  floor: {},
-  camera: {},
-  info: '',
-  settings: {furniture: [], floor: []},
-  instruction: {type: '', group: {}},
+  info: {},
+  setting: {},
+  instruction: {},
   dataIsFetched: false,
 };
 
 const projectReducer = (state = initialState, action) => {
   switch (action.type) {
-    case 'SET_SETTINGS':
+    case 'SET_SETTING':
       return {
         ...state,
-        settings: action.settings,
+        setting: action.payload.setting,
       };
 
     case 'SET_INFO':
       return {
         ...state,
-        info: action.info,
+        info: action.payload.info,
       };
 
     case 'SET_PROJECT':
       return {
         ...state,
-        name: action.project.name,
-        author_id: action.project.author_id,
-        share_id: action.project.share_id,
-        groups: action.project.groups,
-        room: action.project.room,
-        floor: action.project.floor,
-        camera: action.project.camera,
+        name: action.payload.project.name,
+        author_id: action.payload.project.author_id,
+        share_id: action.payload.project.share_id,
+        walls: action.payload.project.walls,
+        furnitures: action.payload.project.furnitures,
+        floors: action.payload.project.floors,
+        cameras: action.payload.project.cameras,
         dataIsFetched: true,
       };
 
-    case 'ADD_GROUP':
+    case 'RESET_PROJECT_STATUS':
       return {
         ...state,
-        groups: [...state.groups, action.group],
+        dataIsFetched: false,
       };
 
-    case 'REMOVE_GROUP':
+    case 'ADD_FURNITURE':
       return {
         ...state,
-        groups: state.groups.filter((group) => group.id !== action.group.id),
+        furnitures: [...state.furnitures, action.payload.furniture],
         instruction: {
-          type: action.instruction.type,
-          group: action.instruction.group,
+          type: action.payload.instruction.type,
+          furniture: action.payload.instruction.furniture,
         },
       };
 
-    case 'SELECT_GROUP':
+    case 'REMOVE_FURNITURE':
       return {
         ...state,
-        selectedGroup: action.group,
+        furnitures: state.furnitures.filter(
+          (furniture) => furniture.id !== action.payload.furniture.id
+        ),
+        instruction: {
+          type: action.payload.instruction.type,
+          furniture: action.payload.instruction.furniture,
+        },
+      };
+
+    case 'SELECT_FURNITURE':
+      return {
+        ...state,
+        selectedFurniture: action.payload.furniture,
         info: 'group',
       };
 
-    case 'SET_GROUP_POSITION':
+    case 'SET_FURNITURE_POSITION':
       return {
         ...state,
-        groups: state.groups.map((group) => {
-          if (group.id === action.group.id) {
+        furnitures: state.furnitures.map((furniture) => {
+          if (furniture.id === action.payload.furniture.id) {
             return {
-              ...group,
+              ...furniture,
               position: {
-                x: action.group.position.x,
-                y: action.group.position.y,
+                x: action.payload.furniture.position.x,
+                y: action.payload.furniture.position.y,
               },
             };
           }
-          return group;
+          return furniture;
         }),
       };
 
-    case 'SET_GROUP_ROTATION':
+    case 'SET_FURNITURE_ROTATION':
       return {
         ...state,
-        groups: state.groups.map((group) => {
-          if (group.id === action.group.id) {
+        furnitures: state.furnitures.map((furniture) => {
+          if (furniture.id === action.payload.furniture.id) {
             return {
-              ...group,
+              ...furniture,
               rotation: {
-                angle: action.group.rotation.angle,
+                angle: action.payload.furniture.rotation.angle,
               },
             };
           }
-          return group;
+          return furniture;
         }),
         instruction: {
-          type: action.instruction.type,
-          group: action.instruction.group,
+          type: action.payload.instruction.type,
+          furniture: action.payload.instruction.furniture,
         },
       };
 
-    case 'SET_ROOM_COLOR':
+    case 'SET_WALL_COLOR':
       return {
         ...state,
-        room: {...state.room, color: action.color},
+        walls: [{...state.walls[0], color: action.payload.color}],
       };
 
     case 'SET_FLOOR_TEXTURE':
       return {
         ...state,
-        floor: {...state.floor, path: action.path},
+        floors: [{...state.floors[0], path: action.payload.path}],
       };
 
     case 'SET_CAMERA_POSITION':
       return {
         ...state,
-        camera: {...state.camera, position: action.position},
+        cameras: [{...state.cameras[0], position: action.payload.position}],
       };
 
     case 'SET_INSTRUCTION':
       return {
         ...state,
         instruction: {
-          type: action.instruction.type,
-          group: action.instruction.group,
+          type: action.payload.instruction.type,
+          furniture: action.payload.instruction.furniture,
         },
       };
 

@@ -1,18 +1,22 @@
 import React from 'react';
 import styled from 'styled-components';
+import {useParams} from 'react-router';
 import {useSelector, useDispatch} from 'react-redux';
-import {addGroup, setInstruction} from '../../../app/actions/index.js';
-import {_uuid} from '../../../app/utils/index.js';
+import {createFurniture} from '../../../app/actions/index.js';
 
 function FurnitureInfo() {
-  const {settings} = useSelector((state) => state.project);
+  let {id} = useParams();
+  const {setting} = useSelector((state) => state.project);
   const dispatch = useDispatch();
 
   return (
     <Div>
       <Container>
-        {settings.furniture.map((item, index) => (
-          <Item key={index} onClick={() => handleClick(dispatch, item)}>
+        {setting.furnitures.map((item, index) => (
+          <Item
+            key={index}
+            onClick={() => handleClickFurniture(dispatch, id, item)}
+          >
             <ItemImg></ItemImg>
             <ItemText>{item.name}</ItemText>
             <Dimension>
@@ -25,19 +29,17 @@ function FurnitureInfo() {
   );
 }
 
-function handleClick(dispatch, item) {
-  const group = {
-    id: _uuid(),
-    name: item.name,
-    type: item.type,
-    file: item.file,
-    dimension: item.dimension,
-    position: item.position,
-    rotation: item.rotation,
-  };
-
-  dispatch(addGroup(group));
-  dispatch(setInstruction({type: 'add', group}));
+function handleClickFurniture(dispatch, project_id, furniture) {
+  dispatch(
+    createFurniture(project_id, {
+      name: furniture.name,
+      type: 'furniture',
+      file: furniture.file,
+      dimension: furniture.dimension,
+      position: {x: 0, y: 0},
+      rotation: {angle: 0},
+    })
+  );
 }
 
 const Div = styled.div`
@@ -68,7 +70,7 @@ const ItemImg = styled.img`
   margin: 10px 0 0;
   width: 80%;
   height: 80px;
-  background-color: lightgrey;
+  background-color: #bdc0ba;
 `;
 
 const ItemText = styled.p`

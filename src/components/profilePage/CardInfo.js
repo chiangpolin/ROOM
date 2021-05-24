@@ -84,6 +84,7 @@ const ImgDiv = styled.div`
 const Img = styled.img`
   width: 150px;
   height: 150px;
+  background-color: #bdc0ba;
 `;
 
 const Content = styled.div`
@@ -98,13 +99,16 @@ const IdText = styled.p`
   font-size: 16px;
 `;
 
-const Buttons = styled.div``;
+const Buttons = styled.div`
+  margin: 15px 0 0;
+`;
 
 const Button = styled.button`
-  width: 60px;
-  height: 20px;
+  width: 100%;
+  height: 30px;
   color: #1c1c1c;
   border: 1px solid #1c1c1c;
+  font-size: 16px;
   cursor: pointer;
 
   ${(props) =>

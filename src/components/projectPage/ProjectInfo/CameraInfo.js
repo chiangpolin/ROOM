@@ -4,7 +4,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {setCameraPosition} from '../../../app/actions/index.js';
 
 function CameraInfo() {
-  const defaultCamera = useSelector((state) => state.project.camera);
+  const {cameras} = useSelector((state) => state.project);
   const dispatch = useDispatch();
 
   return (
@@ -13,34 +13,37 @@ function CameraInfo() {
         <Img />
       </ImgDiv>
       <Content>
-        <NameText>{defaultCamera.name}</NameText>
+        <NameText>{cameras[0].name}</NameText>
         <InputDiv>
-          x:
+          <p>x:</p>
+
           <Input
             type="number"
-            value={defaultCamera.position.x}
+            value={cameras[0].position.x}
             onChange={(event) =>
-              handlePositionChange(event, dispatch, defaultCamera, 'x')
+              handlePositionChange(event, dispatch, cameras[0], 'x')
             }
           ></Input>
         </InputDiv>
         <InputDiv>
-          y:
+          <p>y:</p>
+
           <Input
             type="number"
-            value={defaultCamera.position.y}
+            value={cameras[0].position.y}
             onChange={(event) =>
-              handlePositionChange(event, dispatch, defaultCamera, 'y')
+              handlePositionChange(event, dispatch, cameras[0], 'y')
             }
           ></Input>
         </InputDiv>
         <InputDiv>
-          z_index:
+          <p>z_index:</p>
+
           <Input
             type="number"
-            value={defaultCamera.position.z_index}
+            value={cameras[0].position.z_index}
             onChange={(event) =>
-              handlePositionChange(event, dispatch, defaultCamera, 'z')
+              handlePositionChange(event, dispatch, cameras[0], 'z')
             }
           ></Input>
         </InputDiv>
@@ -99,6 +102,7 @@ const ImgDiv = styled.div`
 const Img = styled.img`
   width: 150px;
   height: 150px;
+  background-color: #bdc0ba;
 `;
 
 const Div = styled.div`
@@ -114,8 +118,18 @@ const NameText = styled.p`
   font-size: 24px;
 `;
 
-const InputDiv = styled.div``;
+const InputDiv = styled.div`
+  display: flex;
+  margin: 10px 0;
+  p {
+    width: 80px;
+  }
+`;
 
-const Input = styled.input``;
+const Input = styled.input`
+  padding: 0 10px;
+  width: 160px;
+  font-size: 14px;
+`;
 
 export {CameraInfo};
