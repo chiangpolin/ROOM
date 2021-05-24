@@ -1,84 +1,6 @@
 import * as actionTypes from './actionTypes';
+import * as defaultSettings from './defaultSettings';
 import * as firestore from '../../app/utils/firebase.js';
-
-const bed = {
-  name: 'Bed',
-  type: 'furniture',
-  position: {
-    x: 0,
-    y: -50,
-  },
-  dimension: {
-    width: 145,
-    height: 195,
-  },
-  rotation: {
-    angle: 0,
-  },
-  file: {
-    gltf_path: 'bed-01.gltf',
-    svg_path: 'bed-01.svg',
-  },
-};
-
-const default_wall = {
-  name: 'Bedroom',
-  type: 'wall',
-  position: {
-    x: 0,
-    y: 0,
-  },
-  dimension: {
-    width: 500,
-    height: 330,
-  },
-  rotation: {
-    angle: 0,
-  },
-  color: {
-    r: 252,
-    g: 250,
-    b: 242,
-  },
-  file: {
-    gltf_path: 'room.gltf',
-    svg_path: 'room.svg',
-  },
-};
-
-const default_floor = {
-  name: 'Bedroom',
-  type: 'floor',
-  position: {
-    x: 0,
-    y: 0,
-  },
-  dimension: {
-    width: 0,
-    height: 0,
-  },
-  rotation: {
-    angle: 0,
-  },
-  path: 'kitchen-wood.jpg',
-};
-
-const default_camera = {
-  name: 'Default-Camera',
-  type: 'camera',
-  position: {
-    x: -300,
-    y: 600,
-    z_index: 400,
-  },
-  dimension: {
-    width: 0,
-    height: 0,
-  },
-  rotation: {
-    angle: 0,
-  },
-};
 
 // thunk
 export const fetchProfileData = (user_id) => async (dispatch) => {
@@ -150,10 +72,10 @@ export const createProject = (user_id) => async (dispatch) => {
   });
 
   await Promise.all([
-    firestore.postWall(id, default_wall),
-    firestore.postFurniture(id, bed),
-    firestore.postFloor(id, default_floor),
-    firestore.postCamera(id, default_camera),
+    firestore.postWall(id, defaultSettings.wall),
+    firestore.postFurniture(id, defaultSettings.bed),
+    firestore.postFloor(id, defaultSettings.floor),
+    firestore.postCamera(id, defaultSettings.camera),
   ]);
 
   const projects = await firestore.getProjects(user_id);
@@ -207,27 +129,27 @@ export const shareProject = (project_id, target_id) => async (dispatch) => {
   dispatch(closeShare());
 };
 
+export const updateProject = (project_id, data) => async () => {
+  for (let i = 0; i < data.walls.length; i++) {
+    firestore.putWall(project_id, data.walls[i]);
+  }
+  for (let i = 0; i < data.furnitures.length; i++) {
+    firestore.putFurniture(project_id, data.furnitures[i]);
+  }
+  for (let i = 0; i < data.floors.length; i++) {
+    firestore.putFloor(project_id, data.floors[i]);
+  }
+  for (let i = 0; i < data.cameras.length; i++) {
+    firestore.putCamera(project_id, data.cameras[i]);
+  }
+};
+
 export const updateProjectName =
   (name, user_id, project_id) => async (dispatch) => {
     await firestore.putProjectName(project_id, {name: name});
     const projects = await firestore.getProjects(user_id);
     dispatch(setProjects(projects));
   };
-
-export const updateProject = (project_id, data) => async () => {
-  for (let i = 0; i < data.walls.length; i++) {
-    firestore.putProjectWall(project_id, data.walls[i]);
-  }
-  for (let i = 0; i < data.furnitures.length; i++) {
-    firestore.putProjectFurniture(project_id, data.furnitures[i]);
-  }
-  for (let i = 0; i < data.floors.length; i++) {
-    firestore.putProjectFloor(project_id, data.floors[i]);
-  }
-  for (let i = 0; i < data.cameras.length; i++) {
-    firestore.putProjectCamera(project_id, data.cameras[i]);
-  }
-};
 
 export const deleteProject = (user_id, project_id) => async (dispatch) => {
   await firestore.deleteProject(project_id);

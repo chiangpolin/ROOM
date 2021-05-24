@@ -30,29 +30,6 @@ export function login(email, password) {
     });
 }
 
-export function getUserId(email) {
-  const db = firebase.firestore();
-  return new Promise((resolve) => {
-    db.collection('users')
-      .where('email', '==', email)
-      .get()
-      .then((querySnapshot) => {
-        const users = [];
-        querySnapshot.forEach((doc) => {
-          users.push({id: doc.id, data: doc.data()});
-        });
-        if (users.length > 0) {
-          resolve(users[0].id);
-        } else {
-          resolve('');
-        }
-      })
-      .catch((error) => {
-        console.log('Error getting documents: ', error);
-      });
-  });
-}
-
 export function getUserByEmail(email) {
   const db = firebase.firestore();
   return new Promise((resolve) => {
@@ -210,6 +187,21 @@ export function putProjectShareId(id, data) {
   });
 }
 
+export function deleteProject(id) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(id)
+      .delete()
+      .then(() => {
+        resolve('success');
+      })
+      .catch((error) => {
+        console.error('Error removing document: ', error);
+      });
+  });
+}
+
 export function getWalls(project_id) {
   const db = firebase.firestore();
   return new Promise((resolve) => {
@@ -227,58 +219,23 @@ export function getWalls(project_id) {
   });
 }
 
-export function getFurnitures(project_id) {
+export function postWall(project_id, data) {
   const db = firebase.firestore();
   return new Promise((resolve) => {
     db.collection('projects')
       .doc(project_id)
-      .collection('furnitures')
-      .get()
-      .then((querySnapshot) => {
-        const furnitures = [];
-        querySnapshot.forEach((doc) => {
-          furnitures.push({...doc.data(), id: doc.id});
-        });
-        resolve(furnitures);
+      .collection('walls')
+      .add(data)
+      .then((docRef) => {
+        resolve(docRef.id);
+      })
+      .catch((error) => {
+        console.error('Error adding document: ', error);
       });
   });
 }
 
-export function getFloors(project_id) {
-  const db = firebase.firestore();
-  return new Promise((resolve) => {
-    db.collection('projects')
-      .doc(project_id)
-      .collection('floors')
-      .get()
-      .then((querySnapshot) => {
-        const floors = [];
-        querySnapshot.forEach((doc) => {
-          floors.push({...doc.data(), id: doc.id});
-        });
-        resolve(floors);
-      });
-  });
-}
-
-export function getCameras(project_id) {
-  const db = firebase.firestore();
-  return new Promise((resolve) => {
-    db.collection('projects')
-      .doc(project_id)
-      .collection('cameras')
-      .get()
-      .then((querySnapshot) => {
-        const cameras = [];
-        querySnapshot.forEach((doc) => {
-          cameras.push({...doc.data(), id: doc.id});
-        });
-        resolve(cameras);
-      });
-  });
-}
-
-export function putProjectWall(project_id, wall) {
+export function putWall(project_id, wall) {
   const db = firebase.firestore();
   return new Promise((resolve) => {
     db.collection('projects')
@@ -300,7 +257,57 @@ export function putProjectWall(project_id, wall) {
   });
 }
 
-export function putProjectFurniture(project_id, furniture) {
+export function deleteWall(project_id, wall_id) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('walls')
+      .doc(wall_id)
+      .delete()
+      .then(() => {
+        resolve('success');
+      })
+      .catch((error) => {
+        console.error('Error removing document: ', error);
+      });
+  });
+}
+
+export function getFurnitures(project_id) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('furnitures')
+      .get()
+      .then((querySnapshot) => {
+        const furnitures = [];
+        querySnapshot.forEach((doc) => {
+          furnitures.push({...doc.data(), id: doc.id});
+        });
+        resolve(furnitures);
+      });
+  });
+}
+
+export function postFurniture(project_id, data) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('furnitures')
+      .add(data)
+      .then((docRef) => {
+        resolve(docRef.id);
+      })
+      .catch((error) => {
+        console.error('Error adding document: ', error);
+      });
+  });
+}
+
+export function putFurniture(project_id, furniture) {
   const db = firebase.firestore();
   return new Promise((resolve) => {
     db.collection('projects')
@@ -323,7 +330,57 @@ export function putProjectFurniture(project_id, furniture) {
   });
 }
 
-export function putProjectFloor(project_id, floor) {
+export function deleteFurniture(project_id, furniture_id) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('furnitures')
+      .doc(furniture_id)
+      .delete()
+      .then(() => {
+        resolve('success');
+      })
+      .catch((error) => {
+        console.error('Error removing document: ', error);
+      });
+  });
+}
+
+export function getFloors(project_id) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('floors')
+      .get()
+      .then((querySnapshot) => {
+        const floors = [];
+        querySnapshot.forEach((doc) => {
+          floors.push({...doc.data(), id: doc.id});
+        });
+        resolve(floors);
+      });
+  });
+}
+
+export function postFloor(project_id, data) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('floors')
+      .add(data)
+      .then((docRef) => {
+        resolve(docRef.id);
+      })
+      .catch((error) => {
+        console.error('Error adding document: ', error);
+      });
+  });
+}
+
+export function putFloor(project_id, floor) {
   const db = firebase.firestore();
   return new Promise((resolve) => {
     db.collection('projects')
@@ -345,7 +402,57 @@ export function putProjectFloor(project_id, floor) {
   });
 }
 
-export function putProjectCamera(project_id, camera) {
+export function deleteFloor(project_id, floor_id) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('floors')
+      .doc(floor_id)
+      .delete()
+      .then(() => {
+        resolve('success');
+      })
+      .catch((error) => {
+        console.error('Error removing document: ', error);
+      });
+  });
+}
+
+export function getCameras(project_id) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('cameras')
+      .get()
+      .then((querySnapshot) => {
+        const cameras = [];
+        querySnapshot.forEach((doc) => {
+          cameras.push({...doc.data(), id: doc.id});
+        });
+        resolve(cameras);
+      });
+  });
+}
+
+export function postCamera(project_id, data) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('cameras')
+      .add(data)
+      .then((docRef) => {
+        resolve(docRef.id);
+      })
+      .catch((error) => {
+        console.error('Error adding document: ', error);
+      });
+  });
+}
+
+export function putCamera(project_id, camera) {
   const db = firebase.firestore();
   return new Promise((resolve) => {
     db.collection('projects')
@@ -367,92 +474,13 @@ export function putProjectCamera(project_id, camera) {
   });
 }
 
-export function deleteProject(id) {
-  const db = firebase.firestore();
-  return new Promise((resolve) => {
-    db.collection('projects')
-      .doc(id)
-      .delete()
-      .then(() => {
-        resolve('success');
-      })
-      .catch((error) => {
-        console.error('Error removing document: ', error);
-      });
-  });
-}
-
-export function postWall(project_id, data) {
-  const db = firebase.firestore();
-  return new Promise((resolve) => {
-    db.collection('projects')
-      .doc(project_id)
-      .collection('walls')
-      .add(data)
-      .then((docRef) => {
-        resolve(docRef.id);
-      })
-      .catch((error) => {
-        console.error('Error adding document: ', error);
-      });
-  });
-}
-
-export function postFurniture(project_id, data) {
-  const db = firebase.firestore();
-  return new Promise((resolve) => {
-    db.collection('projects')
-      .doc(project_id)
-      .collection('furnitures')
-      .add(data)
-      .then((docRef) => {
-        resolve(docRef.id);
-      })
-      .catch((error) => {
-        console.error('Error adding document: ', error);
-      });
-  });
-}
-
-export function postFloor(project_id, data) {
-  const db = firebase.firestore();
-  return new Promise((resolve) => {
-    db.collection('projects')
-      .doc(project_id)
-      .collection('floors')
-      .add(data)
-      .then((docRef) => {
-        resolve(docRef.id);
-      })
-      .catch((error) => {
-        console.error('Error adding document: ', error);
-      });
-  });
-}
-
-export function postCamera(project_id, data) {
+export function deleteCamera(project_id, camera_id) {
   const db = firebase.firestore();
   return new Promise((resolve) => {
     db.collection('projects')
       .doc(project_id)
       .collection('cameras')
-      .add(data)
-      .then((docRef) => {
-        resolve(docRef.id);
-      })
-      .catch((error) => {
-        console.error('Error adding document: ', error);
-      });
-  });
-}
-
-export function deleteFurniture(project_id, furniture_id) {
-  const db = firebase.firestore();
-  return new Promise((resolve) => {
-    db.collection('projects')
-      .doc(project_id)
-      .collection('furnitures')
-      .doc(furniture_id)
+      .doc(camera_id)
       .delete()
       .then(() => {
         resolve('success');
@@ -517,6 +545,22 @@ export function getSettingPaints(settings_id) {
   });
 }
 
+export function postSettingPaint(setting_id, data) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('settings')
+      .doc(setting_id)
+      .collection('paints')
+      .add(data)
+      .then((docRef) => {
+        resolve(docRef.id);
+      })
+      .catch((error) => {
+        console.error('Error adding document: ', error);
+      });
+  });
+}
+
 export function getSettingTextures(settings_id) {
   const db = firebase.firestore();
   return new Promise((resolve) => {
@@ -534,6 +578,22 @@ export function getSettingTextures(settings_id) {
   });
 }
 
+export function postSettingFurniture(setting_id, data) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('settings')
+      .doc(setting_id)
+      .collection('furnitures')
+      .add(data)
+      .then((docRef) => {
+        resolve(docRef.id);
+      })
+      .catch((error) => {
+        console.error('Error adding document: ', error);
+      });
+  });
+}
+
 export function getSettingFurnitures(settings_id) {
   const db = firebase.firestore();
   return new Promise((resolve) => {
@@ -547,6 +607,22 @@ export function getSettingFurnitures(settings_id) {
           furnitures.push({...doc.data(), id: doc.id});
         });
         resolve(furnitures);
+      });
+  });
+}
+
+export function postSettingTexture(setting_id, data) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('settings')
+      .doc(setting_id)
+      .collection('textures')
+      .add(data)
+      .then((docRef) => {
+        resolve(docRef.id);
+      })
+      .catch((error) => {
+        console.error('Error adding document: ', error);
       });
   });
 }

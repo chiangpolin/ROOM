@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import styled from 'styled-components';
 import {useHistory} from 'react-router-dom';
-import {getUserId} from '../../app/utils/firebase.js';
+import {getUserByEmail} from '../../app/utils/firebase.js';
 import {ReactComponent as GoogleIcon} from '../../static/images/icons/google.svg';
 import {ReactComponent as FacebookIcon} from '../../static/images/icons/facebook.svg';
 
@@ -63,7 +63,7 @@ function Form(props) {
 }
 
 async function handleSubmit(history, email) {
-  const id = await getUserId(email);
+  const {id} = await getUserByEmail(email);
   if (id) {
     localStorage.setItem('user_id', id);
     history.push('/profile');
