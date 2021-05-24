@@ -33,6 +33,7 @@ const ImgDiv = styled.div`
 const Img = styled.img`
   width: 150px;
   height: 150px;
+  background-color: #bdc0ba;
 `;
 
 const Content = styled.div`

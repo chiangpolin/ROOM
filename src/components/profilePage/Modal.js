@@ -21,7 +21,7 @@ function Modal() {
     <Div>
       <Mask></Mask>
       <ModalBody>
-        <Button onClick={() => dispatch(closeShare())}>
+        <Button onClick={() => handleClickX(dispatch)}>
           <X width="24" height="24" />
         </Button>
         <Content>
@@ -38,7 +38,7 @@ function Modal() {
           {searchTarget.id ? (
             <Target
               primary={searchTarget.id === selectedTarget.id}
-              onClick={() => dispatch(selectSearchTarget(searchTarget))}
+              onClick={() => handleSelect(dispatch, searchTarget)}
             >
               <TargetImg></TargetImg>
               <TargetName>{searchTarget.name}</TargetName>
@@ -70,6 +70,14 @@ function handleSubmit(dispatch, email) {
 
 function handleClickShare(dispatch, project_id, target_id) {
   dispatch(shareProject(project_id, target_id));
+}
+
+function handleClickX(dispatch) {
+  dispatch(closeShare());
+}
+
+function handleSelect(dispatch, searchTarget) {
+  dispatch(selectSearchTarget(searchTarget));
 }
 
 const Div = styled.div`

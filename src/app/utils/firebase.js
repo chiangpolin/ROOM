@@ -15,10 +15,7 @@ export function initFirebase() {
   firebase.initializeApp(firebaseConfig);
 }
 
-export function login() {
-  const email = 'polin.chiang1996@gmail.com';
-  const password = 'CKMB31colorguard';
-
+export function login(email, password) {
   firebase
     .auth()
     .signInWithEmailAndPassword(email, password)
@@ -27,7 +24,6 @@ export function login() {
       console.log(userCredential.user.email);
       console.log(userCredential.user.refreshToken);
       console.log(userCredential.user.uid);
-      // ...
     })
     .catch((error) => {
       console.log(error.code, error.message);
@@ -164,7 +160,6 @@ export function postProject(data) {
         name: data.name,
         author_id: data.id,
         share_id: [],
-        groups: data.groups,
       })
       .then((docRef) => {
         resolve(docRef.id);
@@ -215,14 +210,151 @@ export function putProjectShareId(id, data) {
   });
 }
 
-export function putProjectGroups(id, data) {
+export function getWalls(project_id) {
   const db = firebase.firestore();
   return new Promise((resolve) => {
     db.collection('projects')
-      .doc(id)
+      .doc(project_id)
+      .collection('walls')
+      .get()
+      .then((querySnapshot) => {
+        const walls = [];
+        querySnapshot.forEach((doc) => {
+          walls.push({...doc.data(), id: doc.id});
+        });
+        resolve(walls);
+      });
+  });
+}
+
+export function getFurnitures(project_id) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('furnitures')
+      .get()
+      .then((querySnapshot) => {
+        const furnitures = [];
+        querySnapshot.forEach((doc) => {
+          furnitures.push({...doc.data(), id: doc.id});
+        });
+        resolve(furnitures);
+      });
+  });
+}
+
+export function getFloors(project_id) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('floors')
+      .get()
+      .then((querySnapshot) => {
+        const floors = [];
+        querySnapshot.forEach((doc) => {
+          floors.push({...doc.data(), id: doc.id});
+        });
+        resolve(floors);
+      });
+  });
+}
+
+export function getCameras(project_id) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('cameras')
+      .get()
+      .then((querySnapshot) => {
+        const cameras = [];
+        querySnapshot.forEach((doc) => {
+          cameras.push({...doc.data(), id: doc.id});
+        });
+        resolve(cameras);
+      });
+  });
+}
+
+export function putProjectWall(project_id, wall) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('walls')
+      .doc(wall.id)
       .set(
         {
-          groups: data.groups,
+          color: wall.color,
+        },
+        {merge: true}
+      )
+      .then(() => {
+        resolve('success');
+      })
+      .catch((error) => {
+        console.error('Error writing document: ', error);
+      });
+  });
+}
+
+export function putProjectFurniture(project_id, furniture) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('furnitures')
+      .doc(furniture.id)
+      .set(
+        {
+          position: furniture.position,
+          rotation: furniture.rotation,
+        },
+        {merge: true}
+      )
+      .then(() => {
+        resolve('success');
+      })
+      .catch((error) => {
+        console.error('Error writing document: ', error);
+      });
+  });
+}
+
+export function putProjectFloor(project_id, floor) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('floors')
+      .doc(floor.id)
+      .set(
+        {
+          path: floor.path,
+        },
+        {merge: true}
+      )
+      .then(() => {
+        resolve('success');
+      })
+      .catch((error) => {
+        console.error('Error writing document: ', error);
+      });
+  });
+}
+
+export function putProjectCamera(project_id, camera) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('cameras')
+      .doc(camera.id)
+      .set(
+        {
+          position: camera.position,
         },
         {merge: true}
       )
@@ -250,7 +382,88 @@ export function deleteProject(id) {
   });
 }
 
-export function getSettingsByName(name) {
+export function postWall(project_id, data) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('walls')
+      .add(data)
+      .then((docRef) => {
+        resolve(docRef.id);
+      })
+      .catch((error) => {
+        console.error('Error adding document: ', error);
+      });
+  });
+}
+
+export function postFurniture(project_id, data) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('furnitures')
+      .add(data)
+      .then((docRef) => {
+        resolve(docRef.id);
+      })
+      .catch((error) => {
+        console.error('Error adding document: ', error);
+      });
+  });
+}
+
+export function postFloor(project_id, data) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('floors')
+      .add(data)
+      .then((docRef) => {
+        resolve(docRef.id);
+      })
+      .catch((error) => {
+        console.error('Error adding document: ', error);
+      });
+  });
+}
+
+export function postCamera(project_id, data) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('cameras')
+      .add(data)
+      .then((docRef) => {
+        resolve(docRef.id);
+      })
+      .catch((error) => {
+        console.error('Error adding document: ', error);
+      });
+  });
+}
+
+export function deleteFurniture(project_id, furniture_id) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('furnitures')
+      .doc(furniture_id)
+      .delete()
+      .then(() => {
+        resolve('success');
+      })
+      .catch((error) => {
+        console.error('Error removing document: ', error);
+      });
+  });
+}
+
+export function getSettingByName(name) {
   const db = firebase.firestore();
   return new Promise((resolve) => {
     db.collection('settings')
@@ -273,19 +486,67 @@ export function getSettingsByName(name) {
   });
 }
 
-export function postSettings(data) {
+export function postSetting(data) {
   const db = firebase.firestore();
   return new Promise((resolve) => {
     db.collection('settings')
-      .add({
-        name: data.name,
-        furniture: data.furniture,
-      })
+      .add(data)
       .then((docRef) => {
         resolve(docRef.id);
       })
       .catch((error) => {
         console.error('Error adding document: ', error);
+      });
+  });
+}
+
+export function getSettingPaints(settings_id) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('settings')
+      .doc(settings_id)
+      .collection('paints')
+      .get()
+      .then((querySnapshot) => {
+        const paints = [];
+        querySnapshot.forEach((doc) => {
+          paints.push({...doc.data(), id: doc.id});
+        });
+        resolve(paints);
+      });
+  });
+}
+
+export function getSettingTextures(settings_id) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('settings')
+      .doc(settings_id)
+      .collection('textures')
+      .get()
+      .then((querySnapshot) => {
+        const textures = [];
+        querySnapshot.forEach((doc) => {
+          textures.push({...doc.data(), id: doc.id});
+        });
+        resolve(textures);
+      });
+  });
+}
+
+export function getSettingFurnitures(settings_id) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('settings')
+      .doc(settings_id)
+      .collection('furnitures')
+      .get()
+      .then((querySnapshot) => {
+        const furnitures = [];
+        querySnapshot.forEach((doc) => {
+          furnitures.push({...doc.data(), id: doc.id});
+        });
+        resolve(furnitures);
       });
   });
 }

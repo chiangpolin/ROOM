@@ -7,8 +7,9 @@ import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 
 function Rendering() {
   const ref = useRef(null);
-  const {groups, room, floor} = useSelector((state) => state.project);
-  const defaultCamera = useSelector((state) => state.project.camera);
+  const {walls, furnitures, floors, cameras} = useSelector(
+    (state) => state.project
+  );
 
   useEffect(() => {
     //Scene
@@ -32,12 +33,12 @@ function Rendering() {
       50,
       sizes.width / sizes.height,
       0.1,
-      10000
+      1000
     );
     camera.position.set(
-      defaultCamera.position.x,
-      defaultCamera.position.z_index,
-      defaultCamera.position.y
+      cameras[0].position.x,
+      cameras[0].position.z_index,
+      cameras[0].position.y
     );
 
     // Renderer
@@ -46,39 +47,40 @@ function Rendering() {
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     ref.current.appendChild(renderer.domElement);
 
-    // Loader
-    const glftLoader = new GLTFLoader();
-    const textureLoader = new THREE.TextureLoader();
-    setModel(scene, glftLoader, room);
-    setFloor(scene, textureLoader, floor);
-    for (let i = 0; i < groups.length; i++) {
-      setModel(scene, glftLoader, groups[i]);
-    }
-
     // Controls
     const controls = new OrbitControls(camera, renderer.domElement);
     controls.update();
+
+    // Loader
+    const glftLoader = new GLTFLoader();
+    const textureLoader = new THREE.TextureLoader();
+    setModel(renderer, scene, camera, glftLoader, walls[0]);
+    setFloor(renderer, scene, camera, textureLoader, floors[0]);
+    for (let i = 0; i < furnitures.length; i++) {
+      setModel(renderer, scene, camera, glftLoader, furnitures[i]);
+    }
 
     // onResize
     window.addEventListener('resize', () =>
       resizeRendering(ref, sizes, camera, renderer)
     );
 
-    const animate = function () {
-      requestAnimationFrame(animate);
-      controls.update();
-      renderer.render(scene, camera);
-    };
-    animate();
+    // const animate = function () {
+    //   requestAnimationFrame(animate);
+    //   controls.update();
+    //   renderer.render(scene, camera);
+    // };
+    // animate();
+    const current = ref.current;
 
     return () => {
-      // ref.current.removeChild(ref.current.children[0]);
+      current.removeChild(current.children[0]);
       window.removeEventListener('resize', () =>
         resizeRendering(ref, sizes, camera, renderer)
       );
     };
     // eslint-disable-next-line
-  }, [groups]);
+  }, [walls, furnitures, floors, cameras]);
 
   return <RenderingDiv ref={ref} />;
 }
@@ -103,7 +105,8 @@ function loadModel(loader, url) {
   });
 }
 
-async function setFloor(scene, loader, floor) {
+async function setFloor(renderer, scene, camera, loader, floor) {
+  console.log(floor);
   const texturePath = await import(
     `../../../static/images/texture/${floor.path}`
   );
@@ -117,15 +120,18 @@ async function setFloor(scene, loader, floor) {
   const mesh1 = new THREE.Mesh(geometry1, material1);
   mesh1.material.map = texture;
   scene.add(mesh1);
+  renderer.render(scene, camera);
 }
 
-async function setModel(scene, loader, obj) {
-  const modelPath = await import(`../../../static/models/${obj.file.gltfPath}`);
+async function setModel(renderer, scene, camera, loader, obj) {
+  const modelPath = await import(
+    `../../../static/models/${obj.file.gltf_path}`
+  );
   const model = await loadModel(loader, modelPath.default);
   const group = new THREE.Group();
 
   switch (obj.type) {
-    case 'room':
+    case 'wall':
       // eslint-disable-next-line
       for (const [key, mesh] of Object.entries(model)) {
         mesh.material.color = new THREE.Color(
@@ -147,6 +153,9 @@ async function setModel(scene, loader, obj) {
   group.rotation.set(0, -(obj.rotation.angle * Math.PI) / 180, 0);
 
   scene.add(group);
+  renderer.render(scene, camera);
+  // const url = renderer.domElement.toDataURL();
+  // console.log(url);
 }
 
 const RenderingDiv = styled.div`

@@ -18,32 +18,42 @@ const initialState = {
 const profileReducer = (state = initialState, action) => {
   switch (action.type) {
     case 'SET_USER':
-      return {...state, name: action.user.name, email: action.user.email};
+      return {
+        ...state,
+        name: action.payload.user.name,
+        email: action.payload.user.email,
+      };
 
     case 'SET_SEARCH_TARGET':
       return {
         ...state,
-        searchTarget: action.target,
+        searchTarget: action.payload.target,
       };
 
     case 'SELECT_SEARCH_TARGET':
       return {
         ...state,
-        selectedTarget: action.target,
+        selectedTarget: action.payload.target,
       };
 
     case 'SET_PROJECTS':
-      return {...state, projects: action.projects};
+      return {...state, projects: action.payload.projects};
 
     case 'SET_SHARED_PROJECTS':
-      return {...state, sharedProjects: action.sharedProjects};
+      return {...state, sharedProjects: action.payload.sharedProjects};
 
     case 'FILTER_PROJECTS':
       return {
         ...state,
         filter: {
-          shared: action.filter.shared,
-          author: action.filter.author,
+          shared: action.payload.filter.shared,
+          author: action.payload.filter.author,
+        },
+        selectedProject: {
+          id: '',
+          name: '',
+          author_id: '',
+          isEditing: false,
         },
       };
 
@@ -51,9 +61,9 @@ const profileReducer = (state = initialState, action) => {
       return {
         ...state,
         selectedProject: {
-          id: action.project.id,
-          name: action.project.name,
-          author_id: action.project.author_id,
+          id: action.payload.project.id,
+          name: action.payload.project.name,
+          author_id: action.payload.project.author_id,
           isEditing: false,
         },
       };
@@ -63,7 +73,7 @@ const profileReducer = (state = initialState, action) => {
         ...state,
         selectedProject: {
           ...state.selectedProject,
-          name: action.name,
+          name: action.payload.name,
           isEditing: false,
         },
       };

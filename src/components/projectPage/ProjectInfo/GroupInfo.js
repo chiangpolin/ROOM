@@ -1,14 +1,16 @@
 import React from 'react';
 import styled, {css} from 'styled-components';
+import {useParams} from 'react-router';
 import {useSelector, useDispatch} from 'react-redux';
 import {
-  selectGroup,
-  removeGroup,
-  setGroupRotation,
+  selectFurniture,
+  setFurnitureRotation,
+  deleteFurniture,
 } from '../../../app/actions/index.js';
 
 function GroupInfo() {
-  const {selectedGroup} = useSelector((state) => state.project);
+  let {id} = useParams();
+  const {selectedFurniture} = useSelector((state) => state.project);
   const dispatch = useDispatch();
 
   return (
@@ -17,39 +19,41 @@ function GroupInfo() {
         <Img />
       </ImgDiv>
       <Content>
-        <NameText>{selectedGroup.name}</NameText>
-        <IdText>{selectedGroup.id}</IdText>
-        <Button
-          primary
-          onClick={() => handleClickRotate(dispatch, selectedGroup)}
-        >
-          Rotate
-        </Button>
-        <Button
-          danger
-          onClick={() => handleClickDelete(dispatch, selectedGroup)}
-        >
-          Delete
-        </Button>
+        <NameText>{selectedFurniture.name}</NameText>
+        <IdText>{selectedFurniture.id}</IdText>
+        <Buttons>
+          <Button
+            primary
+            onClick={() => handleClickRotate(dispatch, selectedFurniture)}
+          >
+            Rotate
+          </Button>
+          <Button
+            danger
+            onClick={() => handleClickDelete(dispatch, id, selectedFurniture)}
+          >
+            Delete
+          </Button>
+        </Buttons>
       </Content>
     </Div>
   );
 }
 
-function handleClickRotate(dispatch, group) {
-  const newAngle = group.rotation.angle + 90;
-  const newGroup = {...group, rotation: {angle: newAngle}};
+function handleClickRotate(dispatch, furniture) {
+  const newAngle = furniture.rotation.angle + 90;
+  const newFurniture = {...furniture, rotation: {angle: newAngle}};
   dispatch(
-    setGroupRotation(newGroup, {
+    setFurnitureRotation(newFurniture, {
       type: 'rotate',
-      group: newGroup,
+      furniture: newFurniture,
     })
   );
-  dispatch(selectGroup(newGroup));
+  dispatch(selectFurniture(newFurniture));
 }
 
-function handleClickDelete(dispatch, group) {
-  dispatch(removeGroup(group, {type: 'remove', group}));
+function handleClickDelete(dispatch, project_id, furniture) {
+  dispatch(deleteFurniture(project_id, furniture));
 }
 
 const Div = styled.div`
@@ -67,6 +71,7 @@ const ImgDiv = styled.div`
 const Img = styled.img`
   width: 150px;
   height: 150px;
+  background-color: #bdc0ba;
 `;
 
 const Content = styled.div`
@@ -81,9 +86,16 @@ const IdText = styled.p`
   font-size: 16px;
 `;
 
+const Buttons = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  grid-gap: 0 10px;
+  margin: 15px 0 0;
+`;
+
 const Button = styled.button`
-  width: 60px;
-  height: 20px;
+  width: 100%;
+  height: 30px;
   color: #1c1c1c;
   border: 1px solid #1c1c1c;
   cursor: pointer;

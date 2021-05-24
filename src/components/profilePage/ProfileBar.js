@@ -28,6 +28,7 @@ function ProfileBar() {
         <PeopleIcon width="24" height="24" />
       </SideButton>
       <SideButton
+        disabled
         onClick={() => dispatch(filterProjects({shared: false, author: false}))}
       >
         <ImagesIcon width="24" height="24" />

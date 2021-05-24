@@ -1,7 +1,11 @@
 import React, {useEffect} from 'react';
 import styled from 'styled-components';
 import {useSelector, useDispatch} from 'react-redux';
-import {selectProject, fetchProfileData} from '../../app/actions/index.js';
+import {
+  selectProject,
+  fetchProfileData,
+  resetProjectStatus,
+} from '../../app/actions/index.js';
 import {ProfileBar} from './ProfileBar.js';
 import {UserInfo} from './UserInfo.js';
 import {CardInfo} from './CardInfo.js';
@@ -15,6 +19,7 @@ function Profile() {
 
   useEffect(() => {
     dispatch(selectProject({id: '', name: '', author_id: ''}));
+    dispatch(resetProjectStatus());
     dispatch(fetchProfileData(localStorage.getItem('user_id')));
     // eslint-disable-next-line
   }, []);

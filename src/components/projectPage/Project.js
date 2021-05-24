@@ -10,8 +10,8 @@ import {Canvas} from './ProjectCanvas/Canvas.js';
 import {Rendering} from './ProjectCanvas/Rendering.js';
 
 function Project() {
-  const [renderIsClicked, handleClickRender] = useState(false);
   let {id} = useParams();
+  const [renderIsClicked, handleClickRender] = useState(false);
   const {dataIsFetched} = useSelector((state) => state.project);
   const dispatch = useDispatch();
 
@@ -20,26 +20,22 @@ function Project() {
     // eslint-disable-next-line
   }, []);
 
-  if (dataIsFetched) {
-    return (
-      <Main>
-        <ProjectBar />
-        <InfoBar />
-        <Section>
-          {renderIsClicked ? <Rendering /> : <Canvas />}
-          <RenderButton onClick={() => handleClickRender(!renderIsClicked)}>
-            <CameraIcon width="32" height="32" />
-          </RenderButton>
-        </Section>
-      </Main>
-    );
-  } else {
-    return (
-      <Main>
-        <section></section>
-      </Main>
-    );
-  }
+  return dataIsFetched ? (
+    <Main>
+      <ProjectBar />
+      <InfoBar />
+      <Section>
+        {renderIsClicked ? <Rendering /> : <Canvas />}
+        <RenderButton onClick={() => handleClickRender(!renderIsClicked)}>
+          <CameraIcon width="32" height="32" />
+        </RenderButton>
+      </Section>
+    </Main>
+  ) : (
+    <Main>
+      <section></section>
+    </Main>
+  );
 }
 
 const Main = styled.main`

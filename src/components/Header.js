@@ -6,7 +6,7 @@ import {
   toggleShare,
   createProject,
   cloneProject,
-  updateProjectGroups,
+  updateProject,
   deleteProject,
 } from '../app/actions/index';
 import {ReactComponent as ListIcon} from '../static/images/icons/list.svg';
@@ -19,10 +19,12 @@ import {ReactComponent as SdCardIcon} from '../static/images/icons/sd-card.svg';
 import {ReactComponent as PersonIcon} from '../static/images/icons/person-circle.svg';
 
 function Header() {
-  const user_id = localStorage.getItem('user_id');
   let location = useLocation();
+  const user_id = localStorage.getItem('user_id');
   const {selectedProject, filter} = useSelector((state) => state.profile);
-  const {groups} = useSelector((state) => state.project);
+  const {walls, furnitures, floors, cameras} = useSelector(
+    (state) => state.project
+  );
   const dispatch = useDispatch();
 
   return (
@@ -81,7 +83,12 @@ function Header() {
             <NavControllers>
               <Button
                 onClick={() =>
-                  handleClickUpdate(dispatch, selectedProject.id, groups)
+                  handleClickUpdate(dispatch, selectedProject.id, {
+                    walls,
+                    furnitures,
+                    floors,
+                    cameras,
+                  })
                 }
                 disabled={selectedProject.author_id !== user_id}
               >
@@ -128,8 +135,8 @@ async function handleClickDelete(dispatch, user_id, project_id) {
   dispatch(deleteProject(user_id, project_id));
 }
 
-async function handleClickUpdate(dispatch, groups, project_id) {
-  dispatch(updateProjectGroups(project_id, groups));
+async function handleClickUpdate(dispatch, project_id, data) {
+  dispatch(updateProject(project_id, data));
 }
 
 const Navbar = styled.div`

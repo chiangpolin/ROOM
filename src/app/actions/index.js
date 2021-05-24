@@ -1,12 +1,91 @@
 import * as actionTypes from './actionTypes';
-import * as firebase from '../../app/utils/firebase.js';
+import * as firestore from '../../app/utils/firebase.js';
+
+const bed = {
+  name: 'Bed',
+  type: 'furniture',
+  position: {
+    x: 0,
+    y: -50,
+  },
+  dimension: {
+    width: 145,
+    height: 195,
+  },
+  rotation: {
+    angle: 0,
+  },
+  file: {
+    gltf_path: 'bed-01.gltf',
+    svg_path: 'bed-01.svg',
+  },
+};
+
+const default_wall = {
+  name: 'Bedroom',
+  type: 'wall',
+  position: {
+    x: 0,
+    y: 0,
+  },
+  dimension: {
+    width: 500,
+    height: 330,
+  },
+  rotation: {
+    angle: 0,
+  },
+  color: {
+    r: 252,
+    g: 250,
+    b: 242,
+  },
+  file: {
+    gltf_path: 'room.gltf',
+    svg_path: 'room.svg',
+  },
+};
+
+const default_floor = {
+  name: 'Bedroom',
+  type: 'floor',
+  position: {
+    x: 0,
+    y: 0,
+  },
+  dimension: {
+    width: 0,
+    height: 0,
+  },
+  rotation: {
+    angle: 0,
+  },
+  path: 'kitchen-wood.jpg',
+};
+
+const default_camera = {
+  name: 'Default-Camera',
+  type: 'camera',
+  position: {
+    x: -300,
+    y: 600,
+    z_index: 400,
+  },
+  dimension: {
+    width: 0,
+    height: 0,
+  },
+  rotation: {
+    angle: 0,
+  },
+};
 
 // thunk
 export const fetchProfileData = (user_id) => async (dispatch) => {
   const [user, projects, sharedProjects] = await Promise.all([
-    firebase.getUser(user_id),
-    firebase.getProjects(user_id),
-    firebase.getSharedProjects(user_id),
+    firestore.getUser(user_id),
+    firestore.getProjects(user_id),
+    firestore.getSharedProjects(user_id),
   ]);
 
   dispatch(setUser(user));
@@ -15,18 +94,46 @@ export const fetchProfileData = (user_id) => async (dispatch) => {
 };
 
 export const fetchProjectData = (project_id) => async (dispatch) => {
-  const [project, settings] = await Promise.all([
-    firebase.getProject(project_id),
-    firebase.getSettingsByName('default'),
-  ]);
+  const [project, walls, furnitures, floors, cameras, setting] =
+    await Promise.all([
+      firestore.getProject(project_id),
+      firestore.getWalls(project_id),
+      firestore.getFurnitures(project_id),
+      firestore.getFloors(project_id),
+      firestore.getCameras(project_id),
+      firestore.getSettingByName('Default-Setting'),
+    ]);
 
-  dispatch(setProject(project));
+  const [settingPaints, settingFurnitures, settingTextures] = await Promise.all(
+    [
+      firestore.getSettingPaints(setting.id),
+      firestore.getSettingFurnitures(setting.id),
+      firestore.getSettingTextures(setting.id),
+    ]
+  );
+
+  dispatch(
+    setProject({
+      ...project,
+      walls: walls,
+      furnitures: furnitures,
+      floors: floors,
+      cameras: cameras,
+    })
+  );
+  dispatch(
+    setSetting({
+      ...setting.data,
+      paints: settingPaints,
+      furnitures: settingFurnitures,
+      textures: settingTextures,
+    })
+  );
   dispatch(setInfo('canvas'));
-  dispatch(setSettings(settings.data));
 };
 
 export const fetchSearchTarget = (email) => async (dispatch) => {
-  const user = await firebase.getUserByEmail(email);
+  const user = await firestore.getUserByEmail(email);
   if (!user) {
     window.alert('user not exist');
     return;
@@ -37,28 +144,58 @@ export const fetchSearchTarget = (email) => async (dispatch) => {
 };
 
 export const createProject = (user_id) => async (dispatch) => {
-  await firebase.postProject({
+  const id = await firestore.postProject({
     id: user_id,
     name: 'Untitled',
-    groups: [],
   });
-  const projects = await firebase.getProjects(user_id);
+
+  await Promise.all([
+    firestore.postWall(id, default_wall),
+    firestore.postFurniture(id, bed),
+    firestore.postFloor(id, default_floor),
+    firestore.postCamera(id, default_camera),
+  ]);
+
+  const projects = await firestore.getProjects(user_id);
   dispatch(setProjects(projects));
 };
 
 export const cloneProject = (user_id, project_id) => async (dispatch) => {
-  const project = await firebase.getProject(project_id);
-  await firebase.postProject({
+  const [project, walls, furnitures, floors, cameras] = await Promise.all([
+    firestore.getProject(project_id),
+    firestore.getWalls(project_id),
+    firestore.getFurnitures(project_id),
+    firestore.getFloors(project_id),
+    firestore.getCameras(project_id),
+  ]);
+  const id = await firestore.postProject({
     id: user_id,
     name: `${project.name}-clone`,
-    groups: project.groups,
   });
-  const projects = await firebase.getProjects(user_id);
+
+  const promises = [];
+
+  for (let i = 0; i < walls.length; i++) {
+    promises.push(firestore.postWall(id, walls[i]));
+  }
+  for (let i = 0; i < furnitures.length; i++) {
+    promises.push(firestore.postFurniture(id, furnitures[i]));
+  }
+  for (let i = 0; i < floors.length; i++) {
+    promises.push(firestore.postFloor(id, floors[i]));
+  }
+  for (let i = 0; i < cameras.length; i++) {
+    promises.push(firestore.postCamera(id, cameras[i]));
+  }
+
+  await Promise.all(promises);
+
+  const projects = await firestore.getProjects(user_id);
   dispatch(setProjects(projects));
 };
 
 export const shareProject = (project_id, target_id) => async (dispatch) => {
-  const {share_id} = await firebase.getProject(project_id);
+  const {share_id} = await firestore.getProject(project_id);
   for (let i = 0; i < share_id.length; i++) {
     if (share_id[i] === target_id) {
       window.alert('project is already shared!!');
@@ -66,74 +203,100 @@ export const shareProject = (project_id, target_id) => async (dispatch) => {
     }
   }
   share_id.push(target_id);
-  firebase.putProjectShareId(project_id, {share_id: share_id});
+  firestore.putProjectShareId(project_id, {share_id: share_id});
   dispatch(closeShare());
 };
 
 export const updateProjectName =
   (name, user_id, project_id) => async (dispatch) => {
-    await firebase.putProjectName(project_id, {name: name});
-    const projects = await firebase.getProjects(user_id);
+    await firestore.putProjectName(project_id, {name: name});
+    const projects = await firestore.getProjects(user_id);
     dispatch(setProjects(projects));
   };
 
-export const updateProjectGroups = (groups, project_id) => async () => {
-  await firebase.putProjectGroups(project_id, {groups: groups});
+export const updateProject = (project_id, data) => async () => {
+  for (let i = 0; i < data.walls.length; i++) {
+    firestore.putProjectWall(project_id, data.walls[i]);
+  }
+  for (let i = 0; i < data.furnitures.length; i++) {
+    firestore.putProjectFurniture(project_id, data.furnitures[i]);
+  }
+  for (let i = 0; i < data.floors.length; i++) {
+    firestore.putProjectFloor(project_id, data.floors[i]);
+  }
+  for (let i = 0; i < data.cameras.length; i++) {
+    firestore.putProjectCamera(project_id, data.cameras[i]);
+  }
 };
 
 export const deleteProject = (user_id, project_id) => async (dispatch) => {
-  await firebase.deleteProject(project_id);
-  const projects = await firebase.getProjects(user_id);
+  await firestore.deleteProject(project_id);
+  const projects = await firestore.getProjects(user_id);
   dispatch(setProjects(projects));
   dispatch(selectProject(''));
+};
+
+export const createFurniture = (project_id, data) => async (dispatch) => {
+  const furniture_id = await firestore.postFurniture(project_id, data);
+  const furniture = {...data, id: furniture_id};
+  dispatch(addFurniture(furniture, {type: 'add', furniture}));
+};
+
+export const deleteFurniture = (project_id, furniture) => async (dispatch) => {
+  await firestore.deleteFurniture(project_id, furniture.id);
+  dispatch(removeFurniture(furniture, {type: 'remove', furniture}));
 };
 
 // user
 export const setUser = (user) => ({
   type: actionTypes.SET_USER,
-  user,
+  payload: {user},
 });
 
 export const setSearchTarget = (target) => ({
   type: actionTypes.SET_SEARCH_TARGET,
-  target,
+  payload: {target},
 });
 
 export const selectSearchTarget = (target) => ({
   type: actionTypes.SELECT_SEARCH_TARGET,
-  target,
+  payload: {target},
 });
 
 // projects
 export const setProjects = (projects) => ({
   type: actionTypes.SET_PROJECTS,
-  projects,
+  payload: {projects},
 });
 
 export const setSharedProjects = (sharedProjects) => ({
   type: actionTypes.SET_SHARED_PROJECTS,
-  sharedProjects,
+  payload: {sharedProjects},
 });
 
 export const filterProjects = (filter) => ({
   type: actionTypes.FILTER_PROJECTS,
-  filter,
+  payload: {filter},
 });
 
 // project
 export const setProject = (project) => ({
   type: actionTypes.SET_PROJECT,
-  project,
+  payload: {project},
 });
 
 export const selectProject = (project) => ({
   type: actionTypes.SELECT_PROJECT,
-  project,
+  payload: {project},
+});
+
+export const resetProjectStatus = () => ({
+  type: actionTypes.RESET_PROJECT_STATUS,
 });
 
 export const setProjectName = (name) => ({
   type: actionTypes.SET_PROJECT_NAME,
-  name,
+  payload: {name},
 });
 
 export const toggleProjectName = () => ({
@@ -149,62 +312,63 @@ export const closeShare = () => ({
 });
 
 // settings
-export const setSettings = (settings) => ({
-  type: actionTypes.SET_SETTINGS,
-  settings,
+export const setSetting = (setting) => ({
+  type: actionTypes.SET_SETTING,
+  payload: {setting},
 });
 
 // info
 export const setInfo = (info) => ({
   type: actionTypes.SET_INFO,
-  info,
+  payload: {info},
 });
 
-// group
-export const addGroup = (group) => ({
-  type: actionTypes.ADD_GROUP,
-  group,
+// walls
+export const setWallColor = (color) => ({
+  type: actionTypes.SET_WALL_COLOR,
+  payload: {color},
 });
 
-export const removeGroup = (group, instruction) => ({
-  type: actionTypes.REMOVE_GROUP,
-  group,
-  instruction,
+// furnitures
+export const addFurniture = (furniture, instruction) => ({
+  type: actionTypes.ADD_FURNITURE,
+  payload: {furniture, instruction},
 });
 
-export const selectGroup = (group) => ({
-  type: actionTypes.SELECT_GROUP,
-  group,
+export const removeFurniture = (furniture, instruction) => ({
+  type: actionTypes.REMOVE_FURNITURE,
+  payload: {furniture, instruction},
 });
 
-export const setGroupPosition = (group) => ({
-  type: actionTypes.SET_GROUP_POSITION,
-  group,
+export const selectFurniture = (furniture) => ({
+  type: actionTypes.SELECT_FURNITURE,
+  payload: {furniture},
 });
 
-export const setGroupRotation = (group, instruction) => ({
-  type: actionTypes.SET_GROUP_ROTATION,
-  group,
-  instruction,
+export const setFurniturePosition = (furniture) => ({
+  type: actionTypes.SET_FURNITURE_POSITION,
+  payload: {furniture},
 });
 
-export const setRoomColor = (color) => ({
-  type: actionTypes.SET_ROOM_COLOR,
-  color,
+export const setFurnitureRotation = (furniture, instruction) => ({
+  type: actionTypes.SET_FURNITURE_ROTATION,
+  payload: {furniture, instruction},
 });
 
+// floors
 export const setFloorTexture = (path) => ({
   type: actionTypes.SET_FLOOR_TEXTURE,
-  path,
+  payload: {path},
 });
 
+// cameras
 export const setCameraPosition = (position) => ({
   type: actionTypes.SET_CAMERA_POSITION,
-  position,
+  payload: {position},
 });
 
 // instruction
 export const setInstruction = (instruction) => ({
   type: actionTypes.SET_INSTRUCTION,
-  instruction,
+  payload: {instruction},
 });

@@ -14,33 +14,33 @@ function Form(props) {
   return (
     <Div>
       {props.type === 'sign-up' ? (
-        <Label>
+        <InputDiv>
           Name
           <Input
             type="text"
             value={name}
             onChange={(event) => handleChange(event, setName)}
           ></Input>
-        </Label>
+        </InputDiv>
       ) : (
         ''
       )}
-      <Label>
+      <InputDiv>
         Email
         <Input
           type="text"
           value={email}
           onChange={(event) => handleChange(event, setEmail)}
         ></Input>
-      </Label>
-      <Label>
+      </InputDiv>
+      <InputDiv>
         Password
         <Input
           type="text"
           value={password}
           onChange={(event) => handleChange(event, setPassword)}
         ></Input>
-      </Label>
+      </InputDiv>
       <Buttons>
         {props.type === 'sign-up' ? (
           <Button>Sign Up</Button>
@@ -94,8 +94,8 @@ const Div = styled.div`
   }
 `;
 
-const Label = styled.label`
-  margin: 5px;
+const InputDiv = styled.div`
+  margin: 10px;
   font-size: 16px;
   color: #fffffb;
 `;
@@ -137,14 +137,14 @@ const Buttons = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 5px;
+  margin: 10px;
 `;
 
 const TPLButtons = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 5px 5px;
-  margin: auto 5px 5px 5px;
+  margin: auto 10px 10px 10px;
 `;
 
 export {Form};

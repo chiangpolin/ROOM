@@ -11,19 +11,7 @@ function ProjectCard(props) {
   return (
     <Item
       primary={selectedProject.id === props.id}
-      onClick={() => {
-        if (selectedProject.id === props.id) {
-          dispatch(selectProject({id: '', name: '', author_id: ''}));
-        } else {
-          dispatch(
-            selectProject({
-              id: props.id,
-              name: props.name,
-              author_id: props.author_id,
-            })
-          );
-        }
-      }}
+      onClick={() => handleSelect(dispatch, props, selectedProject)}
     >
       <Link to={`/project/${props.id}`}>
         <ItemImg />
@@ -34,10 +22,28 @@ function ProjectCard(props) {
   );
 }
 
+function handleSelect(dispatch, project, selectedProject) {
+  if (selectedProject.id !== project.id) {
+    dispatch(
+      selectProject({
+        id: project.id,
+        name: project.name,
+        author_id: project.author_id,
+      })
+    );
+  }
+}
+
 const Item = styled.div`
   width: 100%;
   border: none;
   background-color: '#ffffff';
+  border: 1px solid #ffffff;
+
+  :hover {
+    border: 1px solid #1c1c1c;
+    cursor: pointer;
+  }
 
   ${(props) =>
     props.primary &&

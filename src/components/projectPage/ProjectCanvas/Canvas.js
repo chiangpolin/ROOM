@@ -2,14 +2,19 @@ import React, {useState, useEffect, useRef} from 'react';
 import styled from 'styled-components';
 import {useSelector} from 'react-redux';
 import {store} from '../../../app/store/index.js';
-import {selectGroup, setGroupPosition} from '../../../app/actions/index.js';
+import {
+  selectFurniture,
+  setFurniturePosition,
+} from '../../../app/actions/index.js';
 import * as PIXI from 'pixi.js';
 // import {SVGScene} from '@pixi-essentials/svg';
 
 function Canvas() {
-  const [DOMapp, setDOMapp] = useState('');
   const ref = useRef(null);
-  const {groups, room, instruction} = useSelector((state) => state.project);
+  const [DOMapp, setDOMapp] = useState('');
+  const {walls, furnitures, instruction} = useSelector(
+    (state) => state.project
+  );
 
   useEffect(() => {
     // Sizes
@@ -31,9 +36,9 @@ function Canvas() {
     app.stage.scale.y = 1;
     ref.current.appendChild(app.view);
 
-    createRoom(app, room);
-    for (let i = 0; i < groups.length; i++) {
-      createCanvasElement(app, groups[i]);
+    createRoom(app, walls[0]);
+    for (let i = 0; i < furnitures.length; i++) {
+      createCanvasElement(app, furnitures[i]);
     }
 
     setDOMapp(app);
@@ -52,20 +57,21 @@ function Canvas() {
     if (DOMapp) {
       switch (instruction.type) {
         case 'add':
-          createCanvasElement(DOMapp, instruction.group);
+          createCanvasElement(DOMapp, instruction.furniture);
           break;
 
         case 'remove':
           for (let i = 0; i < DOMapp.stage.children.length; i++)
-            if (DOMapp.stage.children[i].id === instruction.group.id) {
+            if (DOMapp.stage.children[i].id === instruction.furniture.id) {
               DOMapp.stage.removeChild(DOMapp.stage.children[i]);
             }
           break;
 
         case 'rotate':
           for (let i = 0; i < DOMapp.stage.children.length; i++)
-            if (DOMapp.stage.children[i].id === instruction.group.id) {
-              DOMapp.stage.children[i].angle = instruction.group.rotation.angle;
+            if (DOMapp.stage.children[i].id === instruction.furniture.id) {
+              DOMapp.stage.children[i].angle =
+                instruction.furniture.rotation.angle;
             }
           break;
 
@@ -93,7 +99,7 @@ function resizeCanvas(ref, sizes, app) {
 
 async function createRoom(app, obj) {
   const svgPath = await import(
-    `../../../static/images/furniture/${obj.file.svgPath}`
+    `../../../static/images/furniture/${obj.file.svg_path}`
   );
 
   const texture = PIXI.Texture.from(svgPath.default);
@@ -119,7 +125,7 @@ async function createRoom(app, obj) {
 
 async function createCanvasElement(app, obj) {
   const svgPath = await import(
-    `../../../static/images/furniture/${obj.file.svgPath}`
+    `../../../static/images/furniture/${obj.file.svg_path}`
   );
 
   const texture = PIXI.Texture.from(svgPath.default);
@@ -160,7 +166,7 @@ function onDragEnd() {
   this.alpha = 1;
   this.dragging = false;
   store.dispatch(
-    setGroupPosition({id: this.id, position: {x: this.x, y: this.y}})
+    setFurniturePosition({id: this.id, position: {x: this.x, y: this.y}})
   );
 }
 
@@ -174,7 +180,7 @@ function onDragMove() {
 
 function onClick() {
   store.dispatch(
-    selectGroup({
+    selectFurniture({
       name: this.name,
       id: this.id,
       type: this.type,

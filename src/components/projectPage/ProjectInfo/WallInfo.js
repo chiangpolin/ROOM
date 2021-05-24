@@ -1,80 +1,82 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 import {useSelector, useDispatch} from 'react-redux';
-import {setRoomColor} from '../../../app/actions/index.js';
-import {hexToRGB, RGBToHex} from '../../../app/utils/index.js';
+import {setWallColor} from '../../../app/actions/index.js';
 
 function WallInfo() {
-  const {room} = useSelector((state) => state.project);
+  const {setting, walls} = useSelector((state) => state.project);
   const dispatch = useDispatch();
 
   return (
     <Div>
-      <ImgDiv>
-        <Img />
-      </ImgDiv>
-      <Content>
-        <NameText>{room.name}</NameText>
-        <IdText>{room.id}</IdText>
-        <Colors>
-          <Color>{room.color.r}</Color>
-          <Color>{room.color.g}</Color>
-          <Color>{room.color.b}</Color>
-        </Colors>
-        <Label>
-          Name
-          <Input
-            type="color"
-            value={RGBToHex(room.color.r, room.color.g, room.color.b)}
-            onChange={(event) => handleColorChange(event, dispatch)}
-          ></Input>
-        </Label>
-      </Content>
+      <Container>
+        {setting.paints.map((paint, index) => (
+          <Item
+            key={index}
+            primary={
+              paint.color.r === walls[0].color.r &&
+              paint.color.g === walls[0].color.g &&
+              paint.color.b === walls[0].color.b
+            }
+            onClick={() => handleClickPaint(dispatch, paint.color)}
+          >
+            <ItemImg style={{backgroundColor: `${paint.code}`}}></ItemImg>
+            <ItemText>{paint.name}</ItemText>
+            <CodeText>{paint.code}</CodeText>
+          </Item>
+        ))}
+      </Container>
     </Div>
   );
 }
 
-function handleColorChange(event, dispatch) {
-  dispatch(setRoomColor(hexToRGB(event.target.value)));
+function handleClickPaint(dispatch, color) {
+  dispatch(setWallColor(color));
 }
-
-const ImgDiv = styled.div`
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 30px 0;
-`;
-
-const Img = styled.img`
-  width: 150px;
-  height: 150px;
-`;
 
 const Div = styled.div`
   width: 300px;
   border-right: 1px solid #1c1c1c;
+  overflow-y: scroll;
 `;
 
-const Content = styled.div`
-  margin: 0 30px;
+const Container = styled.div`
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  margin: 15px 15px;
 `;
 
-const NameText = styled.p`
-  font-size: 24px;
+const Item = styled.button`
+  width: 100%;
+  border: none;
+  background-color: transparent;
+  border: 1px solid transparent;
+
+  :hover {
+    border: 1px solid #1c1c1c;
+    cursor: pointer;
+  }
+
+  ${(props) =>
+    props.primary &&
+    css`
+      border: 1px solid #1c1c1c;
+    `}
 `;
 
-const IdText = styled.p`
+const ItemImg = styled.img`
+  margin: 10px 0 0;
+  width: 80%;
+  height: 80px;
+`;
+
+const ItemText = styled.p`
+  margin: 5px 0;
   font-size: 16px;
 `;
 
-const Colors = styled.div``;
-
-const Color = styled.p`
+const CodeText = styled.p`
   font-size: 14px;
 `;
-
-const Label = styled.label``;
-
-const Input = styled.input``;
 
 export {WallInfo};
