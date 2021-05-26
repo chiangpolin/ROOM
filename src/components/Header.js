@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import {Link, useLocation} from 'react-router-dom';
+import {Link, useHistory, useLocation} from 'react-router-dom';
 import {useSelector, useDispatch} from 'react-redux';
 import {
   toggleShare,
@@ -8,7 +8,8 @@ import {
   cloneProject,
   updateProject,
   deleteProject,
-} from '../app/actions/index';
+  signOut,
+} from '../app/actions/index.js';
 import {ReactComponent as ListIcon} from '../static/images/icons/list.svg';
 import {ReactComponent as DoorIcon} from '../static/images/icons/door-open-fill.svg';
 import {ReactComponent as FolderPlusIcon} from '../static/images/icons/folder-plus.svg';
@@ -17,10 +18,12 @@ import {ReactComponent as StickiesIcon} from '../static/images/icons/stickies.sv
 import {ReactComponent as TrashIcon} from '../static/images/icons/trash.svg';
 import {ReactComponent as SdCardIcon} from '../static/images/icons/sd-card.svg';
 import {ReactComponent as PersonIcon} from '../static/images/icons/person-circle.svg';
+import {ReactComponent as XCircleIcon} from '../static/images/icons/x-circle.svg';
 
 function Header() {
   let location = useLocation();
-  const user_id = localStorage.getItem('user_id');
+  let history = useHistory();
+  const user_id = useSelector((state) => state.profile.id);
   const {selectedProject, filter} = useSelector((state) => state.profile);
   const {walls, furnitures, floors, cameras} = useSelector(
     (state) => state.project
@@ -42,7 +45,7 @@ function Header() {
           </NavbarBrand>
         </Link>
         <Nav>
-          {location.pathname === '/profile' ? (
+          {location.pathname === '/profile' && user_id !== null ? (
             <NavControllers>
               <Button
                 onClick={() => handleClickCreate(dispatch, user_id)}
@@ -79,7 +82,11 @@ function Header() {
                 <TrashIcon width="24" height="24" />
               </Button>
             </NavControllers>
-          ) : location.pathname.indexOf('/project') > -1 ? (
+          ) : (
+            ''
+          )}
+
+          {location.pathname.indexOf('/project') > -1 ? (
             <NavControllers>
               <Button
                 onClick={() =>
@@ -90,7 +97,7 @@ function Header() {
                     cameras,
                   })
                 }
-                disabled={selectedProject.author_id !== user_id}
+                disabled={!user_id || selectedProject.author_id !== user_id}
               >
                 <SdCardIcon width="24" height="24" />
               </Button>
@@ -98,17 +105,15 @@ function Header() {
           ) : (
             ''
           )}
+
           {location.pathname !== '/profile' && user_id !== null ? (
             <NavLinks>
-              <Link
-                to="/profile"
-                style={{
-                  color: '#1C1C1C',
-                  textDecoration: 'none',
-                }}
-              >
+              <Button onClick={() => handleClickProfile(history, user_id)}>
                 <PersonIcon width="24" height="24" />
-              </Link>
+              </Button>
+              <Button onClick={() => handleClickSignOut(dispatch)}>
+                <XCircleIcon width="24" height="24" />
+              </Button>
             </NavLinks>
           ) : (
             ''
@@ -137,6 +142,18 @@ async function handleClickDelete(dispatch, user_id, project_id) {
 
 async function handleClickUpdate(dispatch, project_id, data) {
   dispatch(updateProject(project_id, data));
+}
+
+function handleClickProfile(history, user_id) {
+  if (user_id) {
+    history.push('/profile');
+  } else {
+    alert('Please sign in first');
+  }
+}
+
+function handleClickSignOut(dispatch) {
+  dispatch(signOut());
 }
 
 const Navbar = styled.div`

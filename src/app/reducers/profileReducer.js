@@ -1,4 +1,5 @@
 const initialState = {
+  id: '',
   name: '',
   email: '',
   projects: [],
@@ -8,6 +9,7 @@ const initialState = {
     name: '',
     author_id: '',
     isEditing: false,
+    type: '',
   },
   filter: {shared: true, author: true},
   shareIsToggled: false,
@@ -20,6 +22,7 @@ const profileReducer = (state = initialState, action) => {
     case 'SET_USER':
       return {
         ...state,
+        id: action.payload.user.id,
         name: action.payload.user.name,
         email: action.payload.user.email,
       };
