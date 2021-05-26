@@ -1,9 +1,10 @@
-import React from 'react';
-import styled from 'styled-components';
+import React, {useState} from 'react';
+import styled, {css} from 'styled-components';
 import {Form} from './Form.js';
 import room from '../../static/images/backgrounds/room.png';
 
 function Landing() {
+  const [type, setType] = useState('sign-in');
   return (
     <Main>
       <Div>
@@ -16,7 +17,21 @@ function Landing() {
           <Img src={room}></Img>
         </VisionDiv>
         <AuthDiv>
-          <Form type={'sign-in'} />
+          <Types>
+            <Type
+              primary={type === 'sign-up'}
+              onClick={() => setType('sign-up')}
+            >
+              Sign Up
+            </Type>
+            <Type
+              primary={type === 'sign-in'}
+              onClick={() => setType('sign-in')}
+            >
+              Sign In
+            </Type>
+          </Types>
+          <Form type={type} />
         </AuthDiv>
       </Div>
     </Main>
@@ -74,9 +89,36 @@ const Img = styled.img`
 `;
 
 const AuthDiv = styled.div`
+  align-items: center;
+  justify-content: center;
+`;
+
+const Types = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
+  margin: 5px 0 0;
+`;
+
+const Type = styled.button`
+  margin: 0 auto;
+  width: 100%;
+  font-size: 14px;
+  color: #fffffb;
+  background-color: transparent;
+  text-align: center;
+  text-decoration: none;
+  border: none;
+  border-bottom: 1px solid #fffffb;
+  cursor: pointer;
+  ${(props) =>
+    props.primary &&
+    css`
+      border-top: 1px solid #fffffb;
+      border-left: 1px solid #fffffb;
+      border-right: 1px solid #fffffb;
+      border-bottom: 1px solid transparent;
+    `}
 `;
 
 export {Landing};

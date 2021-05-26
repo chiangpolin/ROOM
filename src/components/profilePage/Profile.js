@@ -1,11 +1,8 @@
 import React, {useEffect} from 'react';
 import styled from 'styled-components';
+import {useHistory} from 'react-router-dom';
 import {useSelector, useDispatch} from 'react-redux';
-import {
-  selectProject,
-  fetchProfileData,
-  resetProjectStatus,
-} from '../../app/actions/index.js';
+import {fetchProfileData} from '../../app/actions/index.js';
 import {ProfileBar} from './ProfileBar.js';
 import {UserInfo} from './UserInfo.js';
 import {CardInfo} from './CardInfo.js';
@@ -13,18 +10,23 @@ import {ProjectCard} from './ProjectCard.js';
 import {Modal} from './Modal.js';
 
 function Profile() {
-  const {selectedProject, filter, projects, sharedProjects, shareIsToggled} =
-    useSelector((state) => state.profile);
+  const history = useHistory();
+  const {
+    id,
+    selectedProject,
+    filter,
+    projects,
+    sharedProjects,
+    shareIsToggled,
+  } = useSelector((state) => state.profile);
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(selectProject({id: '', name: '', author_id: ''}));
-    dispatch(resetProjectStatus());
-    dispatch(fetchProfileData(localStorage.getItem('user_id')));
+    dispatch(fetchProfileData(history));
     // eslint-disable-next-line
   }, []);
 
-  return (
+  return id ? (
     <Main>
       <ProfileBar />
       {selectedProject.id === '' ? <UserInfo /> : <CardInfo />}
@@ -35,8 +37,8 @@ function Profile() {
                 <ProjectCard
                   key={project.id}
                   id={project.id}
-                  name={project.data.name}
-                  author_id={project.data.author_id}
+                  name={project.name}
+                  author_id={project.author_id}
                 ></ProjectCard>
               ))
             : ''}
@@ -45,8 +47,8 @@ function Profile() {
                 <ProjectCard
                   key={project.id}
                   id={project.id}
-                  name={project.data.name}
-                  author_id={project.data.author_id}
+                  name={project.name}
+                  author_id={project.author_id}
                 ></ProjectCard>
               ))
             : ''}
@@ -54,6 +56,8 @@ function Profile() {
       </Section>
       {shareIsToggled ? <Modal /> : ''}
     </Main>
+  ) : (
+    <Main></Main>
   );
 }
 

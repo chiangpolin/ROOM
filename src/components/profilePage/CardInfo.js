@@ -8,9 +8,8 @@ import {
 } from '../../app/actions/index.js';
 
 function CardInfo() {
-  const user_id = localStorage.getItem('user_id');
   const [name, setName] = useState('');
-  const {selectedProject} = useSelector((state) => state.profile);
+  const {id, selectedProject} = useSelector((state) => state.profile);
   const dispatch = useDispatch();
 
   return (
@@ -35,13 +34,13 @@ function CardInfo() {
         )}
         <IdText>{selectedProject.author_id}</IdText>
         <IdText>{selectedProject.id}</IdText>
-        {selectedProject.author_id === user_id ? (
+        {selectedProject.author_id === id ? (
           <Buttons>
             <Button
               success
               disabled={!selectedProject.isEditing}
               onClick={() => {
-                handleClickUpdate(dispatch, name, user_id, selectedProject.id);
+                handleClickUpdate(dispatch, name, id, selectedProject.id);
               }}
             >
               Update

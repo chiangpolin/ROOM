@@ -1,18 +1,101 @@
 import * as actionTypes from './actionTypes';
 import * as defaultSettings from './defaultSettings';
-import * as firestore from '../../app/utils/firebase.js';
+import * as firestore from '../../app/utils/firestore.js';
+import * as auth from '../../app/utils/auth.js';
 
 // thunk
-export const fetchProfileData = (user_id) => async (dispatch) => {
-  const [user, projects, sharedProjects] = await Promise.all([
-    firestore.getUser(user_id),
-    firestore.getProjects(user_id),
-    firestore.getSharedProjects(user_id),
+export const signUp = (name, email, password) => async (dispatch) => {
+  const credential = await auth.signUp(email, password);
+  auth.sendEmailVerification();
+  const data = {name: name, email: credential.user.email};
+  if (credential.user.uid) {
+    const id = await firestore.postUser(data);
+    return id;
+  } else {
+    alert('Something went wrong');
+    return;
+  }
+};
+
+export const signIn = (email, password) => async (dispatch) => {
+  const credential = await auth.signIn(email, password);
+  return credential;
+};
+
+export const googleSignIn = () => async (dispatch) => {
+  const provider = auth.googleProvider();
+  const result = await auth.googleSignInPopup(provider);
+  const user = await firestore.getUserByEmail(result.user.email);
+
+  if (user.id) {
+    await firestore.putUser(user.id, {
+      name: result.user.displayName,
+      email: result.user.email,
+      photoURL: result.user.photoURL,
+    });
+  } else {
+    await firestore.postUser({
+      name: result.user.displayName,
+      email: result.user.email,
+      photoURL: result.user.photoURL,
+    });
+  }
+
+  return result;
+};
+
+export const facebookSignIn = () => async (dispatch) => {
+  const provider = auth.facebookProvider();
+  const result = await auth.facebookSignInPopup(provider);
+  const user = await firestore.getUserByEmail(result.user.email);
+
+  if (user.id) {
+    await firestore.putUser(user.id, {
+      name: result.user.displayName,
+      email: result.user.email,
+      photoURL: result.user.photoURL,
+    });
+  } else {
+    await firestore.postUser({
+      name: result.user.displayName,
+      email: result.user.email,
+      photoURL: result.user.photoURL,
+    });
+  }
+
+  return result;
+};
+
+export const signOut = () => async (dispatch) => {
+  dispatch(setUser({id: '', name: '', email: ''}));
+  auth.signOut();
+  alert('Sign out!');
+};
+
+export const forgetPassword = (email) => async (dispatch) => {
+  auth.sendPasswordResetEmail(email);
+};
+
+export const fetchProfileData = (history) => async (dispatch) => {
+  let user;
+  const credentialUser = await auth.getAuthState();
+  if (credentialUser.uid) {
+    user = await firestore.getUserByEmail(credentialUser.email);
+    dispatch(setUser({id: user.id, name: user.name, email: user.email}));
+  } else {
+    history.push('/');
+    return;
+  }
+
+  const [projects, sharedProjects] = await Promise.all([
+    firestore.getProjects(user.id),
+    firestore.getSharedProjects(user.id),
   ]);
 
-  dispatch(setUser(user));
   dispatch(setProjects(projects));
   dispatch(setSharedProjects(sharedProjects));
+  dispatch(selectProject({id: '', name: '', author_id: ''}));
+  dispatch(resetProjectStatus());
 };
 
 export const fetchProjectData = (project_id) => async (dispatch) => {
