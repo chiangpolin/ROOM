@@ -7,6 +7,7 @@ import {WallInfo} from './WallInfo.js';
 import {FurnitureInfo} from './FurnitureInfo.js';
 import {FloorInfo} from './FloorInfo.js';
 import {CameraInfo} from './CameraInfo.js';
+import {ToolInfo} from './ToolInfo.js';
 import {GroupInfo} from './GroupInfo.js';
 
 function InfoBar() {
@@ -25,6 +26,8 @@ function InfoBar() {
       return <FloorInfo></FloorInfo>;
     case 'camera':
       return <CameraInfo></CameraInfo>;
+    case 'edit':
+      return <ToolInfo></ToolInfo>;
     case 'group':
       return <GroupInfo></GroupInfo>;
     default:

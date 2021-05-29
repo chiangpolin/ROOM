@@ -236,6 +236,24 @@ export const updateProjectName =
 
 export const deleteProject = (user_id, project_id) => async (dispatch) => {
   await firestore.deleteProject(project_id);
+  const [walls, furnitures, floors, cameras] = await Promise.all([
+    firestore.getWalls(project_id),
+    firestore.getFurnitures(project_id),
+    firestore.getFloors(project_id),
+    firestore.getCameras(project_id),
+  ]);
+  for (let i = 0; i < walls.length; i++) {
+    firestore.deleteWall(project_id, walls[i].id);
+  }
+  for (let i = 0; i < furnitures.length; i++) {
+    firestore.deleteFurniture(project_id, furnitures[i].id);
+  }
+  for (let i = 0; i < floors.length; i++) {
+    firestore.deleteFloor(project_id, floors[i].id);
+  }
+  for (let i = 0; i < cameras.length; i++) {
+    firestore.deleteCamera(project_id, cameras[i].id);
+  }
   const projects = await firestore.getProjects(user_id);
   dispatch(setProjects(projects));
   dispatch(selectProject(''));
@@ -376,4 +394,20 @@ export const setCameraPosition = (position) => ({
 export const setInstruction = (instruction) => ({
   type: actionTypes.SET_INSTRUCTION,
   payload: {instruction},
+});
+
+// canvas
+export const addCanvasElement = (type, dots) => ({
+  type: actionTypes.ADD_CANVAS_ELEMENT,
+  payload: {type, dots},
+});
+
+export const setCanvasTool = (type) => ({
+  type: actionTypes.SET_CANVAS_TOOL,
+  payload: {type},
+});
+
+export const setCanvasScale = (scale) => ({
+  type: actionTypes.SET_CANVAS_SCALE,
+  payload: {scale},
 });

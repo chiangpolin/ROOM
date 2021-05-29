@@ -43,3 +43,10 @@ export const SET_CAMERA_POSITION = 'SET_CAMERA_POSITION';
 
 // instruction
 export const SET_INSTRUCTION = 'SET_INSTRUCTION';
+
+// canvas
+export const SET_CANVAS_SCALE = 'SET_CANVAS_SCALE';
+export const SET_CANVAS_TOOL = 'SET_CANVAS_TOOL';
+
+// dots
+export const ADD_CANVAS_ELEMENT = 'ADD_CANVAS_ELEMENT';

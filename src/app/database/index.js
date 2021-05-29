@@ -12,8 +12,8 @@ import {
   furnitures_data,
 } from './projectData.js';
 
-initFirebase();
-updateProject();
+// initFirebase();
+// updateProject();
 // updateSetting();
 
 async function updateProject() {

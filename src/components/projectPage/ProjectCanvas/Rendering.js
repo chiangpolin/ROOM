@@ -7,12 +7,11 @@ import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 
 function Rendering() {
   const ref = useRef(null);
-  const {walls, furnitures, floors, cameras} = useSelector(
-    (state) => state.project
-  );
+  const {walls, furnitures, floors, cameras, d_walls, d_floors, d_bases} =
+    useSelector((state) => state.project);
 
   useEffect(() => {
-    //Scene
+    // Scene
     const scene = new THREE.Scene();
 
     // Canvas Sizes
@@ -60,17 +59,87 @@ function Rendering() {
       setModel(renderer, scene, camera, glftLoader, furnitures[i]);
     }
 
+    // walls
+    for (let i = 0; i < d_walls.length; i++) {
+      for (let j = 0; j < d_walls[i].length - 1; j++) {
+        const x1 = d_walls[i][j].x;
+        const x2 = d_walls[i][j + 1].x;
+        const y1 = d_walls[i][j].y;
+        const y2 = d_walls[i][j + 1].y;
+        const angleRad = Math.atan((y2 - y1) / (x2 - x1));
+        const angleDeg = (angleRad * 180) / Math.PI;
+        const lineWid =
+          Math.sqrt(Math.pow(y2 - y1, 2) + Math.pow(x2 - x1, 2)) + 15;
+
+        const geometry = new THREE.BoxGeometry(lineWid, 240, 15);
+        const material = new THREE.MeshStandardMaterial({color: 0xbdc0ba});
+        const cube = new THREE.Mesh(geometry, material);
+        cube.position.set((x1 + x2) / 2, 120, (y1 + y2) / 2);
+        cube.rotation.set(0, (angleDeg * Math.PI) / -180, 0);
+        scene.add(cube);
+      }
+    }
+
+    // floors
+    for (let i = 0; i < d_floors.length; i++) {
+      const shape = new THREE.Shape();
+      shape.moveTo(d_floors[i][0].x, d_floors[i][0].y);
+      for (let j = 1; j < d_floors[i].length; j++) {
+        shape.lineTo(d_floors[i][j].x, d_floors[i][j].y);
+      }
+
+      const extrudeSettings = {
+        depth: 1,
+        bevelEnabled: false,
+        bevelSegments: 0,
+        steps: 1,
+        bevelSize: 0,
+        bevelThickness: 0,
+      };
+
+      const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+      const material = new THREE.MeshStandardMaterial({color: 0xffff00});
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.rotation.set(THREE.MathUtils.degToRad(90), 0, 0);
+      mesh.position.y = 1;
+      scene.add(mesh);
+    }
+
+    // bases
+    for (let i = 0; i < d_bases.length; i++) {
+      const shape = new THREE.Shape();
+      shape.moveTo(d_bases[i][0].x, d_bases[i][0].y);
+      for (let j = 1; j < d_bases[i].length; j++) {
+        shape.lineTo(d_bases[i][j].x, d_bases[i][j].y);
+      }
+
+      const extrudeSettings = {
+        depth: 15,
+        bevelEnabled: false,
+        bevelSegments: 0,
+        steps: 1,
+        bevelSize: 0,
+        bevelThickness: 0,
+      };
+
+      const geometry = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+      const material = new THREE.MeshStandardMaterial({color: 0xffffff});
+      const mesh = new THREE.Mesh(geometry, material);
+      mesh.rotation.set(THREE.MathUtils.degToRad(90), 0, 0);
+      scene.add(mesh);
+    }
+
     // onResize
     window.addEventListener('resize', () =>
       resizeRendering(ref, sizes, camera, renderer)
     );
 
-    // const animate = function () {
-    //   requestAnimationFrame(animate);
-    //   controls.update();
-    //   renderer.render(scene, camera);
-    // };
-    // animate();
+    const animate = function () {
+      requestAnimationFrame(animate);
+      controls.update();
+      renderer.render(scene, camera);
+    };
+    animate();
     const current = ref.current;
 
     return () => {
@@ -106,7 +175,6 @@ function loadModel(loader, url) {
 }
 
 async function setFloor(renderer, scene, camera, loader, floor) {
-  console.log(floor);
   const texturePath = await import(
     `../../../static/images/texture/${floor.path}`
   );

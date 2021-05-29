@@ -12,6 +12,12 @@ const initialState = {
   setting: {},
   instruction: {},
   dataIsFetched: false,
+  dots: [],
+  d_walls: [],
+  d_floors: [],
+  d_bases: [],
+  tool: '',
+  scale: 1,
 };
 
 const projectReducer = (state = initialState, action) => {
@@ -138,6 +144,42 @@ const projectReducer = (state = initialState, action) => {
           type: action.payload.instruction.type,
           furniture: action.payload.instruction.furniture,
         },
+      };
+
+    case 'ADD_CANVAS_ELEMENT':
+      switch (action.payload.type) {
+        case 'wall':
+          return {
+            ...state,
+            dots: [],
+            d_walls: [...state.d_walls, [...action.payload.dots]],
+          };
+        case 'floor':
+          return {
+            ...state,
+            dots: [],
+            d_floors: [...state.d_floors, [...action.payload.dots]],
+          };
+        case 'base':
+          return {
+            ...state,
+            dots: [],
+            d_bases: [...state.d_bases, [...action.payload.dots]],
+          };
+        default:
+      }
+      break;
+
+    case 'SET_CANVAS_TOOL':
+      return {
+        ...state,
+        tool: action.payload.type,
+      };
+
+    case 'SET_CANVAS_SCALE':
+      return {
+        ...state,
+        scale: action.payload.scale,
       };
 
     default:
