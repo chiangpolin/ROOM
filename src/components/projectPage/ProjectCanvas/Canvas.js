@@ -1,207 +1,217 @@
 import React, {useState, useEffect, useRef} from 'react';
 import styled from 'styled-components';
 import {useSelector} from 'react-redux';
-import {store} from '../../../app/store/index.js';
-import {
-  selectFurniture,
-  setFurniturePosition,
-} from '../../../app/actions/index.js';
-import * as PIXI from 'pixi.js';
-// import {SVGScene} from '@pixi-essentials/svg';
+import * as pixi from '../../../app/utils/pixi.js';
 
 function Canvas() {
-  const ref = useRef(null);
-  const [DOMapp, setDOMapp] = useState('');
-  const {walls, furnitures, instruction} = useSelector(
-    (state) => state.project
-  );
+  const canvasRef = useRef(null);
+  const [pixiApp, setApp] = useState('');
+  const [pixiOpeningContainer, setOpeningContainer] = useState('');
+  const [pixiWallContainer, setWallContainer] = useState('');
+  const [pixiFurnitureContainer, setFurnitureContainer] = useState('');
+  const [pixiCoveringContainer, setCoveringContainer] = useState('');
+  const [pixiFloorContainer, setFloorContainer] = useState('');
+  const {
+    scale,
+    instruction,
+    selectedGroup,
+    tool,
+    d_furnitures,
+    d_walls,
+    d_openings,
+    d_coverings,
+    d_floors,
+  } = useSelector((state) => state.project);
 
   useEffect(() => {
     // Sizes
     const sizes = {
-      width: ref.current.clientWidth,
-      height: ref.current.clientHeight,
+      width: canvasRef.current.clientWidth,
+      height: canvasRef.current.clientHeight,
     };
 
-    // Canvas
-    const app = new PIXI.Application({
-      width: sizes.width,
-      height: sizes.height,
-      backgroundAlpha: 0,
-    });
+    // App
+    const app = pixi.initApplication(sizes, scale);
+    setApp(app);
 
-    app.stage.x = app.renderer.width * 0.5;
-    app.stage.y = app.renderer.height * 0.5;
-    app.stage.scale.x = 1;
-    app.stage.scale.y = 1;
-    ref.current.appendChild(app.view);
+    // Containers
+    const backgroundContainer = pixi.initContainer(app);
 
-    createRoom(app, walls[0]);
-    for (let i = 0; i < furnitures.length; i++) {
-      createCanvasElement(app, furnitures[i]);
+    const floorContainer = pixi.initContainer(app);
+    setFloorContainer(floorContainer);
+    const coveringContainer = pixi.initContainer(app);
+    setCoveringContainer(coveringContainer);
+    const wallContainer = pixi.initContainer(app);
+    setWallContainer(wallContainer);
+    const openingContainer = pixi.initContainer(app);
+    setOpeningContainer(openingContainer);
+    const furnitureContainer = pixi.initContainer(app);
+    setFurnitureContainer(furnitureContainer);
+
+    // Main
+    pixi.createBackground(backgroundContainer, tool);
+    for (let i = 0; i < d_floors.length; i++) {
+      if (d_floors[i].method !== 'delete') {
+        pixi.createFloor(floorContainer, d_floors[i]);
+      }
+    }
+    for (let i = 0; i < d_coverings.length; i++) {
+      if (d_coverings[i].method !== 'delete') {
+        pixi.createCovering(coveringContainer, d_coverings[i]);
+      }
+    }
+    for (let i = 0; i < d_furnitures.length; i++) {
+      if (d_furnitures[i].method !== 'delete') {
+        pixi.createFurniture(furnitureContainer, d_furnitures[i]);
+      }
+    }
+    for (let i = 0; i < d_walls.length; i++) {
+      if (d_walls[i].method !== 'delete') {
+        pixi.createWall(wallContainer, d_walls[i]);
+      }
+    }
+    for (let i = 0; i < d_openings.length; i++) {
+      if (d_openings[i].method !== 'delete') {
+        pixi.createOpening(openingContainer, d_openings[i]);
+      }
     }
 
-    setDOMapp(app);
+    // Ref
+    canvasRef.current.appendChild(app.view);
 
     // onResize
-    window.addEventListener('resize', () => resizeCanvas(ref, sizes, app));
+    window.addEventListener('resize', () =>
+      pixi.resizeCanvas(canvasRef, app, sizes)
+    );
 
     return () => {
       app.destroy(true, true);
-      window.removeEventListener('resize', () => resizeCanvas(ref, sizes, app));
+      window.removeEventListener('resize', () =>
+        pixi.resizeCanvas(canvasRef, app, sizes)
+      );
     };
     // eslint-disable-next-line
-  }, []);
+  }, [tool]);
 
   useEffect(() => {
-    if (DOMapp) {
-      switch (instruction.type) {
-        case 'add':
-          createCanvasElement(DOMapp, instruction.furniture);
+    if (pixiApp) {
+      switch (instruction.target) {
+        case 'furniture':
+          switch (instruction.type) {
+            case 'add':
+              pixi.createFurniture(
+                pixiFurnitureContainer,
+                d_furnitures[d_furnitures.length - 1]
+              );
+              break;
+            case 'remove':
+              for (let i = 0; i < pixiFurnitureContainer.children.length; i++)
+                if (
+                  pixiFurnitureContainer.children[i].id === selectedGroup.id
+                ) {
+                  pixiFurnitureContainer.removeChild(
+                    pixiFurnitureContainer.children[i]
+                  );
+                }
+              break;
+            case 'rotate':
+              for (let i = 0; i < pixiFurnitureContainer.children.length; i++)
+                if (
+                  pixiFurnitureContainer.children[i].id === selectedGroup.id
+                ) {
+                  pixiFurnitureContainer.children[i].angle =
+                    selectedGroup.rotation.angle;
+                }
+              break;
+            default:
+          }
           break;
-
-        case 'remove':
-          for (let i = 0; i < DOMapp.stage.children.length; i++)
-            if (DOMapp.stage.children[i].id === instruction.furniture.id) {
-              DOMapp.stage.removeChild(DOMapp.stage.children[i]);
-            }
+        case 'floor':
+          switch (instruction.type) {
+            case 'add':
+              pixi.createFloor(
+                pixiFloorContainer,
+                d_floors[d_floors.length - 1]
+              );
+              break;
+            case 'remove':
+              for (let i = 0; i < pixiFloorContainer.children.length; i++) {
+                if (pixiFloorContainer.children[i].id === selectedGroup.id) {
+                  pixiFloorContainer.removeChild(
+                    pixiFloorContainer.children[i]
+                  );
+                }
+              }
+              break;
+            default:
+          }
           break;
-
-        case 'rotate':
-          for (let i = 0; i < DOMapp.stage.children.length; i++)
-            if (DOMapp.stage.children[i].id === instruction.furniture.id) {
-              DOMapp.stage.children[i].angle =
-                instruction.furniture.rotation.angle;
-            }
+        case 'covering':
+          switch (instruction.type) {
+            case 'add':
+              pixi.createCovering(
+                pixiCoveringContainer,
+                d_coverings[d_coverings.length - 1]
+              );
+              break;
+            case 'remove':
+              for (let i = 0; i < pixiCoveringContainer.children.length; i++) {
+                if (pixiCoveringContainer.children[i].id === selectedGroup.id) {
+                  pixiCoveringContainer.removeChild(
+                    pixiCoveringContainer.children[i]
+                  );
+                }
+              }
+              break;
+            default:
+          }
           break;
-
+        case 'wall':
+          switch (instruction.type) {
+            case 'add':
+              pixi.createWall(pixiWallContainer, d_walls[d_walls.length - 1]);
+              break;
+            case 'remove':
+              for (let i = 0; i < pixiWallContainer.children.length; i++) {
+                if (pixiWallContainer.children[i].id === selectedGroup.id) {
+                  pixiWallContainer.removeChild(pixiWallContainer.children[i]);
+                }
+              }
+              break;
+            default:
+          }
+          break;
+        case 'opening':
+          switch (instruction.type) {
+            case 'add':
+              break;
+            case 'remove':
+              for (let i = 0; i < pixiOpeningContainer.children.length; i++) {
+                if (pixiOpeningContainer.children[i].id === selectedGroup.id) {
+                  pixiOpeningContainer.removeChild(
+                    pixiOpeningContainer.children[i]
+                  );
+                }
+              }
+              break;
+            default:
+          }
+          break;
         default:
-          console.log('Instruction type is not defined');
       }
     }
     // eslint-disable-next-line
   }, [instruction]);
 
-  return <ProjectCanvasDiv ref={ref} />;
+  useEffect(() => {
+    if (pixiApp) {
+      pixiApp.stage.scale.x = scale;
+      pixiApp.stage.scale.y = scale;
+    }
+  }, [scale]);
+
+  return <ProjectCanvasDiv ref={canvasRef} />;
 }
-
-function resizeCanvas(ref, sizes, app) {
-  if (ref.current === null) {
-    return;
-  }
-  sizes.width = ref.current.clientWidth;
-  sizes.height = ref.current.clientHeight;
-
-  app.renderer.resize(sizes.width, sizes.height);
-  app.stage.x = app.renderer.width * 0.5;
-  app.stage.y = app.renderer.height * 0.5;
-}
-
-async function createRoom(app, obj) {
-  const svgPath = await import(
-    `../../../static/images/furniture/${obj.file.svg_path}`
-  );
-
-  const texture = PIXI.Texture.from(svgPath.default);
-  texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
-
-  const element = new PIXI.Sprite(texture);
-  element.interactive = true;
-  element.buttonMode = true;
-  element.anchor.set(0.5);
-  element.scale.set(1);
-  element.id = obj.id;
-  element.name = obj.name;
-  element.type = obj.type;
-  element.file = obj.file;
-  element.x = obj.position.x;
-  element.y = obj.position.y;
-  element.width = obj.dimension.width;
-  element.height = obj.dimension.height;
-  element.angle = obj.rotation.angle;
-
-  app.stage.addChild(element);
-}
-
-async function createCanvasElement(app, obj) {
-  const svgPath = await import(
-    `../../../static/images/furniture/${obj.file.svg_path}`
-  );
-
-  const texture = PIXI.Texture.from(svgPath.default);
-  texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
-
-  const element = new PIXI.Sprite(texture);
-  element.interactive = true;
-  element.buttonMode = true;
-  element.anchor.set(0.5);
-  element.scale.set(1);
-  element.id = obj.id;
-  element.name = obj.name;
-  element.type = obj.type;
-  element.file = obj.file;
-  element.x = obj.position.x;
-  element.y = obj.position.y;
-  element.width = obj.dimension.width;
-  element.height = obj.dimension.height;
-  element.angle = obj.rotation.angle;
-  element
-    .on('pointerdown', onDragStart)
-    .on('pointerup', onDragEnd)
-    .on('pointerupoutside', onDragEnd)
-    .on('pointermove', onDragMove)
-    .on('click', onClick);
-
-  app.stage.addChild(element);
-}
-
-function onDragStart(event) {
-  this.data = event.data;
-  this.alpha = 0.5;
-  this.dragging = true;
-}
-
-function onDragEnd() {
-  this.data = null;
-  this.alpha = 1;
-  this.dragging = false;
-  store.dispatch(
-    setFurniturePosition({id: this.id, position: {x: this.x, y: this.y}})
-  );
-}
-
-function onDragMove() {
-  if (this.dragging) {
-    const newPosition = this.data.getLocalPosition(this.parent);
-    this.x = newPosition.x;
-    this.y = newPosition.y;
-  }
-}
-
-function onClick() {
-  store.dispatch(
-    selectFurniture({
-      name: this.name,
-      id: this.id,
-      type: this.type,
-      position: {x: this.x, y: this.y},
-      rotation: {angle: this.angle},
-      dimension: {width: this.width, height: this.height},
-      file: this.file,
-    })
-  );
-}
-
-// async function test(app) {
-//   const svgPayload = await fetch(
-//     'https://upload.wikimedia.org/wikipedia/commons/f/fa/De_Groot_academic_genealogy.svg'
-//   ).then((data) => data.text());
-//   const svgDOM = new DOMParser().parseFromString(svgPayload, 'image/svg+xml');
-//   const svgEl = svgDOM.documentElement;
-//   const viewport = app.stage.addChild(new PIXI.Container());
-//   viewport.addChild(new SVGScene(svgEl));
-//   app.renderer.render(app.stage);
-// }
 
 const ProjectCanvasDiv = styled.div`
   width: 100%;

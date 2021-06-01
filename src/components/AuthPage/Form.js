@@ -9,17 +9,23 @@ import {
   facebookSignIn,
   forgetPassword,
 } from '../../app/actions/index.js';
+import * as theme from '../../app/constants/theme.js';
 import {checkValidation} from '../../app/utils/validate.js';
 import {ReactComponent as GoogleIcon} from '../../static/images/icons/google.svg';
 import {ReactComponent as FacebookIcon} from '../../static/images/icons/facebook.svg';
+import {ReactComponent as PersonIcon} from '../../static/images/icons/person.svg';
+import {ReactComponent as EnvelopeIcon} from '../../static/images/icons/envelope.svg';
+import {ReactComponent as LockIcon} from '../../static/images/icons/lock.svg';
 
 function Form(props) {
   let history = useHistory();
   const [name, setName] = useState('');
   const [nameIsValid, setNameValidation] = useState(true);
-  const [email, setEmail] = useState('test1@gmail.com');
+  const [email, setEmail] = useState('user@gmail.com');
+  const [newEmail, setNewEmail] = useState('');
   const [emailIsValid, setEmailValidation] = useState(true);
-  const [password, setPassword] = useState('');
+  const [password, setPassword] = useState('batch13');
+  const [newPassword, setNewPassword] = useState('');
   const [passwordIsValid, setPasswordValidation] = useState(true);
   const dispatch = useDispatch();
 
@@ -27,37 +33,7 @@ function Form(props) {
     case 'sign-in':
       return (
         <Div>
-          <InputDiv>
-            Email
-            <Input
-              type="text"
-              value={email}
-              onChange={(event) => handleChange(event, setEmail)}
-            ></Input>
-          </InputDiv>
-          <InputDiv>
-            Password
-            <Input
-              type="text"
-              value={password}
-              onChange={(event) => handleChange(event, setPassword)}
-            ></Input>
-            <p
-              style={{cursor: 'pointer'}}
-              onClick={() => handleClickForgetPassword(dispatch, email)}
-            >
-              Forget Password?
-            </p>
-          </InputDiv>
-          <Buttons>
-            <Button
-              onClick={() =>
-                handleClickSignIn(dispatch, history, email, password)
-              }
-            >
-              Sign In
-            </Button>
-          </Buttons>
+          <h1>Sign In</h1>
           <TPLButtons>
             <Button onClick={() => handleClickGoogleSignIn(dispatch, history)}>
               <GoogleIcon width="16" height="16" />
@@ -70,47 +46,113 @@ function Form(props) {
               <p>Facebook</p>
             </Button>
           </TPLButtons>
+          <h3>or use your email to sign in:</h3>
+          <InputDiv>
+            <Input
+              type="text"
+              value={email}
+              onChange={(event) => handleChange(event, setEmail)}
+            ></Input>
+            <div>
+              <EnvelopeIcon></EnvelopeIcon>
+            </div>
+          </InputDiv>
+          <InputDiv>
+            <Input
+              type="password"
+              value={password}
+              onChange={(event) => handleChange(event, setPassword)}
+            ></Input>
+            <div>
+              <LockIcon></LockIcon>
+            </div>
+            <p
+              style={{cursor: 'pointer'}}
+              onClick={() => handleClickForgetPassword(dispatch, email)}
+            >
+              Forgot Password?
+            </p>
+          </InputDiv>
+          <Buttons>
+            <Button
+              primary
+              onClick={() =>
+                handleClickSignIn(dispatch, history, email, password)
+              }
+            >
+              Sign In
+            </Button>
+          </Buttons>
+          <hr></hr>
+          <Buttons>
+            <Button onClick={() => props.setType('sign-up')}>
+              Create New Account
+            </Button>
+          </Buttons>
         </Div>
       );
     case 'sign-up':
       return (
         <Div>
+          <h1>Sign Up</h1>
+          <TPLButtons>
+            <Button onClick={() => handleClickGoogleSignIn(dispatch, history)}>
+              <GoogleIcon width="16" height="16" />
+              <p>Google</p>
+            </Button>
+            <Button
+              onClick={() => handleClickFacebookSignIn(dispatch, history)}
+            >
+              <FacebookIcon width="24" hieght="24" />
+              <p>Facebook</p>
+            </Button>
+          </TPLButtons>
           <InputDiv>
-            Name
             <Input
               type="text"
+              placeholder="Name"
               value={name}
               invalid={!nameIsValid}
               onChange={(event) => handleChange(event, setName)}
             ></Input>
+            <div>
+              <PersonIcon></PersonIcon>
+            </div>
           </InputDiv>
           <InputDiv>
-            Email
             <Input
               type="text"
-              value={email}
+              placeholder="Email"
+              value={newEmail}
               invalid={!emailIsValid}
-              onChange={(event) => handleChange(event, setEmail)}
+              onChange={(event) => handleChange(event, setNewEmail)}
             ></Input>
+            <div>
+              <EnvelopeIcon></EnvelopeIcon>
+            </div>
           </InputDiv>
           <InputDiv>
-            Password
             <Input
-              type="text"
-              value={password}
+              type="password"
+              placeholder="Password"
+              value={newPassword}
               invalid={!passwordIsValid}
-              onChange={(event) => handleChange(event, setPassword)}
+              onChange={(event) => handleChange(event, setNewPassword)}
             ></Input>
+            <div>
+              <LockIcon></LockIcon>
+            </div>
           </InputDiv>
           <Buttons>
             <Button
+              primary
               onClick={() =>
                 handleClickSignUp(
                   dispatch,
                   history,
                   name,
-                  email,
-                  password,
+                  newEmail,
+                  newPassword,
                   setNameValidation,
                   setEmailValidation,
                   setPasswordValidation
@@ -120,18 +162,12 @@ function Form(props) {
               Sign Up
             </Button>
           </Buttons>
-          <TPLButtons>
-            <Button onClick={() => handleClickGoogleSignIn(dispatch, history)}>
-              <GoogleIcon width="16" height="16" />
-              <p>Google</p>
+          <hr></hr>
+          <Buttons>
+            <Button onClick={() => props.setType('sign-in')}>
+              Use an Existing Account
             </Button>
-            <Button
-              onClick={() => handleClickFacebookSignIn(dispatch, history)}
-            >
-              <FacebookIcon width="24" hieght="24" />
-              <p>Facebook</p>
-            </Button>
-          </TPLButtons>
+          </Buttons>
         </Div>
       );
     default:
@@ -145,11 +181,18 @@ function handleChange(event, setValue) {
 
 async function handleClickSignIn(dispatch, history, email, password) {
   const credential = await dispatch(signIn(email, password));
-  if (credential.user.emailVerified) {
+  console.log(credential.user);
+  if (credential.user.uid) {
     history.push('/profile');
   } else {
-    alert('Email not verify');
+    alert('User not exist');
   }
+
+  // if (credential.user.emailVerified) {
+  //   history.push('/profile');
+  // } else {
+  //   alert('Email not verify');
+  // }
 }
 
 async function handleClickSignUp(
@@ -206,15 +249,36 @@ async function handleClickForgetPassword(dispatch, email) {
 const Div = styled.div`
   display: flex;
   flex-direction: column;
-  width: 300px;
-  height: 80%;
-  border-left: 1px solid #fffffb;
-  border-right: 1px solid #fffffb;
-  border-bottom: 1px solid #fffffb;
+  width: 360px;
+  height: 90%;
+  border: 1px solid ${theme.GOFUN};
+  border-radius: 10px;
   background-color: transparent;
+
+  h1 {
+    margin: 10px 20px 5px;
+    color: ${theme.GOFUN};
+  }
+
+  h3 {
+    margin: 0 20px;
+    color: ${theme.GOFUN};
+  }
+
+  p {
+    margin: 0 5px 0;
+  }
+
+  hr {
+    margin: 0 15px;
+    border: 1px solid ${theme.GOFUN};
+  }
 
   @media (max-width: 768px) {
     height: 100%;
+    hr {
+      margin: 0 15px 10px;
+    }
   }
 
   @media (max-width: 480px) {
@@ -223,62 +287,86 @@ const Div = styled.div`
 `;
 
 const InputDiv = styled.div`
-  margin: 10px 10px 5px;
+  position: relative;
+  margin: 5px 15px 5px;
   font-size: 16px;
-  color: #fffffb;
+  color: ${theme.GOFUN};
+
+  div {
+    position: absolute;
+    top: 5px;
+    left: 20px;
+  }
 `;
 
 const Input = styled.input`
-  padding: 0 10px;
+  padding: 0 0 0 50px;
   width: 100%;
   height: 30px;
-  border: 1px solid #fffffb;
+  border: 1px solid ${theme.GOFUN};
   border-radius: 5px;
-  color: #fffffb;
+  font-size: 16px;
+  color: ${theme.GOFUN};
   background-color: transparent;
 
   :focus {
     outline: none !important;
   }
 
+  ::placeholder {
+    color: ${theme.GOFUN};
+  }
+
   ${(props) =>
     props.invalid &&
     css`
-      background-color: #336774;
+      background-color: ${theme.RURIKON};
     `}
 `;
 
 const Button = styled.button`
   display: flex;
   align-items: center;
-  justify-content: space-evenly;
+  justify-content: center;
   margin: 0 0 10px;
   width: 100%;
   height: 30px;
-  border: 1px solid #fffffb;
+  border: 1px solid ${theme.GOFUN};
   border-radius: 5px;
   font-size: 16px;
-  color: #fffffb;
+  color: ${theme.GOFUN};
   background-color: transparent;
+
+  svg {
+    margin: 0 5px 0 0;
+  }
 
   :hover {
     cursor: pointer;
     color: #81c7d4;
     background-color: #fffffb;
   }
+
+  ${(props) =>
+    props.primary &&
+    css`
+      margin: 10px 0 10px;
+      color: ${theme.MIZU};
+      background-color: ${theme.GOFUN};
+    `}
 `;
 
 const Buttons = styled.div`
   align-items: center;
   justify-content: center;
-  margin: 10px;
+  margin: auto 15px 5px;
 `;
 
 const TPLButtons = styled.div`
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   grid-gap: 5px 5px;
-  margin: auto 10px 10px 10px;
+  margin: 10px 15px;
 `;
 
 export {Form};

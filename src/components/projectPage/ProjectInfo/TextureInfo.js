@@ -1,10 +1,10 @@
 import React from 'react';
 import styled, {css} from 'styled-components';
 import {useSelector, useDispatch} from 'react-redux';
-import {setFloorTexture} from '../../../app/actions/index.js';
+import {setCoveringTexture} from '../../../app/actions/index.js';
 
-function FloorInfo() {
-  const {setting, floors} = useSelector((state) => state.project);
+function TextureInfo() {
+  const {setting, selectedGroup} = useSelector((state) => state.project);
   const dispatch = useDispatch();
 
   return (
@@ -13,8 +13,13 @@ function FloorInfo() {
         {setting.textures.map((texture, index) => (
           <Item
             key={index}
-            primary={texture.path === floors[0].path}
-            onClick={() => handleClickTexture(dispatch, texture.path)}
+            primary={
+              selectedGroup.type === 'covering' &&
+              selectedGroup.path === texture.path
+            }
+            onClick={() =>
+              dispatch(setCoveringTexture(selectedGroup.id, texture.path))
+            }
           >
             <ItemImg src={texture.main_image}></ItemImg>
             <ItemText>{texture.name}</ItemText>
@@ -26,10 +31,6 @@ function FloorInfo() {
       </Container>
     </Div>
   );
-}
-
-function handleClickTexture(dispatch, path) {
-  dispatch(setFloorTexture(path));
 }
 
 const Div = styled.div`
@@ -77,4 +78,5 @@ const ItemText = styled.p`
 const Dimension = styled.p`
   font-size: 14px;
 `;
-export {FloorInfo};
+
+export {TextureInfo};

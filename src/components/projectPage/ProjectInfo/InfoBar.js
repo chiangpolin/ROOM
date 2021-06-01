@@ -3,28 +3,31 @@ import styled from 'styled-components';
 import {useSelector} from 'react-redux';
 import {SettingsInfo} from './SettingsInfo.js';
 import {CanvasInfo} from './CanvasInfo.js';
-import {WallInfo} from './WallInfo.js';
+import {PaintInfo} from './PaintInfo.js';
 import {FurnitureInfo} from './FurnitureInfo.js';
-import {FloorInfo} from './FloorInfo.js';
+import {TextureInfo} from './TextureInfo.js';
 import {CameraInfo} from './CameraInfo.js';
+import {ToolInfo} from './ToolInfo.js';
 import {GroupInfo} from './GroupInfo.js';
 
 function InfoBar() {
-  const {info} = useSelector((state) => state.project);
+  const {information} = useSelector((state) => state.project);
 
-  switch (info) {
+  switch (information) {
     case 'settings':
       return <SettingsInfo></SettingsInfo>;
     case 'canvas':
       return <CanvasInfo></CanvasInfo>;
-    case 'wall':
-      return <WallInfo></WallInfo>;
+    case 'paint':
+      return <PaintInfo></PaintInfo>;
     case 'furniture':
       return <FurnitureInfo></FurnitureInfo>;
-    case 'floor':
-      return <FloorInfo></FloorInfo>;
+    case 'texture':
+      return <TextureInfo></TextureInfo>;
     case 'camera':
       return <CameraInfo></CameraInfo>;
+    case 'tool':
+      return <ToolInfo></ToolInfo>;
     case 'group':
       return <GroupInfo></GroupInfo>;
     default:

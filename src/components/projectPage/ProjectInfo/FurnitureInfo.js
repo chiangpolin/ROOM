@@ -1,44 +1,31 @@
 import React from 'react';
 import styled from 'styled-components';
-import {useParams} from 'react-router';
 import {useSelector, useDispatch} from 'react-redux';
-import {createFurniture} from '../../../app/actions/index.js';
+import {addCanvasElement} from '../../../app/actions/index.js';
 
 function FurnitureInfo() {
-  let {id} = useParams();
   const {setting} = useSelector((state) => state.project);
   const dispatch = useDispatch();
 
   return (
     <Div>
       <Container>
-        {setting.furnitures.map((item, index) => (
+        {setting.furnitures.map((furniture, index) => (
           <Item
             key={index}
-            onClick={() => handleClickFurniture(dispatch, id, item)}
+            onClick={() => {
+              dispatch(addCanvasElement('furniture', furniture));
+            }}
           >
             <ItemImg></ItemImg>
-            <ItemText>{item.name}</ItemText>
+            <ItemText>{furniture.name}</ItemText>
             <Dimension>
-              {item.dimension.width} x {item.dimension.height}
+              {furniture.dimension.width} x {furniture.dimension.height}
             </Dimension>
           </Item>
         ))}
       </Container>
     </Div>
-  );
-}
-
-function handleClickFurniture(dispatch, project_id, furniture) {
-  dispatch(
-    createFurniture(project_id, {
-      name: furniture.name,
-      type: 'furniture',
-      file: furniture.file,
-      dimension: furniture.dimension,
-      position: {x: 0, y: 0},
-      rotation: {angle: 0},
-    })
   );
 }
 
