@@ -37,7 +37,7 @@ function Header() {
             <ListIcon width="24" height="24" />
           </ListButton>
         </List>
-        <Link to="/" style={{color: '#1C1C1C', textDecoration: 'none'}}>
+        <Link to="/profile" style={{color: '#1C1C1C', textDecoration: 'none'}}>
           <NavbarBrand>
             <DoorIcon width="24" height="24" />
             <Title>ROOM</Title>
@@ -85,7 +85,8 @@ function Header() {
             ''
           )}
 
-          {location.pathname.indexOf('/project') > -1 && user_id !== '' ? (
+          {location.pathname.indexOf('/project') > -1 &&
+          user_id === selectedProject.author_id ? (
             <NavControllers>
               <Button
                 onClick={() =>
@@ -107,13 +108,10 @@ function Header() {
             ''
           )}
 
-          {location.pathname !== '/profile' && user_id !== '' ? (
+          {user_id !== '' ? (
             <NavLinks>
-              <Button onClick={() => handleClickProfile(history, user_id)}>
+              <Button onClick={() => handleClickSignOut(dispatch, history)}>
                 <PersonIcon width="24" height="24" />
-              </Button>
-              <Button onClick={() => handleClickSignOut(dispatch)}>
-                <XCircleIcon width="24" height="24" />
               </Button>
             </NavLinks>
           ) : (
@@ -145,16 +143,9 @@ async function handleClickUpdate(dispatch, project_id, data) {
   dispatch(updateProject(project_id, data));
 }
 
-function handleClickProfile(history, user_id) {
-  if (user_id) {
-    history.push('/profile');
-  } else {
-    alert('Please sign in first');
-  }
-}
-
-function handleClickSignOut(dispatch) {
+function handleClickSignOut(dispatch, history) {
   dispatch(signOut());
+  history.push('/');
 }
 
 const Navbar = styled.div`

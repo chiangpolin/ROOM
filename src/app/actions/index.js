@@ -1,5 +1,5 @@
-import * as actionTypes from './actionTypes';
-import * as defaultSettings from './defaultSettings';
+import * as actionTypes from '../constants/actionTypes';
+import * as defaultSettings from '../constants/defaultSettings';
 import * as firestore from '../../app/utils/firestore.js';
 import * as auth from '../../app/utils/auth.js';
 
@@ -74,6 +74,13 @@ export const signOut = () => async (dispatch) => {
 
 export const forgetPassword = (email) => async (dispatch) => {
   auth.sendPasswordResetEmail(email);
+};
+
+export const fetchAuthState = (history) => async (dispatch) => {
+  const credentialUser = await auth.getAuthState();
+  if (credentialUser.uid) {
+    history.push('/profile');
+  }
 };
 
 export const fetchProfileData = (history) => async (dispatch) => {
