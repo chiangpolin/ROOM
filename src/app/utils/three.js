@@ -133,7 +133,7 @@ export async function setWall(renderer, scene, camera, wall, openings) {
   const color = RGBToHex(wall.color.r, wall.color.g, wall.color.b);
   const subtractCubes = [];
   for (let i = 0; i < openings.length; i++) {
-    if (openings[i].type === 'window') {
+    if (openings[i].type === 'window' && openings[i].method !== 'delete') {
       const loader = new GLTFLoader();
       const path = await import(
         `../../static/models/${openings[i].file.gltf_path}`
