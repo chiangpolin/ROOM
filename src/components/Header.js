@@ -25,9 +25,8 @@ function Header() {
   let history = useHistory();
   const user_id = useSelector((state) => state.profile.id);
   const {selectedProject, filter} = useSelector((state) => state.profile);
-  const {walls, furnitures, floors, cameras} = useSelector(
-    (state) => state.project
-  );
+  const {d_cameras, d_furnitures, d_walls, d_openings, d_coverings, d_floors} =
+    useSelector((state) => state.project);
   const dispatch = useDispatch();
 
   return (
@@ -86,18 +85,20 @@ function Header() {
             ''
           )}
 
-          {location.pathname.indexOf('/project') > -1 ? (
+          {location.pathname.indexOf('/project') > -1 && user_id !== '' ? (
             <NavControllers>
               <Button
                 onClick={() =>
                   handleClickUpdate(dispatch, selectedProject.id, {
-                    walls,
-                    furnitures,
-                    floors,
-                    cameras,
+                    d_cameras,
+                    d_furnitures,
+                    d_walls,
+                    d_openings,
+                    d_coverings,
+                    d_floors,
                   })
                 }
-                disabled={!user_id || selectedProject.author_id !== user_id}
+                // disabled={!user_id || selectedProject.author_id !== user_id}
               >
                 <SdCardIcon width="24" height="24" />
               </Button>
@@ -106,7 +107,7 @@ function Header() {
             ''
           )}
 
-          {location.pathname !== '/profile' && user_id !== null ? (
+          {location.pathname !== '/profile' && user_id !== '' ? (
             <NavLinks>
               <Button onClick={() => handleClickProfile(history, user_id)}>
                 <PersonIcon width="24" height="24" />

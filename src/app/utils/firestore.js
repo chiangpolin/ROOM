@@ -224,9 +224,27 @@ export function getWalls(project_id) {
       .then((querySnapshot) => {
         const walls = [];
         querySnapshot.forEach((doc) => {
-          walls.push({...doc.data(), id: doc.id});
+          walls.push(doc.data());
         });
         resolve(walls);
+      });
+  });
+}
+
+export function getWallDocId(project_id, uuid) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('walls')
+      .where('id', '==', uuid)
+      .get()
+      .then((querySnapshot) => {
+        const ids = [];
+        querySnapshot.forEach((doc) => {
+          ids.push(doc.id);
+        });
+        resolve(ids[0]);
       });
   });
 }
@@ -237,7 +255,7 @@ export function postWall(project_id, data) {
     db.collection('projects')
       .doc(project_id)
       .collection('walls')
-      .add(data)
+      .add({...data, method: 'put'})
       .then((docRef) => {
         resolve(docRef.id);
       })
@@ -247,13 +265,14 @@ export function postWall(project_id, data) {
   });
 }
 
-export function putWall(project_id, wall) {
+export async function putWall(project_id, wall) {
   const db = firebase.firestore();
+  const id = await getWallDocId(project_id, wall.id);
   return new Promise((resolve) => {
     db.collection('projects')
       .doc(project_id)
       .collection('walls')
-      .doc(wall.id)
+      .doc(id)
       .set(
         {
           color: wall.color,
@@ -269,13 +288,198 @@ export function putWall(project_id, wall) {
   });
 }
 
-export function deleteWall(project_id, wall_id) {
+export async function deleteWall(project_id, wall) {
   const db = firebase.firestore();
+  const id = await getWallDocId(project_id, wall.id);
   return new Promise((resolve) => {
     db.collection('projects')
       .doc(project_id)
       .collection('walls')
-      .doc(wall_id)
+      .doc(id)
+      .delete()
+      .then(() => {
+        resolve('success');
+      })
+      .catch((error) => {
+        console.error('Error removing document: ', error);
+      });
+  });
+}
+
+export function getOpenings(project_id) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('openings')
+      .get()
+      .then((querySnapshot) => {
+        const openings = [];
+        querySnapshot.forEach((doc) => {
+          openings.push(doc.data());
+        });
+        resolve(openings);
+      });
+  });
+}
+
+export function getOpeningDocId(project_id, uuid) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('openings')
+      .where('id', '==', uuid)
+      .get()
+      .then((querySnapshot) => {
+        const ids = [];
+        querySnapshot.forEach((doc) => {
+          ids.push(doc.id);
+        });
+        resolve(ids[0]);
+      });
+  });
+}
+
+export function postOpening(project_id, data) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('openings')
+      .add({...data, method: 'put'})
+      .then((docRef) => {
+        resolve(docRef.id);
+      })
+      .catch((error) => {
+        console.error('Error adding document: ', error);
+      });
+  });
+}
+
+export async function putOpening(project_id, opening) {
+  const db = firebase.firestore();
+  const id = await getOpeningDocId(project_id, opening.id);
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('openings')
+      .doc(id)
+      .set(
+        {
+          name: opening.name,
+        },
+        {merge: true}
+      )
+      .then(() => {
+        resolve('success');
+      })
+      .catch((error) => {
+        console.error('Error writing document: ', error);
+      });
+  });
+}
+
+export async function deleteOpening(project_id, opening) {
+  const db = firebase.firestore();
+  const id = await getOpeningDocId(project_id, opening.id);
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('openings')
+      .doc(id)
+      .delete()
+      .then(() => {
+        resolve('success');
+      })
+      .catch((error) => {
+        console.error('Error removing document: ', error);
+      });
+  });
+}
+
+export function getCoverings(project_id) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('coverings')
+      .get()
+      .then((querySnapshot) => {
+        const coverings = [];
+        querySnapshot.forEach((doc) => {
+          coverings.push(doc.data());
+        });
+        resolve(coverings);
+      });
+  });
+}
+
+export function getCoveringDocId(project_id, uuid) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('coverings')
+      .where('id', '==', uuid)
+      .get()
+      .then((querySnapshot) => {
+        const ids = [];
+        querySnapshot.forEach((doc) => {
+          ids.push(doc.id);
+        });
+        resolve(ids[0]);
+      });
+  });
+}
+
+export function postCovering(project_id, data) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('coverings')
+      .add({...data, method: 'put'})
+      .then((docRef) => {
+        resolve(docRef.id);
+      })
+      .catch((error) => {
+        console.error('Error adding document: ', error);
+      });
+  });
+}
+
+export async function putCovering(project_id, covering) {
+  const db = firebase.firestore();
+  const id = await getCoveringDocId(project_id, covering.id);
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('coverings')
+      .doc(id)
+      .set(
+        {
+          path: covering.path,
+        },
+        {merge: true}
+      )
+      .then(() => {
+        resolve('success');
+      })
+      .catch((error) => {
+        console.error('Error writing document: ', error);
+      });
+  });
+}
+
+export async function deleteCovering(project_id, covering) {
+  const db = firebase.firestore();
+  const id = await getCoveringDocId(project_id, covering.id);
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('coverings')
+      .doc(id)
       .delete()
       .then(() => {
         resolve('success');
@@ -296,9 +500,27 @@ export function getFurnitures(project_id) {
       .then((querySnapshot) => {
         const furnitures = [];
         querySnapshot.forEach((doc) => {
-          furnitures.push({...doc.data(), id: doc.id});
+          furnitures.push(doc.data());
         });
         resolve(furnitures);
+      });
+  });
+}
+
+export function getFurnitureDocId(project_id, uuid) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('furnitures')
+      .where('id', '==', uuid)
+      .get()
+      .then((querySnapshot) => {
+        const ids = [];
+        querySnapshot.forEach((doc) => {
+          ids.push(doc.id);
+        });
+        resolve(ids[0]);
       });
   });
 }
@@ -309,7 +531,7 @@ export function postFurniture(project_id, data) {
     db.collection('projects')
       .doc(project_id)
       .collection('furnitures')
-      .add(data)
+      .add({...data, method: 'put'})
       .then((docRef) => {
         resolve(docRef.id);
       })
@@ -319,13 +541,14 @@ export function postFurniture(project_id, data) {
   });
 }
 
-export function putFurniture(project_id, furniture) {
+export async function putFurniture(project_id, furniture) {
   const db = firebase.firestore();
+  const id = await getFurnitureDocId(project_id, furniture.id);
   return new Promise((resolve) => {
     db.collection('projects')
       .doc(project_id)
       .collection('furnitures')
-      .doc(furniture.id)
+      .doc(id)
       .set(
         {
           position: furniture.position,
@@ -342,13 +565,14 @@ export function putFurniture(project_id, furniture) {
   });
 }
 
-export function deleteFurniture(project_id, furniture_id) {
+export async function deleteFurniture(project_id, furniture) {
   const db = firebase.firestore();
+  const id = await getFurnitureDocId(project_id, furniture.id);
   return new Promise((resolve) => {
     db.collection('projects')
       .doc(project_id)
       .collection('furnitures')
-      .doc(furniture_id)
+      .doc(id)
       .delete()
       .then(() => {
         resolve('success');
@@ -369,9 +593,27 @@ export function getFloors(project_id) {
       .then((querySnapshot) => {
         const floors = [];
         querySnapshot.forEach((doc) => {
-          floors.push({...doc.data(), id: doc.id});
+          floors.push(doc.data());
         });
         resolve(floors);
+      });
+  });
+}
+
+export function getFloorDocId(project_id, uuid) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('floors')
+      .where('id', '==', uuid)
+      .get()
+      .then((querySnapshot) => {
+        const ids = [];
+        querySnapshot.forEach((doc) => {
+          ids.push(doc.id);
+        });
+        resolve(ids[0]);
       });
   });
 }
@@ -382,7 +624,7 @@ export function postFloor(project_id, data) {
     db.collection('projects')
       .doc(project_id)
       .collection('floors')
-      .add(data)
+      .add({...data, method: 'put'})
       .then((docRef) => {
         resolve(docRef.id);
       })
@@ -392,16 +634,17 @@ export function postFloor(project_id, data) {
   });
 }
 
-export function putFloor(project_id, floor) {
+export async function putFloor(project_id, floor) {
   const db = firebase.firestore();
+  const id = await getFloorDocId(project_id, floor.id);
   return new Promise((resolve) => {
     db.collection('projects')
       .doc(project_id)
       .collection('floors')
-      .doc(floor.id)
+      .doc(id)
       .set(
         {
-          path: floor.path,
+          color: floor.color,
         },
         {merge: true}
       )
@@ -414,13 +657,14 @@ export function putFloor(project_id, floor) {
   });
 }
 
-export function deleteFloor(project_id, floor_id) {
+export async function deleteFloor(project_id, floor) {
   const db = firebase.firestore();
+  const id = await getFloorDocId(project_id, floor.id);
   return new Promise((resolve) => {
     db.collection('projects')
       .doc(project_id)
       .collection('floors')
-      .doc(floor_id)
+      .doc(id)
       .delete()
       .then(() => {
         resolve('success');
@@ -441,9 +685,27 @@ export function getCameras(project_id) {
       .then((querySnapshot) => {
         const cameras = [];
         querySnapshot.forEach((doc) => {
-          cameras.push({...doc.data(), id: doc.id});
+          cameras.push(doc.data());
         });
         resolve(cameras);
+      });
+  });
+}
+
+export function getCameraDocId(project_id, uuid) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('cameras')
+      .where('id', '==', uuid)
+      .get()
+      .then((querySnapshot) => {
+        const ids = [];
+        querySnapshot.forEach((doc) => {
+          ids.push(doc.id);
+        });
+        resolve(ids[0]);
       });
   });
 }
@@ -454,7 +716,7 @@ export function postCamera(project_id, data) {
     db.collection('projects')
       .doc(project_id)
       .collection('cameras')
-      .add(data)
+      .add({...data, method: 'put'})
       .then((docRef) => {
         resolve(docRef.id);
       })
@@ -464,13 +726,14 @@ export function postCamera(project_id, data) {
   });
 }
 
-export function putCamera(project_id, camera) {
+export async function putCamera(project_id, camera) {
   const db = firebase.firestore();
+  const id = await getCameraDocId(project_id, camera.id);
   return new Promise((resolve) => {
     db.collection('projects')
       .doc(project_id)
       .collection('cameras')
-      .doc(camera.id)
+      .doc(id)
       .set(
         {
           position: camera.position,
@@ -486,13 +749,14 @@ export function putCamera(project_id, camera) {
   });
 }
 
-export function deleteCamera(project_id, camera_id) {
+export async function deleteCamera(project_id, camera) {
   const db = firebase.firestore();
+  const id = await getCameraDocId(project_id, camera.id);
   return new Promise((resolve) => {
     db.collection('projects')
       .doc(project_id)
       .collection('cameras')
-      .doc(camera_id)
+      .doc(id)
       .delete()
       .then(() => {
         resolve('success');

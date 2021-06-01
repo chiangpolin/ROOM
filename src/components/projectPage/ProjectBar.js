@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
 import {useDispatch} from 'react-redux';
-import {setInfo} from '../../app/actions/index.js';
+import {setInformation} from '../../app/actions/index.js';
 import {ReactComponent as GearIcon} from '../../static/images/icons/gear.svg';
 import {ReactComponent as InfoSquareIcon} from '../../static/images/icons/info-square.svg';
 import {ReactComponent as EaselIcon} from '../../static/images/icons/easel.svg';
@@ -15,25 +15,25 @@ function ProjectBar() {
 
   return (
     <Div>
-      <SideButton onClick={() => dispatch(setInfo('settings'))}>
+      <SideButton onClick={() => dispatch(setInformation('settings'))}>
         <GearIcon width="24" height="24" />
       </SideButton>
-      <SideButton onClick={() => dispatch(setInfo('canvas'))}>
+      <SideButton onClick={() => dispatch(setInformation('canvas'))}>
         <InfoSquareIcon width="24" height="24" />
       </SideButton>
-      <SideButton onClick={() => dispatch(setInfo('wall'))}>
+      <SideButton onClick={() => dispatch(setInformation('paint'))}>
         <PaletteIcon width="24" height="24" />
       </SideButton>
-      <SideButton onClick={() => dispatch(setInfo('furniture'))}>
+      <SideButton onClick={() => dispatch(setInformation('furniture'))}>
         <EaselIcon width="24" height="24" />
       </SideButton>
-      <SideButton onClick={() => dispatch(setInfo('floor'))}>
+      <SideButton onClick={() => dispatch(setInformation('texture'))}>
         <BricksIcon width="24" height="24" />
       </SideButton>
-      <SideButton onClick={() => dispatch(setInfo('camera'))}>
+      <SideButton onClick={() => dispatch(setInformation('camera'))}>
         <CameraIcon width="24" height="24" />
       </SideButton>
-      <SideButton onClick={() => dispatch(setInfo('edit'))}>
+      <SideButton onClick={() => dispatch(setInformation('tool'))}>
         <HammerIcon width="24" height="24" />
       </SideButton>
     </Div>

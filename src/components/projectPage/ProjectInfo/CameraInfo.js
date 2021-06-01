@@ -4,7 +4,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {setCameraPosition} from '../../../app/actions/index.js';
 
 function CameraInfo() {
-  const {cameras} = useSelector((state) => state.project);
+  const {d_cameras} = useSelector((state) => state.project);
   const dispatch = useDispatch();
 
   return (
@@ -13,83 +13,58 @@ function CameraInfo() {
         <Img />
       </ImgDiv>
       <Content>
-        <NameText>{cameras[0].name}</NameText>
+        <NameText>{d_cameras[0].name}</NameText>
         <InputDiv>
           <p>x:</p>
-
           <Input
             type="number"
-            value={cameras[0].position.x}
+            value={d_cameras[0].position.x}
             onChange={(event) =>
-              handlePositionChange(event, dispatch, cameras[0], 'x')
+              dispatch(
+                setCameraPosition(d_cameras[0].id, {
+                  x: event.target.value,
+                  y: d_cameras[0].position.y,
+                  z_index: d_cameras[0].position.z_index,
+                })
+              )
             }
           ></Input>
         </InputDiv>
         <InputDiv>
           <p>y:</p>
-
           <Input
             type="number"
-            value={cameras[0].position.y}
+            value={d_cameras[0].position.y}
             onChange={(event) =>
-              handlePositionChange(event, dispatch, cameras[0], 'y')
+              dispatch(
+                setCameraPosition(d_cameras[0].id, {
+                  x: d_cameras[0].position.x,
+                  y: event.target.value,
+                  z_index: d_cameras[0].position.z_index,
+                })
+              )
             }
           ></Input>
         </InputDiv>
         <InputDiv>
           <p>z_index:</p>
-
           <Input
             type="number"
-            value={cameras[0].position.z_index}
+            value={d_cameras[0].position.z_index}
             onChange={(event) =>
-              handlePositionChange(event, dispatch, cameras[0], 'z')
+              dispatch(
+                setCameraPosition(d_cameras[0].id, {
+                  x: d_cameras[0].position.x,
+                  y: d_cameras[0].position.y,
+                  z_index: event.target.value,
+                })
+              )
             }
           ></Input>
         </InputDiv>
       </Content>
     </Div>
   );
-}
-
-function handlePositionChange(event, dispatch, camera, tag) {
-  switch (tag) {
-    case 'x':
-      dispatch(
-        setCameraPosition({
-          x: event.target.value,
-          y: camera.position.y,
-          z_index: camera.position.z_index,
-        })
-      );
-      break;
-    case 'y':
-      dispatch(
-        setCameraPosition({
-          x: camera.position.x,
-          y: event.target.value,
-          z_index: camera.position.z_index,
-        })
-      );
-      break;
-    case 'z':
-      dispatch(
-        setCameraPosition({
-          x: camera.position.x,
-          y: camera.position.y,
-          z_index: event.target.value,
-        })
-      );
-      break;
-    default:
-      dispatch(
-        setCameraPosition({
-          x: camera.position.x,
-          y: camera.position.y,
-          z_index: camera.position.z_index,
-        })
-      );
-  }
 }
 
 const ImgDiv = styled.div`

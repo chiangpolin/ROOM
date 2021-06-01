@@ -9,6 +9,7 @@ import {ReactComponent as SquareFillIcon} from '../../../static/images/icons/squ
 import {ReactComponent as PentagonFillIcon} from '../../../static/images/icons/pentagon-fill.svg';
 import {ReactComponent as SlashIcon} from '../../../static/images/icons/slash-lg.svg';
 import {ReactComponent as PencilIcon} from '../../../static/images/icons/pencil.svg';
+import {ReactComponent as XIcon} from '../../../static/images/icons/x.svg';
 
 function ToolInfo() {
   const {tool} = useSelector((state) => state.project);
@@ -17,6 +18,10 @@ function ToolInfo() {
   return (
     <Div>
       <Tools>
+        <Tool onClick={() => dispatch(setCanvasTool(''))}>
+          <XIcon width="24" height="24"></XIcon>
+          <p>None</p>
+        </Tool>
         <Tool
           onClick={() => dispatch(setCanvasTool('frame'))}
           primary={tool === 'frame'}
@@ -50,28 +55,28 @@ function ToolInfo() {
           primary={tool === 'filled-rectangle'}
         >
           <SquareFillIcon width="24" height="24"></SquareFillIcon>
-          <p>Floor</p>
+          <p>Covering</p>
         </Tool>
         <Tool
           onClick={() => dispatch(setCanvasTool('filled-polygon'))}
           primary={tool === 'filled-polygon'}
         >
           <PentagonFillIcon width="24" height="24"></PentagonFillIcon>
-          <p>Polygon Floor</p>
+          <p>Polygon Covering</p>
         </Tool>
         <Tool
           onClick={() => dispatch(setCanvasTool('rectangle'))}
           primary={tool === 'rectangle'}
         >
           <SquareIcon width="24" height="24"></SquareIcon>
-          <p>Base</p>
+          <p>Floor</p>
         </Tool>
         <Tool
           onClick={() => dispatch(setCanvasTool('polygon'))}
           primary={tool === 'polygon'}
         >
           <PentagonIcon width="24" height="24"></PentagonIcon>
-          <p>Polygon Base</p>
+          <p>Polygon Floor</p>
         </Tool>
       </Tools>
     </Div>

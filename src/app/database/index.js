@@ -6,21 +6,35 @@ import {
 } from './settingsData.js';
 import {
   project_data,
-  camera_data,
-  floor_data,
-  wall_data,
+  cameras_data,
+  floors_data,
+  walls_data,
+  coverings_data,
+  openings_data,
   furnitures_data,
 } from './projectData.js';
 
-// initFirebase();
-// updateProject();
+initFirebase();
+updateProject();
 // updateSetting();
 
 async function updateProject() {
   const id = await postProject(project_data);
-  postFloor(id, floor_data);
-  postWall(id, wall_data);
-  postCamera(id, camera_data);
+  for (let i = 0; i < floors_data.length; i++) {
+    postFloor(id, floors_data[i]);
+  }
+  for (let i = 0; i < walls_data.length; i++) {
+    postWall(id, walls_data[i]);
+  }
+  for (let i = 0; i < coverings_data.length; i++) {
+    postCovering(id, coverings_data[i]);
+  }
+  for (let i = 0; i < openings_data.length; i++) {
+    postOpening(id, openings_data[i]);
+  }
+  for (let i = 0; i < cameras_data.length; i++) {
+    postCamera(id, cameras_data[i]);
+  }
   for (let i = 0; i < furnitures_data.length; i++) {
     postFurniture(id, furnitures_data[i]);
   }
@@ -86,7 +100,7 @@ function postFloor(project_id, data) {
     db.collection('projects')
       .doc(project_id)
       .collection('floors')
-      .add(data)
+      .add({...data, method: 'put'})
       .then((docRef) => {
         resolve(docRef.id);
       })
@@ -102,7 +116,7 @@ function postWall(project_id, data) {
     db.collection('projects')
       .doc(project_id)
       .collection('walls')
-      .add(data)
+      .add({...data, method: 'put'})
       .then((docRef) => {
         resolve(docRef.id);
       })
@@ -118,7 +132,39 @@ function postFurniture(project_id, data) {
     db.collection('projects')
       .doc(project_id)
       .collection('furnitures')
-      .add(data)
+      .add({...data, method: 'put'})
+      .then((docRef) => {
+        resolve(docRef.id);
+      })
+      .catch((error) => {
+        console.error('Error adding document: ', error);
+      });
+  });
+}
+
+function postOpening(project_id, data) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('openings')
+      .add({...data, method: 'put'})
+      .then((docRef) => {
+        resolve(docRef.id);
+      })
+      .catch((error) => {
+        console.error('Error adding document: ', error);
+      });
+  });
+}
+
+export function postCovering(project_id, data) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(project_id)
+      .collection('coverings')
+      .add({...data, method: 'put'})
       .then((docRef) => {
         resolve(docRef.id);
       })
@@ -134,7 +180,7 @@ function postCamera(project_id, data) {
     db.collection('projects')
       .doc(project_id)
       .collection('cameras')
-      .add(data)
+      .add({...data, method: 'put'})
       .then((docRef) => {
         resolve(docRef.id);
       })

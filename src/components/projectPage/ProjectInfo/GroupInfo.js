@@ -1,16 +1,13 @@
 import React from 'react';
 import styled, {css} from 'styled-components';
-import {useParams} from 'react-router';
 import {useSelector, useDispatch} from 'react-redux';
 import {
-  selectFurniture,
   setFurnitureRotation,
-  deleteFurniture,
+  removeCanvasElement,
 } from '../../../app/actions/index.js';
 
 function GroupInfo() {
-  let {id} = useParams();
-  const {selectedFurniture} = useSelector((state) => state.project);
+  const {selectedGroup} = useSelector((state) => state.project);
   const dispatch = useDispatch();
 
   return (
@@ -19,18 +16,19 @@ function GroupInfo() {
         <Img />
       </ImgDiv>
       <Content>
-        <NameText>{selectedFurniture.name}</NameText>
-        <IdText>{selectedFurniture.id}</IdText>
+        <NameText>{selectedGroup.name}</NameText>
+        <IdText>{selectedGroup.id}</IdText>
         <Buttons>
           <Button
             primary
-            onClick={() => handleClickRotate(dispatch, selectedFurniture)}
+            disabled={selectedGroup.type !== 'furniture'}
+            onClick={() => handleClickRotate(dispatch, selectedGroup)}
           >
             Rotate
           </Button>
           <Button
             danger
-            onClick={() => handleClickDelete(dispatch, id, selectedFurniture)}
+            onClick={() => handleClickDelete(dispatch, selectedGroup)}
           >
             Delete
           </Button>
@@ -40,20 +38,41 @@ function GroupInfo() {
   );
 }
 
-function handleClickRotate(dispatch, furniture) {
-  const newAngle = furniture.rotation.angle + 90;
-  const newFurniture = {...furniture, rotation: {angle: newAngle}};
-  dispatch(
-    setFurnitureRotation(newFurniture, {
-      type: 'rotate',
-      furniture: newFurniture,
-    })
-  );
-  dispatch(selectFurniture(newFurniture));
+function handleClickRotate(dispatch, group) {
+  switch (group.type) {
+    case 'furniture':
+      dispatch(
+        setFurnitureRotation(group.id, {
+          angle: group.rotation.angle + 90,
+        })
+      );
+      break;
+    default:
+  }
 }
 
-function handleClickDelete(dispatch, project_id, furniture) {
-  dispatch(deleteFurniture(project_id, furniture));
+function handleClickDelete(dispatch, group) {
+  switch (group.type) {
+    case 'furniture':
+      dispatch(removeCanvasElement('furniture', group.id));
+      break;
+    case 'wall':
+      dispatch(removeCanvasElement('wall', group.id));
+      break;
+    case 'window':
+      dispatch(removeCanvasElement('opening', group.id));
+      break;
+    case 'door':
+      dispatch(removeCanvasElement('opening', group.id));
+      break;
+    case 'covering':
+      dispatch(removeCanvasElement('covering', group.id));
+      break;
+    case 'floor':
+      dispatch(removeCanvasElement('floor', group.id));
+      break;
+    default:
+  }
 }
 
 const Div = styled.div`

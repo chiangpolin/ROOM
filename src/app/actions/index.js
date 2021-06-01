@@ -99,15 +99,25 @@ export const fetchProfileData = (history) => async (dispatch) => {
 };
 
 export const fetchProjectData = (project_id) => async (dispatch) => {
-  const [project, walls, furnitures, floors, cameras, setting] =
-    await Promise.all([
-      firestore.getProject(project_id),
-      firestore.getWalls(project_id),
-      firestore.getFurnitures(project_id),
-      firestore.getFloors(project_id),
-      firestore.getCameras(project_id),
-      firestore.getSettingByName('Default-Setting'),
-    ]);
+  const [
+    project,
+    cameras,
+    furnitures,
+    walls,
+    openings,
+    coverings,
+    floors,
+    setting,
+  ] = await Promise.all([
+    firestore.getProject(project_id),
+    firestore.getCameras(project_id),
+    firestore.getFurnitures(project_id),
+    firestore.getWalls(project_id),
+    firestore.getOpenings(project_id),
+    firestore.getCoverings(project_id),
+    firestore.getFloors(project_id),
+    firestore.getSettingByName('Default-Setting'),
+  ]);
 
   const [settingPaints, settingFurnitures, settingTextures] = await Promise.all(
     [
@@ -120,10 +130,12 @@ export const fetchProjectData = (project_id) => async (dispatch) => {
   dispatch(
     setProject({
       ...project,
-      walls: walls,
-      furnitures: furnitures,
-      floors: floors,
       cameras: cameras,
+      furnitures: furnitures,
+      walls: walls,
+      openings: openings,
+      coverings: coverings,
+      floors: floors,
     })
   );
   dispatch(
@@ -134,7 +146,7 @@ export const fetchProjectData = (project_id) => async (dispatch) => {
       textures: settingTextures,
     })
   );
-  dispatch(setInfo('canvas'));
+  dispatch(setInformation('canvas'));
 };
 
 export const fetchSearchTarget = (email) => async (dispatch) => {
@@ -150,29 +162,54 @@ export const fetchSearchTarget = (email) => async (dispatch) => {
 
 export const createProject = (user_id) => async (dispatch) => {
   const id = await firestore.postProject({
-    id: user_id,
     name: 'Untitled',
+    id: user_id,
   });
 
-  await Promise.all([
-    firestore.postWall(id, defaultSettings.wall),
-    firestore.postFurniture(id, defaultSettings.bed),
-    firestore.postFloor(id, defaultSettings.floor),
-    firestore.postCamera(id, defaultSettings.camera),
-  ]);
+  const promises = [];
+
+  for (let i = 0; i < defaultSettings.cameras.length; i++) {
+    promises.push(firestore.postCamera(id, defaultSettings.cameras[i]));
+  }
+
+  for (let i = 0; i < defaultSettings.furnitures.length; i++) {
+    promises.push(firestore.postFurniture(id, defaultSettings.furnitures[i]));
+  }
+
+  for (let i = 0; i < defaultSettings.walls.length; i++) {
+    promises.push(firestore.postWall(id, defaultSettings.walls[i]));
+  }
+
+  for (let i = 0; i < defaultSettings.openings.length; i++) {
+    promises.push(firestore.postOpening(id, defaultSettings.openings[i]));
+  }
+
+  for (let i = 0; i < defaultSettings.coverings.length; i++) {
+    promises.push(firestore.postCovering(id, defaultSettings.coverings[i]));
+  }
+
+  for (let i = 0; i < defaultSettings.floors.length; i++) {
+    promises.push(firestore.postFloor(id, defaultSettings.floors[i]));
+  }
+
+  await Promise.all(promises);
 
   const projects = await firestore.getProjects(user_id);
   dispatch(setProjects(projects));
 };
 
 export const cloneProject = (user_id, project_id) => async (dispatch) => {
-  const [project, walls, furnitures, floors, cameras] = await Promise.all([
-    firestore.getProject(project_id),
-    firestore.getWalls(project_id),
-    firestore.getFurnitures(project_id),
-    firestore.getFloors(project_id),
-    firestore.getCameras(project_id),
-  ]);
+  const [project, cameras, furnitures, walls, openings, coverings, floors] =
+    await Promise.all([
+      firestore.getProject(project_id),
+      firestore.getCameras(project_id),
+      firestore.getFurnitures(project_id),
+      firestore.getWalls(project_id),
+      firestore.getOpenings(project_id),
+      firestore.getCoverings(project_id),
+      firestore.getFloors(project_id),
+    ]);
+
   const id = await firestore.postProject({
     id: user_id,
     name: `${project.name}-clone`,
@@ -180,17 +217,23 @@ export const cloneProject = (user_id, project_id) => async (dispatch) => {
 
   const promises = [];
 
-  for (let i = 0; i < walls.length; i++) {
-    promises.push(firestore.postWall(id, walls[i]));
+  for (let i = 0; i < cameras.length; i++) {
+    promises.push(firestore.postCamera(id, cameras[i]));
   }
   for (let i = 0; i < furnitures.length; i++) {
     promises.push(firestore.postFurniture(id, furnitures[i]));
   }
+  for (let i = 0; i < walls.length; i++) {
+    promises.push(firestore.postWall(id, walls[i]));
+  }
+  for (let i = 0; i < openings.length; i++) {
+    promises.push(firestore.postOpening(id, openings[i]));
+  }
+  for (let i = 0; i < coverings.length; i++) {
+    promises.push(firestore.postCovering(id, coverings[i]));
+  }
   for (let i = 0; i < floors.length; i++) {
     promises.push(firestore.postFloor(id, floors[i]));
-  }
-  for (let i = 0; i < cameras.length; i++) {
-    promises.push(firestore.postCamera(id, cameras[i]));
   }
 
   await Promise.all(promises);
@@ -212,18 +255,89 @@ export const shareProject = (project_id, target_id) => async (dispatch) => {
   dispatch(closeShare());
 };
 
-export const updateProject = (project_id, data) => async () => {
-  for (let i = 0; i < data.walls.length; i++) {
-    firestore.putWall(project_id, data.walls[i]);
+export const updateProject = (project_id, data) => async (dispatch) => {
+  for (let i = 0; i < data.d_cameras.length; i++) {
+    switch (data.d_cameras[i].method) {
+      case 'post':
+        firestore.postCamera(project_id, data.d_cameras[i]);
+        break;
+      case 'put':
+        firestore.putCamera(project_id, data.d_cameras[i]);
+        break;
+      case 'delete':
+        firestore.deleteCamera(project_id, data.d_cameras[i]);
+        break;
+      default:
+    }
   }
-  for (let i = 0; i < data.furnitures.length; i++) {
-    firestore.putFurniture(project_id, data.furnitures[i]);
+  for (let i = 0; i < data.d_furnitures.length; i++) {
+    switch (data.d_furnitures[i].method) {
+      case 'post':
+        firestore.postFurniture(project_id, data.d_furnitures[i]);
+        break;
+      case 'put':
+        firestore.putFurniture(project_id, data.d_furnitures[i]);
+        break;
+      case 'delete':
+        firestore.deleteFurniture(project_id, data.d_furnitures[i]);
+      default:
+    }
   }
-  for (let i = 0; i < data.floors.length; i++) {
-    firestore.putFloor(project_id, data.floors[i]);
+  for (let i = 0; i < data.d_walls.length; i++) {
+    switch (data.d_walls[i].method) {
+      case 'post':
+        firestore.postWall(project_id, data.d_walls[i]);
+        break;
+      case 'put':
+        firestore.putWall(project_id, data.d_walls[i]);
+        break;
+      case 'delete':
+        firestore.deleteWall(project_id, data.d_walls[i]);
+        break;
+      default:
+    }
   }
-  for (let i = 0; i < data.cameras.length; i++) {
-    firestore.putCamera(project_id, data.cameras[i]);
+  for (let i = 0; i < data.d_openings.length; i++) {
+    switch (data.d_openings[i].method) {
+      case 'post':
+        firestore.postOpening(project_id, data.d_openings[i]);
+        break;
+      case 'put':
+        firestore.putOpening(project_id, data.d_openings[i]);
+        break;
+      case 'delete':
+        firestore.deleteOpening(project_id, data.d_openings[i]);
+        break;
+      default:
+    }
+  }
+  for (let i = 0; i < data.d_coverings.length; i++) {
+    switch (data.d_coverings[i].method) {
+      case 'post':
+        firestore.postCovering(project_id, data.d_coverings[i]);
+        break;
+      case 'put':
+        firestore.putCovering(project_id, data.d_coverings[i]);
+        break;
+      case 'delete':
+        firestore.deleteCovering(project_id, data.d_coverings[i]);
+        break;
+      default:
+    }
+  }
+  for (let i = 0; i < data.d_floors.length; i++) {
+    switch (data.d_floors[i].method) {
+      case 'post':
+        firestore.postFloor(project_id, data.d_floors[i]);
+        break;
+      case 'put':
+        firestore.putFloor(project_id, data.d_floors[i]);
+        break;
+      case 'delete':
+        firestore.deleteFloor(project_id, data.d_floors[i]);
+        break;
+      default:
+    }
   }
 };
 
@@ -257,17 +371,6 @@ export const deleteProject = (user_id, project_id) => async (dispatch) => {
   const projects = await firestore.getProjects(user_id);
   dispatch(setProjects(projects));
   dispatch(selectProject(''));
-};
-
-export const createFurniture = (project_id, data) => async (dispatch) => {
-  const furniture_id = await firestore.postFurniture(project_id, data);
-  const furniture = {...data, id: furniture_id};
-  dispatch(addFurniture(furniture, {type: 'add', furniture}));
-};
-
-export const deleteFurniture = (project_id, furniture) => async (dispatch) => {
-  await firestore.deleteFurniture(project_id, furniture.id);
-  dispatch(removeFurniture(furniture, {type: 'remove', furniture}));
 };
 
 // user
@@ -308,6 +411,11 @@ export const setProject = (project) => ({
   payload: {project},
 });
 
+export const setProjectCollection = (key, data) => ({
+  type: actionTypes.SET_PROJECT_COLLECTION,
+  payload: {key, data},
+});
+
 export const selectProject = (project) => ({
   type: actionTypes.SELECT_PROJECT,
   payload: {project},
@@ -340,66 +448,32 @@ export const setSetting = (setting) => ({
   payload: {setting},
 });
 
-// info
-export const setInfo = (info) => ({
-  type: actionTypes.SET_INFO,
-  payload: {info},
+// information
+export const setInformation = (information) => ({
+  type: actionTypes.SET_INFORMATION,
+  payload: {information},
 });
 
-// walls
-export const setWallColor = (color) => ({
-  type: actionTypes.SET_WALL_COLOR,
-  payload: {color},
-});
-
-// furnitures
-export const addFurniture = (furniture, instruction) => ({
-  type: actionTypes.ADD_FURNITURE,
-  payload: {furniture, instruction},
-});
-
-export const removeFurniture = (furniture, instruction) => ({
-  type: actionTypes.REMOVE_FURNITURE,
-  payload: {furniture, instruction},
-});
-
-export const selectFurniture = (furniture) => ({
-  type: actionTypes.SELECT_FURNITURE,
-  payload: {furniture},
-});
-
-export const setFurniturePosition = (furniture) => ({
-  type: actionTypes.SET_FURNITURE_POSITION,
-  payload: {furniture},
-});
-
-export const setFurnitureRotation = (furniture, instruction) => ({
-  type: actionTypes.SET_FURNITURE_ROTATION,
-  payload: {furniture, instruction},
-});
-
-// floors
-export const setFloorTexture = (path) => ({
-  type: actionTypes.SET_FLOOR_TEXTURE,
-  payload: {path},
-});
-
-// cameras
-export const setCameraPosition = (position) => ({
-  type: actionTypes.SET_CAMERA_POSITION,
-  payload: {position},
-});
-
-// instruction
+// pixi-instruction
 export const setInstruction = (instruction) => ({
   type: actionTypes.SET_INSTRUCTION,
   payload: {instruction},
 });
 
-// canvas
-export const addCanvasElement = (type, dots) => ({
+// pixi-canvas
+export const addCanvasElement = (target, group) => ({
   type: actionTypes.ADD_CANVAS_ELEMENT,
-  payload: {type, dots},
+  payload: {target, group},
+});
+
+export const removeCanvasElement = (target, uuid) => ({
+  type: actionTypes.REMOVE_CANVAS_ELEMENT,
+  payload: {target, uuid},
+});
+
+export const selectCanvasElement = (group) => ({
+  type: actionTypes.SELECT_CANVAS_ELEMENT,
+  payload: {group},
 });
 
 export const setCanvasTool = (type) => ({
@@ -410,4 +484,33 @@ export const setCanvasTool = (type) => ({
 export const setCanvasScale = (scale) => ({
   type: actionTypes.SET_CANVAS_SCALE,
   payload: {scale},
+});
+
+// cameras
+export const setCameraPosition = (uuid, position) => ({
+  type: actionTypes.SET_CAMERA_POSITION,
+  payload: {uuid, position},
+});
+
+// furnitures
+export const setFurniturePosition = (uuid, position) => ({
+  type: actionTypes.SET_FURNITURE_POSITION,
+  payload: {uuid, position},
+});
+
+export const setFurnitureRotation = (uuid, rotation) => ({
+  type: actionTypes.SET_FURNITURE_ROTATION,
+  payload: {uuid, rotation},
+});
+
+// walls
+export const setWallColor = (uuid, color) => ({
+  type: actionTypes.SET_WALL_COLOR,
+  payload: {uuid, color},
+});
+
+// floors
+export const setCoveringTexture = (uuid, path) => ({
+  type: actionTypes.SET_COVERING_TEXTURE,
+  payload: {uuid, path},
 });

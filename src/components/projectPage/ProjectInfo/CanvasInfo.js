@@ -1,8 +1,10 @@
 import React from 'react';
 import styled from 'styled-components';
+import {useParams} from 'react-router';
 import {useSelector} from 'react-redux';
 
 function CanvasInfo() {
+  let {id} = useParams();
   const {name, author_id} = useSelector((state) => state.project);
 
   return (
@@ -12,7 +14,8 @@ function CanvasInfo() {
       </ImgDiv>
       <Content>
         <NameText>{name}</NameText>
-        <AuthorText>{author_id}</AuthorText>
+        <Text>{id}</Text>
+        <Text>{author_id}</Text>
       </Content>
     </Div>
   );
@@ -44,7 +47,7 @@ const NameText = styled.p`
   font-size: 24px;
 `;
 
-const AuthorText = styled.p`
+const Text = styled.p`
   font-size: 16px;
 `;
 

@@ -1,29 +1,26 @@
 import React, {useState, useEffect, useRef} from 'react';
 import styled from 'styled-components';
 import {useSelector} from 'react-redux';
-import {
-  initApplication,
-  resizeCanvas,
-  createBackground,
-  createWall,
-  createFloor,
-  createBase,
-  createRoom,
-  createCanvasElement,
-} from '../../../app/utils/pixi.js';
+import * as pixi from '../../../app/utils/pixi.js';
 
 function Canvas() {
   const canvasRef = useRef(null);
-  const [pixiApp, setPixiApp] = useState('');
+  const [pixiApp, setApp] = useState('');
+  const [pixiOpeningContainer, setOpeningContainer] = useState('');
+  const [pixiWallContainer, setWallContainer] = useState('');
+  const [pixiFurnitureContainer, setFurnitureContainer] = useState('');
+  const [pixiCoveringContainer, setCoveringContainer] = useState('');
+  const [pixiFloorContainer, setFloorContainer] = useState('');
   const {
     scale,
-    walls,
-    furnitures,
     instruction,
-    d_walls,
-    d_floors,
-    d_bases,
+    selectedGroup,
     tool,
+    d_furnitures,
+    d_walls,
+    d_openings,
+    d_coverings,
+    d_floors,
   } = useSelector((state) => state.project);
 
   useEffect(() => {
@@ -34,24 +31,49 @@ function Canvas() {
     };
 
     // App
-    const app = initApplication(sizes, scale);
-    setPixiApp(app);
+    const app = pixi.initApplication(sizes, scale);
+    setApp(app);
 
     // Containers
-    createBackground(app, tool);
-    createRoom(app, walls[0]);
-    for (let i = 0; i < furnitures.length; i++) {
-      createCanvasElement(app, furnitures[i]);
-    }
+    const backgroundContainer = pixi.initContainer(app);
 
-    for (let i = 0; i < d_bases.length; i++) {
-      createBase(app, d_bases[i]);
-    }
+    const floorContainer = pixi.initContainer(app);
+    setFloorContainer(floorContainer);
+    const coveringContainer = pixi.initContainer(app);
+    setCoveringContainer(coveringContainer);
+    const wallContainer = pixi.initContainer(app);
+    setWallContainer(wallContainer);
+    const openingContainer = pixi.initContainer(app);
+    setOpeningContainer(openingContainer);
+    const furnitureContainer = pixi.initContainer(app);
+    setFurnitureContainer(furnitureContainer);
+
+    // Main
+    pixi.createBackground(backgroundContainer, tool);
     for (let i = 0; i < d_floors.length; i++) {
-      createFloor(app, d_floors[i]);
+      if (d_floors[i].method !== 'delete') {
+        pixi.createFloor(floorContainer, d_floors[i]);
+      }
+    }
+    for (let i = 0; i < d_coverings.length; i++) {
+      if (d_coverings[i].method !== 'delete') {
+        pixi.createCovering(coveringContainer, d_coverings[i]);
+      }
+    }
+    for (let i = 0; i < d_furnitures.length; i++) {
+      if (d_furnitures[i].method !== 'delete') {
+        pixi.createFurniture(furnitureContainer, d_furnitures[i]);
+      }
     }
     for (let i = 0; i < d_walls.length; i++) {
-      createWall(app, d_walls[i]);
+      if (d_walls[i].method !== 'delete') {
+        pixi.createWall(wallContainer, d_walls[i]);
+      }
+    }
+    for (let i = 0; i < d_openings.length; i++) {
+      if (d_openings[i].method !== 'delete') {
+        pixi.createOpening(openingContainer, d_openings[i]);
+      }
     }
 
     // Ref
@@ -59,13 +81,13 @@ function Canvas() {
 
     // onResize
     window.addEventListener('resize', () =>
-      resizeCanvas(canvasRef, app, sizes)
+      pixi.resizeCanvas(canvasRef, app, sizes)
     );
 
     return () => {
       app.destroy(true, true);
       window.removeEventListener('resize', () =>
-        resizeCanvas(canvasRef, app, sizes)
+        pixi.resizeCanvas(canvasRef, app, sizes)
       );
     };
     // eslint-disable-next-line
@@ -73,49 +95,113 @@ function Canvas() {
 
   useEffect(() => {
     if (pixiApp) {
-      switch (instruction.type) {
-        case 'add':
-          createCanvasElement(pixiApp, instruction.furniture);
+      switch (instruction.target) {
+        case 'furniture':
+          switch (instruction.type) {
+            case 'add':
+              pixi.createFurniture(
+                pixiFurnitureContainer,
+                d_furnitures[d_furnitures.length - 1]
+              );
+              break;
+            case 'remove':
+              for (let i = 0; i < pixiFurnitureContainer.children.length; i++)
+                if (
+                  pixiFurnitureContainer.children[i].id === selectedGroup.id
+                ) {
+                  pixiFurnitureContainer.removeChild(
+                    pixiFurnitureContainer.children[i]
+                  );
+                }
+              break;
+            case 'rotate':
+              for (let i = 0; i < pixiFurnitureContainer.children.length; i++)
+                if (
+                  pixiFurnitureContainer.children[i].id === selectedGroup.id
+                ) {
+                  pixiFurnitureContainer.children[i].angle =
+                    selectedGroup.rotation.angle;
+                }
+              break;
+            default:
+          }
           break;
-
-        case 'remove':
-          for (let i = 0; i < pixiApp.stage.children.length; i++)
-            if (pixiApp.stage.children[i].id === instruction.furniture.id) {
-              pixiApp.stage.removeChild(pixiApp.stage.children[i]);
-            }
+        case 'floor':
+          switch (instruction.type) {
+            case 'add':
+              pixi.createFloor(
+                pixiFloorContainer,
+                d_floors[d_floors.length - 1]
+              );
+              break;
+            case 'remove':
+              for (let i = 0; i < pixiFloorContainer.children.length; i++) {
+                if (pixiFloorContainer.children[i].id === selectedGroup.id) {
+                  pixiFloorContainer.removeChild(
+                    pixiFloorContainer.children[i]
+                  );
+                }
+              }
+              break;
+            default:
+          }
           break;
-
-        case 'rotate':
-          for (let i = 0; i < pixiApp.stage.children.length; i++)
-            if (pixiApp.stage.children[i].id === instruction.furniture.id) {
-              pixiApp.stage.children[i].angle =
-                instruction.furniture.rotation.angle;
-            }
+        case 'covering':
+          switch (instruction.type) {
+            case 'add':
+              pixi.createCovering(
+                pixiCoveringContainer,
+                d_coverings[d_coverings.length - 1]
+              );
+              break;
+            case 'remove':
+              for (let i = 0; i < pixiCoveringContainer.children.length; i++) {
+                if (pixiCoveringContainer.children[i].id === selectedGroup.id) {
+                  pixiCoveringContainer.removeChild(
+                    pixiCoveringContainer.children[i]
+                  );
+                }
+              }
+              break;
+            default:
+          }
           break;
-
+        case 'wall':
+          switch (instruction.type) {
+            case 'add':
+              pixi.createWall(pixiWallContainer, d_walls[d_walls.length - 1]);
+              break;
+            case 'remove':
+              for (let i = 0; i < pixiWallContainer.children.length; i++) {
+                if (pixiWallContainer.children[i].id === selectedGroup.id) {
+                  pixiWallContainer.removeChild(pixiWallContainer.children[i]);
+                }
+              }
+              break;
+            default:
+          }
+          break;
+        case 'opening':
+          switch (instruction.type) {
+            case 'add':
+              break;
+            case 'remove':
+              for (let i = 0; i < pixiOpeningContainer.children.length; i++) {
+                if (pixiOpeningContainer.children[i].id === selectedGroup.id) {
+                  pixiOpeningContainer.removeChild(
+                    pixiOpeningContainer.children[i]
+                  );
+                }
+              }
+              break;
+            default:
+          }
+          break;
         default:
       }
     }
     // eslint-disable-next-line
   }, [instruction]);
-
-  useEffect(() => {
-    if (pixiApp) {
-      createWall(pixiApp, d_walls[d_walls.length - 1]);
-    }
-  }, [d_walls]);
-
-  useEffect(() => {
-    if (pixiApp) {
-      createFloor(pixiApp, d_floors[d_floors.length - 1]);
-    }
-  }, [d_floors]);
-
-  useEffect(() => {
-    if (pixiApp) {
-      createBase(pixiApp, d_bases[d_bases.length - 1]);
-    }
-  }, [d_bases]);
 
   useEffect(() => {
     if (pixiApp) {

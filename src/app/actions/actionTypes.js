@@ -10,6 +10,7 @@ export const FILTER_PROJECTS = 'FILTER_PROJECTS';
 
 // project
 export const SET_PROJECT = 'SET_PROJECT';
+export const SET_PROJECT_COLLECTION = 'SET_PROJECT_COLLECTION';
 export const SELECT_PROJECT = 'SELECT_PROJECT';
 export const RESET_PROJECT_STATUS = 'RESET_PROJECT_STATUS';
 
@@ -22,31 +23,28 @@ export const CLOSE_SHARE = 'CLOSE_SHARE';
 // settings
 export const SET_SETTING = 'SET_SETTING';
 
-// info
-export const SET_INFO = 'SET_INFO';
+// information
+export const SET_INFORMATION = 'SET_INFORMATION';
 
-// wall
-export const SET_WALL_COLOR = 'SET_WALL_COLOR';
+// pixi-instruction
+export const SET_INSTRUCTION = 'SET_INSTRUCTION';
 
-// furniture
-export const ADD_FURNITURE = 'ADD_FURNITURE';
-export const REMOVE_FURNITURE = 'REMOVE_FURNITURE';
-export const SELECT_FURNITURE = 'SELECT_FURNITURE';
-export const SET_FURNITURE_POSITION = 'SET_FURNITURE_POSITION';
-export const SET_FURNITURE_ROTATION = 'SET_FURNITURE_ROTATION';
-
-// floor
-export const SET_FLOOR_TEXTURE = 'SET_FLOOR_TEXTURE';
+// pixi-canvas
+export const SET_CANVAS_SCALE = 'SET_CANVAS_SCALE';
+export const SET_CANVAS_TOOL = 'SET_CANVAS_TOOL';
+export const ADD_CANVAS_ELEMENT = 'ADD_CANVAS_ELEMENT';
+export const REMOVE_CANVAS_ELEMENT = 'REMOVE_CANVAS_ELEMENT';
+export const SELECT_CANVAS_ELEMENT = 'SELECT_CANVAS_ELEMENT';
 
 // camera
 export const SET_CAMERA_POSITION = 'SET_CAMERA_POSITION';
 
-// instruction
-export const SET_INSTRUCTION = 'SET_INSTRUCTION';
+// furniture
+export const SET_FURNITURE_POSITION = 'SET_FURNITURE_POSITION';
+export const SET_FURNITURE_ROTATION = 'SET_FURNITURE_ROTATION';
 
-// canvas
-export const SET_CANVAS_SCALE = 'SET_CANVAS_SCALE';
-export const SET_CANVAS_TOOL = 'SET_CANVAS_TOOL';
+// wall
+export const SET_WALL_COLOR = 'SET_WALL_COLOR';
 
-// dots
-export const ADD_CANVAS_ELEMENT = 'ADD_CANVAS_ELEMENT';
+// covering
+export const SET_COVERING_TEXTURE = 'SET_COVERING_TEXTURE';

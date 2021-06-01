@@ -1,71 +1,130 @@
+function _uuid() {
+  function s4() {
+    return Math.floor((1 + Math.random()) * 0x10000)
+      .toString(16)
+      .substring(1);
+  }
+  return (
+    s4() +
+    s4() +
+    '-' +
+    s4() +
+    '-' +
+    s4() +
+    '-' +
+    s4() +
+    '-' +
+    s4() +
+    s4() +
+    s4()
+  );
+}
+
 export const project_data = {
-  name: 'Demo0',
+  name: 'Sprint 3 demo',
   author_id: '',
   share_id: [],
 };
 
-export const camera_data = {
-  name: 'Default-Camera',
-  type: 'camera',
-  position: {
-    x: -300,
-    y: 600,
-    z_index: 300,
+export const cameras_data = [
+  {
+    name: 'Default-Camera',
+    id: _uuid(),
+    type: 'camera',
+    position: {
+      x: -300,
+      y: 600,
+      z_index: 300,
+    },
+    dimension: {
+      width: 0,
+      height: 0,
+    },
+    rotation: {
+      angle: 0,
+    },
   },
-  dimension: {
-    width: 0,
-    height: 0,
-  },
-  rotation: {
-    angle: 0,
-  },
-};
+];
 
-export const floor_data = {
-  name: 'Bedroom',
-  type: 'floor',
-  position: {
-    x: 0,
-    y: 0,
+export const coverings_data = [
+  {
+    name: 'Bedroom Covering',
+    id: _uuid(),
+    type: 'covering',
+    method: 'put',
+    path: 'kitchen-wood.jpg',
+    graphic: [
+      {x: -235, y: -150},
+      {x: 235, y: -150},
+      {x: 235, y: 150},
+      {x: -235, y: 150},
+      {x: -235, y: -150},
+    ],
   },
-  dimension: {
-    width: 0,
-    height: 0,
-  },
-  rotation: {
-    angle: 0,
-  },
-  path: 'kitchen-wood.jpg',
-};
+];
 
-export const wall_data = {
-  name: 'Bedroom',
-  type: 'wall',
-  position: {
-    x: 0,
-    y: 0,
+export const openings_data = [
+  {
+    name: 'Default Window',
+    id: _uuid(),
+    type: 'window',
+    method: 'put',
+    position: {x: 242.5, y: 0, z_index: 140},
+    rotation: {angle: 90},
+    dimension: {width: 240, height: 15, length: 120},
+    file: {gltf_path: 'window-01.gltf', svg_path: ''},
   },
-  dimension: {
-    width: 500,
-    height: 330,
+  {
+    name: 'Default Door',
+    id: _uuid(),
+    type: 'door',
+    method: 'put',
+    position: {x: -242.5, y: 105, z_index: 100},
+    rotation: {angle: 90},
+    dimension: {width: 90, height: 15, length: 200},
+    file: {gltf_path: '', svg_path: ''},
   },
-  rotation: {
-    angle: 0,
+];
+
+export const floors_data = [
+  {
+    name: 'Bedroom Floor',
+    id: _uuid(),
+    type: 'floor',
+    method: 'put',
+    color: {r: 252, g: 250, b: 242},
+    graphic: [
+      {x: -250, y: -165},
+      {x: 250, y: -165},
+      {x: 250, y: 165},
+      {x: -250, y: 165},
+      {x: -250, y: -165},
+    ],
   },
-  color: {
-    r: 252,
-    g: 250,
-    b: 242,
+];
+
+export const walls_data = [
+  {
+    name: 'Bedroom Wall',
+    id: _uuid(),
+    type: 'wall',
+    method: 'put',
+    color: {r: 252, g: 250, b: 242},
+    thickness: 15,
+    graphic: [
+      {x: -242.5, y: -157.5},
+      {x: 242.5, y: -157.5},
+      {x: 242.5, y: 157.5},
+      {x: -242.5, y: 157.5},
+      {x: -242.5, y: -157.5},
+    ],
   },
-  file: {
-    gltf_path: 'room.gltf',
-    svg_path: 'room.svg',
-  },
-};
+];
 
 export const furnitures_data = [
   {
     name: 'Bed',
+    id: _uuid(),
     type: 'furniture',
     position: {
       x: 0,
@@ -85,6 +144,7 @@ export const furnitures_data = [
   },
   {
     name: 'Cabinet',
+    id: _uuid(),
     type: 'furniture',
     position: {
       x: -100,
@@ -104,6 +164,7 @@ export const furnitures_data = [
   },
   {
     name: 'Cabinet',
+    id: _uuid(),
     type: 'furniture',
     position: {
       x: 100,
@@ -123,6 +184,7 @@ export const furnitures_data = [
   },
   {
     name: 'Desk',
+    id: _uuid(),
     type: 'furniture',
     position: {
       x: 130,
@@ -142,6 +204,7 @@ export const furnitures_data = [
   },
   {
     name: 'Closet',
+    id: _uuid(),
     type: 'furniture',
     position: {
       x: -210,
@@ -161,6 +224,7 @@ export const furnitures_data = [
   },
   {
     name: 'Lamp',
+    id: _uuid(),
     type: 'furniture',
     position: {
       x: 210,
@@ -180,6 +244,7 @@ export const furnitures_data = [
   },
   {
     name: 'Plant',
+    id: _uuid(),
     type: 'furniture',
     position: {
       x: 200,

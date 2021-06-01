@@ -3,8 +3,8 @@ import styled, {css} from 'styled-components';
 import {useSelector, useDispatch} from 'react-redux';
 import {setWallColor} from '../../../app/actions/index.js';
 
-function WallInfo() {
-  const {setting, walls} = useSelector((state) => state.project);
+function PaintInfo() {
+  const {setting, selectedGroup} = useSelector((state) => state.project);
   const dispatch = useDispatch();
 
   return (
@@ -14,11 +14,14 @@ function WallInfo() {
           <Item
             key={index}
             primary={
-              paint.color.r === walls[0].color.r &&
-              paint.color.g === walls[0].color.g &&
-              paint.color.b === walls[0].color.b
+              selectedGroup.type === 'wall' &&
+              selectedGroup.color.r === paint.color.r &&
+              selectedGroup.color.g === paint.color.g &&
+              selectedGroup.color.b === paint.color.b
             }
-            onClick={() => handleClickPaint(dispatch, paint.color)}
+            onClick={() =>
+              dispatch(setWallColor(selectedGroup.id, paint.color))
+            }
           >
             <ItemImg style={{backgroundColor: `${paint.code}`}}></ItemImg>
             <ItemText>{paint.name}</ItemText>
@@ -28,10 +31,6 @@ function WallInfo() {
       </Container>
     </Div>
   );
-}
-
-function handleClickPaint(dispatch, color) {
-  dispatch(setWallColor(color));
 }
 
 const Div = styled.div`
@@ -79,4 +78,4 @@ const CodeText = styled.p`
   font-size: 14px;
 `;
 
-export {WallInfo};
+export {PaintInfo};
