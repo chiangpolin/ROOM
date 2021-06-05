@@ -13,6 +13,8 @@ function Rendering() {
     d_floors,
     d_cameras,
     sceneBackgroundColor,
+    sceneDirectionalLight,
+    sceneHemisphereLight,
   } = useSelector((state) => state.project);
 
   useEffect(() => {
@@ -26,9 +28,9 @@ function Rendering() {
     };
 
     // Lights
-    const directionalLight = three.directionalLight();
+    const directionalLight = three.directionalLight(sceneDirectionalLight);
     scene.add(directionalLight);
-    const light = three.hemisphereLight();
+    const light = three.hemisphereLight(sceneHemisphereLight);
     scene.add(light);
 
     // Camera

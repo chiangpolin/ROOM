@@ -27,6 +27,8 @@ const initialState = {
   // three rendering
   dataURL: '',
   sceneBackgroundColor: '#81c7d4',
+  sceneDirectionalLight: 0.2,
+  sceneHemisphereLight: 1,
 };
 
 const projectReducer = (state = initialState, action) => {
@@ -355,6 +357,18 @@ const projectReducer = (state = initialState, action) => {
       return {
         ...state,
         dataURL: action.payload.url,
+      };
+
+    case 'SET_DIRECTIONAL_LIGHT':
+      return {
+        ...state,
+        sceneDirectionalLight: action.payload.intensity,
+      };
+
+    case 'SET_HEMISPHERE_LIGHT':
+      return {
+        ...state,
+        sceneHemisphereLight: action.payload.intensity,
       };
 
     case 'SET_BACKGROUND_COLOR':

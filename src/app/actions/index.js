@@ -555,6 +555,16 @@ export const setRenderingDataURL = (url) => ({
   payload: {url},
 });
 
+export const setDirectionalLight = (intensity) => ({
+  type: actionTypes.SET_DIRECTIONAL_LIGHT,
+  payload: {intensity},
+});
+
+export const setHemisphereLight = (intensity) => ({
+  type: actionTypes.SET_HEMISPHERE_LIGHT,
+  payload: {intensity},
+});
+
 export const setBackgroundColor = (color) => ({
   type: actionTypes.SET_BACKGROUND_COLOR,
   payload: {color},

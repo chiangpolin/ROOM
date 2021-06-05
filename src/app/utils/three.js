@@ -12,12 +12,12 @@ export function scene(color) {
   return scene;
 }
 
-export function directionalLight() {
-  return new THREE.DirectionalLight(0xffffff, 0.2);
+export function directionalLight(intensity) {
+  return new THREE.DirectionalLight(0xffffff, intensity);
 }
 
-export function hemisphereLight() {
-  return new THREE.HemisphereLight(0xffffd5, 0x080820, 1);
+export function hemisphereLight(intensity) {
+  return new THREE.HemisphereLight(0xffffd5, 0x080820, intensity);
 }
 
 export function perspectiveCamera(sizes) {
