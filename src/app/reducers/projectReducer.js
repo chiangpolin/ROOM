@@ -24,6 +24,8 @@ const initialState = {
   d_openings: [],
   d_coverings: [],
   d_floors: [],
+  // three rendering
+  dataURL: '',
 };
 
 const projectReducer = (state = initialState, action) => {
@@ -346,6 +348,12 @@ const projectReducer = (state = initialState, action) => {
           ...state.selectedGroup,
           path: action.payload.path,
         },
+      };
+
+    case 'SET_RENDERING_DATAURL':
+      return {
+        ...state,
+        dataURL: action.payload.url,
       };
 
     default:

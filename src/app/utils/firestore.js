@@ -84,6 +84,26 @@ export function putUser(id, data) {
   });
 }
 
+export function putUserName(id, name) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('users')
+      .doc(id)
+      .set(
+        {
+          name: name,
+        },
+        {merge: true}
+      )
+      .then((docRef) => {
+        resolve('success');
+      })
+      .catch((error) => {
+        console.error('Error adding document: ', error);
+      });
+  });
+}
+
 export function getProjects(user_id) {
   const db = firebase.firestore();
   return new Promise((resolve) => {

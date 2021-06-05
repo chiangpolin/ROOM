@@ -256,16 +256,22 @@ const Div = styled.div`
   background-color: transparent;
 
   h1 {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
     margin: 10px 20px 5px;
     color: ${theme.GOFUN};
   }
 
   h3 {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
     margin: 0 20px;
     color: ${theme.GOFUN};
   }
 
   p {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
     margin: 0 5px 0;
   }
 

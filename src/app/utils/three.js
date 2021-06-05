@@ -1,11 +1,15 @@
+import {store} from '../store/index.js';
+import {setRenderingDataURL} from '../actions/index.js';
 import * as THREE from 'three';
 import {CSG} from 'three-csg-ts';
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
 import {RGBToHex} from '../utils/general.js';
 
-export function scene() {
-  return new THREE.Scene();
+export function scene(color) {
+  const scene = new THREE.Scene();
+  scene.background = new THREE.Color(color);
+  return scene;
 }
 
 export function directionalLight() {
@@ -126,6 +130,8 @@ export async function setFurniture(renderer, scene, camera, obj) {
 
   scene.add(group);
   renderer.render(scene, camera);
+  const url = renderer.domElement.toDataURL();
+  store.dispatch(setRenderingDataURL(url));
 }
 
 export async function setWall(renderer, scene, camera, wall, openings) {

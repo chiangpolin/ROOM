@@ -76,6 +76,10 @@ export const forgetPassword = (email) => async (dispatch) => {
   auth.sendPasswordResetEmail(email);
 };
 
+export const updateUserName = (user_id, name) => async (dispatch) => {
+  await firestore.putUserName(user_id, name);
+};
+
 export const fetchAuthState = (history) => async (dispatch) => {
   const credentialUser = await auth.getAuthState();
   if (credentialUser.uid) {
@@ -163,7 +167,7 @@ export const fetchSearchTarget = (email) => async (dispatch) => {
     return;
   }
   dispatch(
-    setSearchTarget({id: user.id, name: user.data.name, photo: user.data.photo})
+    setSearchTarget({id: user.id, name: user.name, photoURL: user.photoURL})
   );
 };
 
@@ -357,24 +361,35 @@ export const updateProjectName =
 
 export const deleteProject = (user_id, project_id) => async (dispatch) => {
   await firestore.deleteProject(project_id);
-  const [walls, furnitures, floors, cameras] = await Promise.all([
-    firestore.getWalls(project_id),
-    firestore.getFurnitures(project_id),
-    firestore.getFloors(project_id),
-    firestore.getCameras(project_id),
-  ]);
-  for (let i = 0; i < walls.length; i++) {
-    firestore.deleteWall(project_id, walls[i].id);
-  }
+  const [furnitures, walls, openings, coverings, floors, cameras] =
+    await Promise.all([
+      firestore.getFurnitures(project_id),
+      firestore.getWalls(project_id),
+      firestore.getOpenings(project_id),
+      firestore.getCoverings(project_id),
+      firestore.getFloors(project_id),
+      firestore.getCameras(project_id),
+    ]);
+
   for (let i = 0; i < furnitures.length; i++) {
-    firestore.deleteFurniture(project_id, furnitures[i].id);
+    firestore.deleteFurniture(project_id, furnitures[i]);
+  }
+  for (let i = 0; i < walls.length; i++) {
+    firestore.deleteWall(project_id, walls[i]);
+  }
+  for (let i = 0; i < openings.length; i++) {
+    firestore.deleteOpening(project_id, openings[i]);
+  }
+  for (let i = 0; i < coverings.length; i++) {
+    firestore.deleteCovering(project_id, coverings[i]);
   }
   for (let i = 0; i < floors.length; i++) {
-    firestore.deleteFloor(project_id, floors[i].id);
+    firestore.deleteFloor(project_id, floors[i]);
   }
   for (let i = 0; i < cameras.length; i++) {
-    firestore.deleteCamera(project_id, cameras[i].id);
+    firestore.deleteCamera(project_id, cameras[i]);
   }
+
   const projects = await firestore.getProjects(user_id);
   dispatch(setProjects(projects));
   dispatch(selectProject(''));
@@ -384,6 +399,11 @@ export const deleteProject = (user_id, project_id) => async (dispatch) => {
 export const setUser = (user) => ({
   type: actionTypes.SET_USER,
   payload: {user},
+});
+
+export const setUserName = (name) => ({
+  type: actionTypes.SET_USER_NAME,
+  payload: {name},
 });
 
 export const setSearchTarget = (target) => ({
@@ -520,4 +540,10 @@ export const setWallColor = (uuid, color) => ({
 export const setCoveringTexture = (uuid, path) => ({
   type: actionTypes.SET_COVERING_TEXTURE,
   payload: {uuid, path},
+});
+
+// three-rendering
+export const setRenderingDataURL = (url) => ({
+  type: actionTypes.SET_RENDERING_DATAURL,
+  payload: {url},
 });

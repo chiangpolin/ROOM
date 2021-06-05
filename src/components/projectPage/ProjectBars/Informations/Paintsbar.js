@@ -1,9 +1,10 @@
 import React from 'react';
 import styled, {css} from 'styled-components';
+import * as theme from '../../../../app/constants/theme.js';
 import {useSelector, useDispatch} from 'react-redux';
-import {setWallColor} from '../../../app/actions/index.js';
+import {setWallColor} from '../../../../app/actions/index.js';
 
-function PaintInfo() {
+function Paintsbar() {
   const {setting, selectedGroup} = useSelector((state) => state.project);
   const dispatch = useDispatch();
 
@@ -23,9 +24,9 @@ function PaintInfo() {
               dispatch(setWallColor(selectedGroup.id, paint.color))
             }
           >
-            <ItemImg style={{backgroundColor: `${paint.code}`}}></ItemImg>
-            <ItemText>{paint.name}</ItemText>
-            <CodeText>{paint.code}</CodeText>
+            <img style={{backgroundColor: `${paint.code}`}}></img>
+            <p>{paint.name}</p>
+            <p>{paint.code}</p>
           </Item>
         ))}
       </Container>
@@ -34,18 +35,30 @@ function PaintInfo() {
 }
 
 const Div = styled.div`
-  width: 300px;
-  border-right: 1px solid #1c1c1c;
+  position: absolute;
+  top: 100px;
+  left: 80px;
+  z-index: 10;
+  padding: 0;
+  width: 150px;
+  height: 65vh;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
+  background-color: ${theme.WHITE};
   overflow-y: scroll;
+
+  @media (max-width: 1024px) {
+  }
 `;
 
 const Container = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  margin: 15px 15px;
+  margin: 20px 15px 5px;
 `;
 
 const Item = styled.button`
+  justify-content: center;
+  margin: 0 0 10px;
   width: 100%;
   border: none;
   background-color: transparent;
@@ -61,21 +74,15 @@ const Item = styled.button`
     css`
       border: 1px solid #1c1c1c;
     `}
+
+  img {
+    width: 100%;
+    height: 80px;
+  }
+
+  p {
+    font-size: 14px;
+  }
 `;
 
-const ItemImg = styled.img`
-  margin: 10px 0 0;
-  width: 80%;
-  height: 80px;
-`;
-
-const ItemText = styled.p`
-  margin: 5px 0;
-  font-size: 16px;
-`;
-
-const CodeText = styled.p`
-  font-size: 14px;
-`;
-
-export {PaintInfo};
+export {Paintsbar};

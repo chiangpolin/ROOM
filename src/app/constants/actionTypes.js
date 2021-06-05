@@ -1,5 +1,6 @@
 // user
 export const SET_USER = 'SET_USER';
+export const SET_USER_NAME = 'SET_USER_NAME';
 export const SET_SEARCH_TARGET = 'SET_SEARCH_TARGET';
 export const SELECT_SEARCH_TARGET = 'SELECT_SEARCH_TARGET';
 
@@ -48,3 +49,6 @@ export const SET_WALL_COLOR = 'SET_WALL_COLOR';
 
 // covering
 export const SET_COVERING_TEXTURE = 'SET_COVERING_TEXTURE';
+
+// three-rendering
+export const SET_RENDERING_DATAURL = 'SET_RENDERING_DATAURL';
