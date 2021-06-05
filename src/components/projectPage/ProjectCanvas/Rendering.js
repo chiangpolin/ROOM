@@ -4,14 +4,20 @@ import {useSelector} from 'react-redux';
 import * as three from '../../../app/utils/three.js';
 
 function Rendering() {
-  const color = '#81c7d4';
   const renderingRef = useRef(null);
-  const {d_walls, d_openings, d_furnitures, d_coverings, d_floors, d_cameras} =
-    useSelector((state) => state.project);
+  const {
+    d_walls,
+    d_openings,
+    d_furnitures,
+    d_coverings,
+    d_floors,
+    d_cameras,
+    sceneBackgroundColor,
+  } = useSelector((state) => state.project);
 
   useEffect(() => {
     // Scene
-    const scene = three.scene(color);
+    const scene = three.scene(sceneBackgroundColor);
 
     // Canvas Sizes
     const sizes = {

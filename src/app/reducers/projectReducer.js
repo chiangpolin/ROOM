@@ -26,6 +26,7 @@ const initialState = {
   d_floors: [],
   // three rendering
   dataURL: '',
+  sceneBackgroundColor: '#81c7d4',
 };
 
 const projectReducer = (state = initialState, action) => {
@@ -354,6 +355,12 @@ const projectReducer = (state = initialState, action) => {
       return {
         ...state,
         dataURL: action.payload.url,
+      };
+
+    case 'SET_BACKGROUND_COLOR':
+      return {
+        ...state,
+        sceneBackgroundColor: action.payload.color,
       };
 
     default:

@@ -22,10 +22,14 @@ function ProjectCard(props) {
   return (
     <Item>
       <ImgDiv>
-        <img
-          src={props.imageURL ? props.imageURL : blank}
-          onClick={() => history.push(`/project/${props.id}`)}
-        />
+        <ImgContainer
+          style={
+            props.imageURL
+              ? {backgroundImage: `url(${props.imageURL})`}
+              : {backgroundImage: `url(${blank})`}
+          }
+          onClick={() => history.push(`project/${props.id}`)}
+        ></ImgContainer>
         <Trash>
           {props.author_id === id ? (
             <TrashIcon
@@ -105,18 +109,20 @@ const Item = styled.div`
 
 const ImgDiv = styled.div`
   position: relative;
+`;
 
-  img {
-    width: 100%;
-    opacity: 0.8;
-    background-color: #bdc0ba;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
+const ImgContainer = styled.div`
+  padding-top: 62.5%;
+  width: 100%;
+  opacity: 0.8;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  background-size: auto 100%;
+  background-position: center;
 
-    :hover {
-      cursor: pointer;
-      opacity: 1;
-    }
+  :hover {
+    cursor: pointer;
+    opacity: 1;
   }
 `;
 

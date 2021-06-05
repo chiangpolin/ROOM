@@ -2,7 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import {useLocation, useParams} from 'react-router';
 import {useSelector, useDispatch} from 'react-redux';
-import {updateProject} from '../../../app/actions/index.js';
+import {
+  updateProject,
+  uploadRenderingImage,
+} from '../../../app/actions/index.js';
 import * as theme from '../../../app/constants/theme.js';
 import {ReactComponent as LightbulbIcon} from '../../../static/images/icons/lightbulb.svg';
 import {ReactComponent as LinkIcon} from '../../../static/images/icons/link.svg';
@@ -47,7 +50,7 @@ function Navbar(props) {
         </button>
       ) : null}
       {user_id === author_id && props.renderIsClicked ? (
-        <button onClick={() => handleClickSnapshot(dataURL, `${id}.jpg`)}>
+        <button onClick={() => handleClickSnapshot(dispatch, id, dataURL)}>
           <CameraIcon width="24" height="24"></CameraIcon>
           <p>Snapshot</p>
         </button>
@@ -77,17 +80,19 @@ function handleClickUpdate(dispatch, project_id, data) {
   dispatch(updateProject(project_id, data));
 }
 
-function handleClickSnapshot(uri, name) {
-  downloadURI(uri, name);
+function handleClickSnapshot(dispatch, id, uri) {
+  downloadURI(`${id}.jpg`, uri);
+  dispatch(uploadRenderingImage(id, uri));
 }
 
-function downloadURI(uri, name) {
-  const link = document.createElement('a');
+function downloadURI(name, uri) {
+  let link = document.createElement('a');
   link.download = name;
   link.href = uri;
   document.body.appendChild(link);
   link.click();
   document.body.removeChild(link);
+  link = null;
 }
 
 const Div = styled.div`

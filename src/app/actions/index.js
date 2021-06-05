@@ -2,6 +2,7 @@ import * as actionTypes from '../constants/actionTypes';
 import * as defaultSettings from '../constants/defaultSettings';
 import * as firestore from '../../app/utils/firestore.js';
 import * as auth from '../../app/utils/auth.js';
+import * as storage from '../../app/utils/storage.js';
 
 // thunk
 export const signUp = (name, email, password) => async (dispatch) => {
@@ -78,6 +79,11 @@ export const forgetPassword = (email) => async (dispatch) => {
 
 export const updateUserName = (user_id, name) => async (dispatch) => {
   await firestore.putUserName(user_id, name);
+};
+
+export const uploadRenderingImage = (project_id, url) => async (dispatch) => {
+  const downloadURL = await storage.putFile(project_id, url);
+  firestore.putProjectImageURL(project_id, {imageURL: downloadURL});
 };
 
 export const fetchAuthState = (history) => async (dispatch) => {
@@ -291,6 +297,7 @@ export const updateProject = (project_id, data) => async (dispatch) => {
         break;
       case 'delete':
         firestore.deleteFurniture(project_id, data.d_furnitures[i]);
+        break;
       default:
     }
   }
@@ -546,4 +553,9 @@ export const setCoveringTexture = (uuid, path) => ({
 export const setRenderingDataURL = (url) => ({
   type: actionTypes.SET_RENDERING_DATAURL,
   payload: {url},
+});
+
+export const setBackgroundColor = (color) => ({
+  type: actionTypes.SET_BACKGROUND_COLOR,
+  payload: {color},
 });

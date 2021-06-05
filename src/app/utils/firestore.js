@@ -219,6 +219,26 @@ export function putProjectShareId(id, data) {
   });
 }
 
+export function putProjectImageURL(id, data) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(id)
+      .set(
+        {
+          imageURL: data.imageURL,
+        },
+        {merge: true}
+      )
+      .then(() => {
+        resolve('success');
+      })
+      .catch((error) => {
+        console.error('Error writing document: ', error);
+      });
+  });
+}
+
 export function deleteProject(id) {
   const db = firebase.firestore();
   return new Promise((resolve) => {
