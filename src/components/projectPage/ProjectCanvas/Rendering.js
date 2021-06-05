@@ -5,12 +5,21 @@ import * as three from '../../../app/utils/three.js';
 
 function Rendering() {
   const renderingRef = useRef(null);
-  const {d_walls, d_openings, d_furnitures, d_coverings, d_floors, d_cameras} =
-    useSelector((state) => state.project);
+  const {
+    d_walls,
+    d_openings,
+    d_furnitures,
+    d_coverings,
+    d_floors,
+    d_cameras,
+    sceneBackgroundColor,
+    sceneDirectionalLight,
+    sceneHemisphereLight,
+  } = useSelector((state) => state.project);
 
   useEffect(() => {
     // Scene
-    const scene = three.scene();
+    const scene = three.scene(sceneBackgroundColor);
 
     // Canvas Sizes
     const sizes = {
@@ -19,9 +28,9 @@ function Rendering() {
     };
 
     // Lights
-    const directionalLight = three.directionalLight();
+    const directionalLight = three.directionalLight(sceneDirectionalLight);
     scene.add(directionalLight);
-    const light = three.hemisphereLight();
+    const light = three.hemisphereLight(sceneHemisphereLight);
     scene.add(light);
 
     // Camera
@@ -95,7 +104,7 @@ function Rendering() {
 const RenderingDiv = styled.div`
   width: 100%;
   height: 100%;
-  background-color: #81c7d4;
+  background-color: transparent;
 `;
 
 export {Rendering};

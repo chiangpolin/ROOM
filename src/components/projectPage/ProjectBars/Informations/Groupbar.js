@@ -1,23 +1,24 @@
 import React from 'react';
 import styled, {css} from 'styled-components';
+import * as theme from '../../../../app/constants/theme.js';
 import {useSelector, useDispatch} from 'react-redux';
 import {
   setFurnitureRotation,
   removeCanvasElement,
-} from '../../../app/actions/index.js';
+} from '../../../../app/actions/index.js';
 
-function GroupInfo() {
+function Groupbar() {
   const {selectedGroup} = useSelector((state) => state.project);
   const dispatch = useDispatch();
 
   return (
     <Div>
       <ImgDiv>
-        <Img />
+        <img />
       </ImgDiv>
       <Content>
-        <NameText>{selectedGroup.name}</NameText>
-        <IdText>{selectedGroup.id}</IdText>
+        <h3>{selectedGroup.name}</h3>
+        <p>{selectedGroup.id}</p>
         <Buttons>
           <Button
             primary
@@ -76,8 +77,19 @@ function handleClickDelete(dispatch, group) {
 }
 
 const Div = styled.div`
-  width: 300px;
-  border-right: 1px solid #1c1c1c;
+  position: absolute;
+  top: 100px;
+  left: 80px;
+  z-index: 10;
+  width: 240px;
+  height: 330px;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
+  background-color: ${theme.WHITE};
+
+  @media (max-width: 1024px) {
+  }
 `;
 
 const ImgDiv = styled.div`
@@ -85,24 +97,23 @@ const ImgDiv = styled.div`
   align-items: center;
   justify-content: center;
   margin: 30px 0;
-`;
 
-const Img = styled.img`
-  width: 150px;
-  height: 150px;
-  background-color: #bdc0ba;
+  img {
+    width: 120px;
+    height: 120px;
+    background-color: #bdc0ba;
+  }
 `;
 
 const Content = styled.div`
-  margin: 0 30px;
-`;
+  margin: 0 15px;
+  h3 {
+    font-size: 24px;
+  }
 
-const NameText = styled.p`
-  font-size: 24px;
-`;
-
-const IdText = styled.p`
-  font-size: 16px;
+  p {
+    font-size: 16px;
+  }
 `;
 
 const Buttons = styled.div`
@@ -150,4 +161,4 @@ const Button = styled.button`
     `}
 `;
 
-export {GroupInfo};
+export {Groupbar};

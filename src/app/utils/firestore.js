@@ -84,6 +84,26 @@ export function putUser(id, data) {
   });
 }
 
+export function putUserName(id, name) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('users')
+      .doc(id)
+      .set(
+        {
+          name: name,
+        },
+        {merge: true}
+      )
+      .then((docRef) => {
+        resolve('success');
+      })
+      .catch((error) => {
+        console.error('Error adding document: ', error);
+      });
+  });
+}
+
 export function getProjects(user_id) {
   const db = firebase.firestore();
   return new Promise((resolve) => {
@@ -187,6 +207,26 @@ export function putProjectShareId(id, data) {
       .set(
         {
           share_id: data.share_id,
+        },
+        {merge: true}
+      )
+      .then(() => {
+        resolve('success');
+      })
+      .catch((error) => {
+        console.error('Error writing document: ', error);
+      });
+  });
+}
+
+export function putProjectImageURL(id, data) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .doc(id)
+      .set(
+        {
+          imageURL: data.imageURL,
         },
         {merge: true}
       )

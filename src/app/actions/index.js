@@ -2,6 +2,7 @@ import * as actionTypes from '../constants/actionTypes';
 import * as defaultSettings from '../constants/defaultSettings';
 import * as firestore from '../../app/utils/firestore.js';
 import * as auth from '../../app/utils/auth.js';
+import * as storage from '../../app/utils/storage.js';
 
 // thunk
 export const signUp = (name, email, password) => async (dispatch) => {
@@ -74,6 +75,15 @@ export const signOut = () => async (dispatch) => {
 
 export const forgetPassword = (email) => async (dispatch) => {
   auth.sendPasswordResetEmail(email);
+};
+
+export const updateUserName = (user_id, name) => async (dispatch) => {
+  await firestore.putUserName(user_id, name);
+};
+
+export const uploadRenderingImage = (project_id, url) => async (dispatch) => {
+  const downloadURL = await storage.putFile(project_id, url);
+  firestore.putProjectImageURL(project_id, {imageURL: downloadURL});
 };
 
 export const fetchAuthState = (history) => async (dispatch) => {
@@ -163,7 +173,7 @@ export const fetchSearchTarget = (email) => async (dispatch) => {
     return;
   }
   dispatch(
-    setSearchTarget({id: user.id, name: user.data.name, photo: user.data.photo})
+    setSearchTarget({id: user.id, name: user.name, photoURL: user.photoURL})
   );
 };
 
@@ -287,6 +297,7 @@ export const updateProject = (project_id, data) => async (dispatch) => {
         break;
       case 'delete':
         firestore.deleteFurniture(project_id, data.d_furnitures[i]);
+        break;
       default:
     }
   }
@@ -357,24 +368,35 @@ export const updateProjectName =
 
 export const deleteProject = (user_id, project_id) => async (dispatch) => {
   await firestore.deleteProject(project_id);
-  const [walls, furnitures, floors, cameras] = await Promise.all([
-    firestore.getWalls(project_id),
-    firestore.getFurnitures(project_id),
-    firestore.getFloors(project_id),
-    firestore.getCameras(project_id),
-  ]);
-  for (let i = 0; i < walls.length; i++) {
-    firestore.deleteWall(project_id, walls[i].id);
-  }
+  const [furnitures, walls, openings, coverings, floors, cameras] =
+    await Promise.all([
+      firestore.getFurnitures(project_id),
+      firestore.getWalls(project_id),
+      firestore.getOpenings(project_id),
+      firestore.getCoverings(project_id),
+      firestore.getFloors(project_id),
+      firestore.getCameras(project_id),
+    ]);
+
   for (let i = 0; i < furnitures.length; i++) {
-    firestore.deleteFurniture(project_id, furnitures[i].id);
+    firestore.deleteFurniture(project_id, furnitures[i]);
+  }
+  for (let i = 0; i < walls.length; i++) {
+    firestore.deleteWall(project_id, walls[i]);
+  }
+  for (let i = 0; i < openings.length; i++) {
+    firestore.deleteOpening(project_id, openings[i]);
+  }
+  for (let i = 0; i < coverings.length; i++) {
+    firestore.deleteCovering(project_id, coverings[i]);
   }
   for (let i = 0; i < floors.length; i++) {
-    firestore.deleteFloor(project_id, floors[i].id);
+    firestore.deleteFloor(project_id, floors[i]);
   }
   for (let i = 0; i < cameras.length; i++) {
-    firestore.deleteCamera(project_id, cameras[i].id);
+    firestore.deleteCamera(project_id, cameras[i]);
   }
+
   const projects = await firestore.getProjects(user_id);
   dispatch(setProjects(projects));
   dispatch(selectProject(''));
@@ -384,6 +406,11 @@ export const deleteProject = (user_id, project_id) => async (dispatch) => {
 export const setUser = (user) => ({
   type: actionTypes.SET_USER,
   payload: {user},
+});
+
+export const setUserName = (name) => ({
+  type: actionTypes.SET_USER_NAME,
+  payload: {name},
 });
 
 export const setSearchTarget = (target) => ({
@@ -520,4 +547,25 @@ export const setWallColor = (uuid, color) => ({
 export const setCoveringTexture = (uuid, path) => ({
   type: actionTypes.SET_COVERING_TEXTURE,
   payload: {uuid, path},
+});
+
+// three-rendering
+export const setRenderingDataURL = (url) => ({
+  type: actionTypes.SET_RENDERING_DATAURL,
+  payload: {url},
+});
+
+export const setDirectionalLight = (intensity) => ({
+  type: actionTypes.SET_DIRECTIONAL_LIGHT,
+  payload: {intensity},
+});
+
+export const setHemisphereLight = (intensity) => ({
+  type: actionTypes.SET_HEMISPHERE_LIGHT,
+  payload: {intensity},
+});
+
+export const setBackgroundColor = (color) => ({
+  type: actionTypes.SET_BACKGROUND_COLOR,
+  payload: {color},
 });

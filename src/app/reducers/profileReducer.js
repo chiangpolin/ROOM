@@ -27,6 +27,12 @@ const profileReducer = (state = initialState, action) => {
         email: action.payload.user.email,
       };
 
+    case 'SET_USER_NAME':
+      return {
+        ...state,
+        name: action.payload.name,
+      };
+
     case 'SET_SEARCH_TARGET':
       return {
         ...state,

@@ -6,9 +6,9 @@ import {
   fetchSearchTarget,
   selectSearchTarget,
   shareProject,
-} from '../../app/actions/index.js';
-import {ReactComponent as X} from '../../static/images/icons/x.svg';
-import {ReactComponent as SearchIcon} from '../../static/images/icons/search.svg';
+} from '../../../app/actions/index.js';
+import {ReactComponent as X} from '../../../static/images/icons/x.svg';
+import {ReactComponent as SearchIcon} from '../../../static/images/icons/search.svg';
 
 function Modal() {
   const [email, setEmail] = useState('');
@@ -82,7 +82,7 @@ function handleSelect(dispatch, searchTarget) {
 
 const Div = styled.div`
   position: fixed;
-  z-index: 20px;
+  z-index: 30;
   width: 100%;
   height: 100%;
 `;
@@ -99,7 +99,7 @@ const ModalBody = styled.div`
   position: absolute;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -60%);
+  transform: translate(-50%, -50%);
   width: 30%;
   height: 60%;
   background-color: white;
@@ -114,6 +114,7 @@ const Button = styled.button`
   background-color: transparent;
   cursor: pointer;
 `;
+
 const Content = styled.div`
   margin: 45px 30px 30px;
 `;
@@ -152,6 +153,7 @@ const Target = styled.div`
       border: 1px solid #1c1c1c;
     `}
 `;
+
 const TargetImg = styled.img`
   width: 40px;
   height: 40px;

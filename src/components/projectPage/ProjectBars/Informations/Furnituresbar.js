@@ -1,9 +1,10 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
+import * as theme from '../../../../app/constants/theme.js';
 import {useSelector, useDispatch} from 'react-redux';
-import {addCanvasElement} from '../../../app/actions/index.js';
+import {addCanvasElement} from '../../../../app/actions/index.js';
 
-function FurnitureInfo() {
+function Furnituresbar() {
   const {setting} = useSelector((state) => state.project);
   const dispatch = useDispatch();
 
@@ -17,11 +18,11 @@ function FurnitureInfo() {
               dispatch(addCanvasElement('furniture', furniture));
             }}
           >
-            <ItemImg></ItemImg>
-            <ItemText>{furniture.name}</ItemText>
-            <Dimension>
+            <img></img>
+            <p>{furniture.name}</p>
+            <p>
               {furniture.dimension.width} x {furniture.dimension.height}
-            </Dimension>
+            </p>
           </Item>
         ))}
       </Container>
@@ -30,18 +31,29 @@ function FurnitureInfo() {
 }
 
 const Div = styled.div`
-  width: 300px;
-  border-right: 1px solid #1c1c1c;
+  position: absolute;
+  top: 100px;
+  left: 80px;
+  z-index: 10;
+  width: 150px;
+  height: 65vh;
+  border: none;
+  border-radius: 5px;
+  box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
+  background-color: ${theme.WHITE};
   overflow-y: scroll;
+
+  @media (max-width: 1024px) {
+  }
 `;
 
 const Container = styled.div`
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  margin: 15px 15px;
+  margin: 20px 15px 5px;
 `;
 
 const Item = styled.button`
+  justify-content: center;
+  margin: 0 0 10px;
   width: 100%;
   border: none;
   background-color: transparent;
@@ -51,22 +63,22 @@ const Item = styled.button`
     border: 1px solid #1c1c1c;
     cursor: pointer;
   }
+
+  ${(props) =>
+    props.primary &&
+    css`
+      border: 1px solid #1c1c1c;
+    `}
+
+  img {
+    width: 100%;
+    height: 80px;
+    background-color: #bdc0ba;
+  }
+
+  p {
+    font-size: 14px;
+  }
 `;
 
-const ItemImg = styled.img`
-  margin: 10px 0 0;
-  width: 80%;
-  height: 80px;
-  background-color: #bdc0ba;
-`;
-
-const ItemText = styled.p`
-  margin: 5px 0;
-  font-size: 16px;
-`;
-
-const Dimension = styled.p`
-  font-size: 14px;
-`;
-
-export {FurnitureInfo};
+export {Furnituresbar};
