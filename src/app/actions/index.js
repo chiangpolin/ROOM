@@ -115,6 +115,11 @@ export const fetchProfileData = (history) => async (dispatch) => {
   dispatch(resetProjectStatus());
 };
 
+export const searchProjects = (name) => async (dispatch) => {
+  const projects = await firestore.getSearchedProjects(name);
+  dispatch(setSearchedProjects(projects));
+};
+
 export const fetchProjectData = (project_id) => async (dispatch) => {
   const [
     project,
@@ -432,6 +437,11 @@ export const setProjects = (projects) => ({
 export const setSharedProjects = (sharedProjects) => ({
   type: actionTypes.SET_SHARED_PROJECTS,
   payload: {sharedProjects},
+});
+
+export const setSearchedProjects = (searchedProjects) => ({
+  type: actionTypes.SET_SEARCHED_PROJECTS,
+  payload: {searchedProjects},
 });
 
 export const filterProjects = (filter) => ({

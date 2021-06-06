@@ -142,6 +142,25 @@ export function getSharedProjects(user_id) {
   });
 }
 
+export function getSearchedProjects(name) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('projects')
+      .where('name', '==', name)
+      .get()
+      .then((querySnapshot) => {
+        const projects = [];
+        querySnapshot.forEach((doc) => {
+          projects.push({...doc.data(), id: doc.id, type: 'searched'});
+        });
+        resolve(projects);
+      })
+      .catch((error) => {
+        console.log('Error getting documents: ', error);
+      });
+  });
+}
+
 export function getProject(id) {
   const db = firebase.firestore();
   return new Promise((resolve) => {

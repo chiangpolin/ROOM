@@ -1,12 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
 import {useHistory} from 'react-router-dom';
+import {useDispatch} from 'react-redux';
+import {searchProjects} from '../../app/actions/index.js';
 import * as theme from '../../app/constants/theme.js';
 import {ReactComponent as LightBulbIcon} from '../../static/images/icons/lightbulb.svg';
 import {ReactComponent as SearchIcon} from '../../static/images/icons/search.svg';
 
 function Header(props) {
   let history = useHistory();
+  const dispatch = useDispatch();
 
   return (
     <Div>
@@ -15,7 +18,9 @@ function Header(props) {
           <button onClick={() => history.push('/profile')}>Room</button>
         </NavbarBrand>
         <SearchBar>
-          <input></input>
+          <input
+            onKeyPress={(event) => handleKeyPress(event, dispatch)}
+          ></input>
           <div>
             <SearchIcon></SearchIcon>
           </div>
@@ -28,6 +33,12 @@ function Header(props) {
       </Navbar>
     </Div>
   );
+}
+
+function handleKeyPress(event, dispatch) {
+  if (event.code === 'Enter') {
+    dispatch(searchProjects(event.target.value));
+  }
 }
 
 const Div = styled.header`

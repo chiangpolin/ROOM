@@ -13,6 +13,7 @@ import {
 import {ReactComponent as FolderIcon} from '../../static/images/icons/folder.svg';
 import {ReactComponent as PersonIcon} from '../../static/images/icons/person.svg';
 import {ReactComponent as PeopleIcon} from '../../static/images/icons/people.svg';
+import {ReactComponent as CompassIcon} from '../../static/images/icons/compass.svg';
 import {Header} from './Header.js';
 import {UserCard} from './Cards/UserCard.js';
 import {ProjectCard} from './Cards/ProjectCard.js';
@@ -23,9 +24,14 @@ function Profile() {
   const history = useHistory();
   const [run, setRun] = useState(false);
   const [steps, setSteps] = useState(profileSteps);
-  const {id, projects, sharedProjects, shareIsToggled, filter} = useSelector(
-    (state) => state.profile
-  );
+  const {
+    id,
+    projects,
+    sharedProjects,
+    searchedProjects,
+    shareIsToggled,
+    filter,
+  } = useSelector((state) => state.profile);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -71,24 +77,55 @@ function Profile() {
                 <div className="step-4">
                   <button
                     onClick={() =>
-                      dispatch(filterProjects({shared: true, author: true}))
+                      dispatch(
+                        filterProjects({
+                          shared: true,
+                          author: true,
+                          searched: true,
+                        })
+                      )
                     }
                   >
                     <FolderIcon width="24" height="24"></FolderIcon>
                   </button>
                   <button
                     onClick={() =>
-                      dispatch(filterProjects({shared: false, author: true}))
+                      dispatch(
+                        filterProjects({
+                          shared: false,
+                          author: true,
+                          searched: false,
+                        })
+                      )
                     }
                   >
                     <PersonIcon width="24" height="24"></PersonIcon>
                   </button>
                   <button
                     onClick={() =>
-                      dispatch(filterProjects({shared: true, author: false}))
+                      dispatch(
+                        filterProjects({
+                          shared: true,
+                          author: false,
+                          searched: false,
+                        })
+                      )
                     }
                   >
                     <PeopleIcon width="24" height="24"></PeopleIcon>
+                  </button>
+                  <button
+                    onClick={() =>
+                      dispatch(
+                        filterProjects({
+                          shared: false,
+                          author: false,
+                          searched: true,
+                        })
+                      )
+                    }
+                  >
+                    <CompassIcon width="24" height="24"></CompassIcon>
                   </button>
                 </div>
               </FilterDiv>
@@ -107,6 +144,17 @@ function Profile() {
                 : ''}
               {filter.shared
                 ? sharedProjects.map((project) => (
+                    <ProjectCard
+                      key={project.id}
+                      id={project.id}
+                      name={project.name}
+                      author_id={project.author_id}
+                      imageURL={project.imageURL}
+                    ></ProjectCard>
+                  ))
+                : ''}
+              {filter.searched
+                ? searchedProjects.map((project) => (
                     <ProjectCard
                       key={project.id}
                       id={project.id}
