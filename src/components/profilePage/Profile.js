@@ -5,7 +5,11 @@ import {useSelector, useDispatch} from 'react-redux';
 import Joyride from 'react-joyride';
 import {fetchProfileData, filterProjects} from '../../app/actions/index.js';
 import * as theme from '../../app/constants/theme.js';
-import {handleJoyrideCallback} from '../../app/utils/joyride.js';
+import {
+  profileSteps,
+  defaultOptions,
+  handleJoyrideCallback,
+} from '../../app/utils/joyride.js';
 import {ReactComponent as FolderIcon} from '../../static/images/icons/folder.svg';
 import {ReactComponent as PersonIcon} from '../../static/images/icons/person.svg';
 import {ReactComponent as PeopleIcon} from '../../static/images/icons/people.svg';
@@ -18,30 +22,7 @@ import {NewCard} from './Cards/NewCard.js';
 function Profile() {
   const history = useHistory();
   const [run, setRun] = useState(false);
-  const [steps, setSteps] = useState([
-    {
-      target: '.step-1',
-      content: 'This is your profile page.',
-      placement: 'center',
-    },
-    {
-      target: '.step-1',
-      content: 'You can start with new projects we created for you.',
-    },
-    {
-      target: '.step-2',
-      content:
-        'You can checkout projects you owned and projects shared with you here.',
-    },
-    {
-      target: '.step-3',
-      content: 'Cloning projects are suggested before editting.',
-    },
-    {
-      target: '.step-4',
-      content: 'You can filter displayed projects by ownership.',
-    },
-  ]);
+  const [steps, setSteps] = useState(profileSteps);
   const {id, projects, sharedProjects, shareIsToggled, filter} = useSelector(
     (state) => state.profile
   );
@@ -59,18 +40,7 @@ function Profile() {
         steps={steps}
         continuous={true}
         callback={(data) => handleJoyrideCallback(data, setRun)}
-        styles={{
-          options: {
-            arrowColor: `${theme.WHITE}`,
-            backgroundColor: `${theme.WHITE}`,
-            primaryColor: `${theme.RURI}`,
-            textColor: `${theme.SUMI}`,
-            overlayColor: 'rgba(0, 0, 0, 0.5)',
-            spotlightShadow: '0 0 15px rgba(0, 0, 0, 0.5)',
-            beaconSize: 36,
-            zIndex: 100,
-          },
-        }}
+        styles={{options: defaultOptions}}
       ></Joyride>
       <Header setRun={setRun}></Header>
       <Section>

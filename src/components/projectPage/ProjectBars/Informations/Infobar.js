@@ -1,7 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
-import * as theme from '../../../../app/constants/theme.js';
-import {useSelector, useDispatch} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {Settingsbar} from './Settingsbar.js';
 import {Groupbar} from './Groupbar.js';
 import {Paintsbar} from './Paintsbar.js';

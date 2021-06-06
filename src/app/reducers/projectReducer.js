@@ -96,7 +96,9 @@ const projectReducer = (state = initialState, action) => {
                 method: 'post',
                 file: action.payload.group.file,
                 dimension: action.payload.group.dimension,
-                position: {x: 0, y: 0},
+                position: action.payload.group.position
+                  ? action.payload.group.position
+                  : {x: 0, y: 0},
                 rotation: {angle: 0},
               },
             ],
