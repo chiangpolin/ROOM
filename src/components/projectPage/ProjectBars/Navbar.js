@@ -55,17 +55,19 @@ function Navbar(props) {
           <p>Snapshot</p>
         </button>
       ) : null}
-      <button
-        onClick={() => {
-          navigator.clipboard.writeText(path);
-        }}
-      >
-        <LinkIcon width="24" height="24"></LinkIcon>
-        <p>Link</p>
-      </button>
+      <div className="step-4">
+        <button
+          onClick={() => {
+            navigator.clipboard.writeText(path);
+          }}
+        >
+          <LinkIcon width="24" height="24"></LinkIcon>
+          <p>Link</p>
+        </button>
+      </div>
       <p>|</p>
       <div>
-        <div>
+        <div onClick={() => props.setRun(true)}>
           <LightbulbIcon width="24" height="24"></LightbulbIcon>
         </div>
         <div onClick={() => props.handleClickUser(!props.userIsClicked)}>
