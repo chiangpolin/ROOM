@@ -407,6 +407,26 @@ export const deleteProject = (user_id, project_id) => async (dispatch) => {
   dispatch(selectProject(''));
 };
 
+export const deselectCanvasElement = (selectedGroup) => async (dispatch) => {
+  if (selectedGroup.type === 'window' || selectedGroup.type === 'door') {
+    dispatch(
+      setInstruction({
+        type: 'deselect',
+        target: 'opening',
+        group: selectedGroup,
+      })
+    );
+  } else if (selectedGroup.type !== undefined) {
+    dispatch(
+      setInstruction({
+        type: 'deselect',
+        target: selectedGroup.type,
+        group: selectedGroup,
+      })
+    );
+  }
+};
+
 // user
 export const setUser = (user) => ({
   type: actionTypes.SET_USER,

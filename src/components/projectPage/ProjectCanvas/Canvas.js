@@ -136,6 +136,14 @@ function Canvas() {
                     selectedGroup.rotation.angle;
                 }
               break;
+            case 'deselect':
+              for (let i = 0; i < pixiFurnitureContainer.children.length; i++)
+                if (
+                  pixiFurnitureContainer.children[i].id === selectedGroup.id
+                ) {
+                  pixiFurnitureContainer.children[i].filters = [];
+                }
+              break;
             default:
           }
           break;
@@ -155,6 +163,12 @@ function Canvas() {
                   );
                 }
               }
+              break;
+            case 'deselect':
+              for (let i = 0; i < pixiFloorContainer.children.length; i++)
+                if (pixiFloorContainer.children[i].id === selectedGroup.id) {
+                  pixiFloorContainer.children[i].filters = [];
+                }
               break;
             default:
           }
@@ -176,6 +190,12 @@ function Canvas() {
                 }
               }
               break;
+            case 'deselect':
+              for (let i = 0; i < pixiCoveringContainer.children.length; i++)
+                if (pixiCoveringContainer.children[i].id === selectedGroup.id) {
+                  pixiCoveringContainer.children[i].filters = [];
+                }
+              break;
             default:
           }
           break;
@@ -190,6 +210,12 @@ function Canvas() {
                   pixiWallContainer.removeChild(pixiWallContainer.children[i]);
                 }
               }
+              break;
+            case 'deselect':
+              for (let i = 0; i < pixiWallContainer.children.length; i++)
+                if (pixiWallContainer.children[i].id === selectedGroup.id) {
+                  pixiWallContainer.children[i].filters = [];
+                }
               break;
             default:
           }
@@ -206,6 +232,12 @@ function Canvas() {
                   );
                 }
               }
+              break;
+            case 'deselect':
+              for (let i = 0; i < pixiOpeningContainer.children.length; i++)
+                if (pixiOpeningContainer.children[i].id === selectedGroup.id) {
+                  pixiOpeningContainer.children[i].filters = [];
+                }
               break;
             default:
           }

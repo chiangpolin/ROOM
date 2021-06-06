@@ -12,10 +12,18 @@ function Zooms() {
 
   return (
     <Div>
-      <button onClick={() => dispatch(setCanvasScale(scale + 0.25))}>
+      <button
+        onClick={() =>
+          dispatch(setCanvasScale(scale >= 5.25 ? 5.25 : scale + 0.25))
+        }
+      >
         <PlusIcon width="24" height="24" />
       </button>
-      <button onClick={() => dispatch(setCanvasScale(scale - 0.25))}>
+      <button
+        onClick={() =>
+          dispatch(setCanvasScale(scale <= 0.25 ? 0.25 : scale - 0.25))
+        }
+      >
         <DashIcon width="24" height="24" />
       </button>
     </Div>
@@ -48,10 +56,6 @@ const Div = styled.div`
       color: white;
       background-color: black;
     }
-  }
-
-  @media (max-width: 767px) {
-    display: none;
   }
 `;
 
