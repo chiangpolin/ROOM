@@ -1,6 +1,8 @@
 import React, {useState, useEffect, useRef} from 'react';
 import styled from 'styled-components';
 import {useSelector} from 'react-redux';
+import {useDrop} from 'react-dnd';
+import {ItemTypes} from '../../../app/constants/dragTypes.js';
 import * as pixi from '../../../app/utils/pixi.js';
 
 function Canvas() {
@@ -11,6 +13,17 @@ function Canvas() {
   const [pixiFurnitureContainer, setFurnitureContainer] = useState('');
   const [pixiCoveringContainer, setCoveringContainer] = useState('');
   const [pixiFloorContainer, setFloorContainer] = useState('');
+  const [{canDrop, isOver}, drop] = useDrop(() => ({
+    accept: ItemTypes.FURNITURE,
+    drop: (item, monitor) => ({
+      name: 'Canvas',
+      position: monitor.getSourceClientOffset(),
+    }),
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+      canDrop: monitor.canDrop(),
+    }),
+  }));
   const {
     scale,
     instruction,
@@ -210,8 +223,17 @@ function Canvas() {
     }
   }, [scale]);
 
-  return <ProjectCanvasDiv ref={canvasRef} />;
+  return (
+    <Div ref={drop} role={'Canvas'}>
+      <ProjectCanvasDiv ref={canvasRef} />
+    </Div>
+  );
 }
+
+const Div = styled.div`
+  width: 100%;
+  height: 100%;
+`;
 
 const ProjectCanvasDiv = styled.div`
   width: 100%;
