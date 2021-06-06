@@ -7,9 +7,13 @@ function CameraReels(props) {
   return (
     <Button onClick={() => props.handleClickRender(!props.renderIsClicked)}>
       {props.renderIsClicked ? (
-        <EaselIcon width="28" height="28" />
+        <div className="step-5">
+          <EaselIcon width="28" height="28" />
+        </div>
       ) : (
-        <CameraReelsIcon width="28" height="28" />
+        <div className="step-5">
+          <CameraReelsIcon width="28" height="28" />
+        </div>
       )}
     </Button>
   );

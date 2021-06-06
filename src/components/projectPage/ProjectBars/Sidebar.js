@@ -36,36 +36,42 @@ function Sidebar() {
       >
         <InfoCircleIcon width="24" height="24" />
       </SideButton>
-      <SideButton
-        primary={information === 'paint'}
-        onClick={() =>
-          information === 'paint'
-            ? dispatch(setInformation(''))
-            : dispatch(setInformation('paint'))
-        }
-      >
-        <PaletteIcon width="24" height="24" />
-      </SideButton>
-      <SideButton
-        primary={information === 'furniture'}
-        onClick={() =>
-          information === 'furniture'
-            ? dispatch(setInformation(''))
-            : dispatch(setInformation('furniture'))
-        }
-      >
-        <InboxesIcon width="24" height="24" />
-      </SideButton>
-      <SideButton
-        primary={information === 'texture'}
-        onClick={() =>
-          information === 'texture'
-            ? dispatch(setInformation(''))
-            : dispatch(setInformation('texture'))
-        }
-      >
-        <BricksIcon width="24" height="24" />
-      </SideButton>
+      <div className="step-1">
+        <SideButton
+          primary={information === 'furniture'}
+          onClick={() =>
+            information === 'furniture'
+              ? dispatch(setInformation(''))
+              : dispatch(setInformation('furniture'))
+          }
+        >
+          <InboxesIcon width="24" height="24" />
+        </SideButton>
+      </div>
+      <div className="step-2">
+        <SideButton
+          primary={information === 'paint'}
+          onClick={() =>
+            information === 'paint'
+              ? dispatch(setInformation(''))
+              : dispatch(setInformation('paint'))
+          }
+        >
+          <PaletteIcon width="24" height="24" />
+        </SideButton>
+      </div>
+      <div className="step-3">
+        <SideButton
+          primary={information === 'texture'}
+          onClick={() =>
+            information === 'texture'
+              ? dispatch(setInformation(''))
+              : dispatch(setInformation('texture'))
+          }
+        >
+          <BricksIcon width="24" height="24" />
+        </SideButton>
+      </div>
       <SideButton
         primary={information === 'camera'}
         onClick={() =>

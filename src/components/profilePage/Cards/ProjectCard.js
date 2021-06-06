@@ -20,48 +20,52 @@ function ProjectCard(props) {
   const dispatch = useDispatch();
 
   return (
-    <Item>
-      <ImgDiv>
-        <ImgContainer
-          style={
-            props.imageURL
-              ? {backgroundImage: `url(${props.imageURL})`}
-              : {backgroundImage: `url(${blank})`}
-          }
-          onClick={() => history.push(`project/${props.id}`)}
-        ></ImgContainer>
-        <Trash>
-          {props.author_id === id ? (
-            <TrashIcon
-              width="24"
-              height="24"
-              onClick={() => handleClickDelete(dispatch, id, props.id)}
-            ></TrashIcon>
-          ) : (
-            ''
-          )}
-        </Trash>
-        <Share>
-          {props.author_id === id ? (
-            <ShareIcon
-              width="24"
-              height="24"
-              onClick={() => handleToggleShare(dispatch, props)}
-            ></ShareIcon>
-          ) : (
-            ''
-          )}
-        </Share>
-        <Stickies>
-          <StickiesIcon
-            width="24"
-            height="24"
-            onClick={() => handleClickClone(dispatch, id, props.id)}
-          ></StickiesIcon>
-        </Stickies>
-      </ImgDiv>
-      <p>{props.name}</p>
-    </Item>
+    <div className="step-2">
+      <Item>
+        <ImgDiv>
+          <ImgContainer
+            style={
+              props.imageURL
+                ? {backgroundImage: `url(${props.imageURL})`}
+                : {backgroundImage: `url(${blank})`}
+            }
+            onClick={() => history.push(`project/${props.id}`)}
+          ></ImgContainer>
+          <Trash>
+            {props.author_id === id ? (
+              <TrashIcon
+                width="24"
+                height="24"
+                onClick={() => handleClickDelete(dispatch, id, props.id)}
+              ></TrashIcon>
+            ) : (
+              ''
+            )}
+          </Trash>
+          <Share>
+            {props.author_id === id ? (
+              <ShareIcon
+                width="24"
+                height="24"
+                onClick={() => handleToggleShare(dispatch, props)}
+              ></ShareIcon>
+            ) : (
+              ''
+            )}
+          </Share>
+          <Stickies>
+            <div className="step-3">
+              <StickiesIcon
+                width="24"
+                height="24"
+                onClick={() => handleClickClone(dispatch, id, props.id)}
+              ></StickiesIcon>
+            </div>
+          </Stickies>
+        </ImgDiv>
+        <p>{props.name}</p>
+      </Item>
+    </div>
   );
 }
 

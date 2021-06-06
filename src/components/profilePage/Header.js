@@ -5,7 +5,7 @@ import * as theme from '../../app/constants/theme.js';
 import {ReactComponent as LightBulbIcon} from '../../static/images/icons/lightbulb.svg';
 import {ReactComponent as SearchIcon} from '../../static/images/icons/search.svg';
 
-function Header() {
+function Header(props) {
   let history = useHistory();
 
   return (
@@ -21,7 +21,9 @@ function Header() {
           </div>
         </SearchBar>
         <NavLinks>
-          <LightBulbIcon width="24" height="24"></LightBulbIcon>
+          <div onClick={() => props.setRun(true)}>
+            <LightBulbIcon width="24" height="24"></LightBulbIcon>
+          </div>
         </NavLinks>
       </Navbar>
     </Div>
