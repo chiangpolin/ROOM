@@ -4,6 +4,7 @@ const initialState = {
   email: '',
   projects: [],
   sharedProjects: [],
+  searchedProjects: [],
   selectedProject: {
     id: '',
     name: '',
@@ -11,7 +12,7 @@ const initialState = {
     isEditing: false,
     type: '',
   },
-  filter: {shared: true, author: true},
+  filter: {shared: true, author: true, searched: true},
   shareIsToggled: false,
   searchTarget: {id: '', name: '', photo: ''},
   selectedTarget: {id: '', name: '', photo: ''},
@@ -51,12 +52,16 @@ const profileReducer = (state = initialState, action) => {
     case 'SET_SHARED_PROJECTS':
       return {...state, sharedProjects: action.payload.sharedProjects};
 
+    case 'SET_SEARCHED_PROJECTS':
+      return {...state, searchedProjects: action.payload.searchedProjects};
+
     case 'FILTER_PROJECTS':
       return {
         ...state,
         filter: {
-          shared: action.payload.filter.shared,
           author: action.payload.filter.author,
+          shared: action.payload.filter.shared,
+          searched: action.payload.filter.searched,
         },
         selectedProject: {
           id: '',
