@@ -6,6 +6,7 @@ import {
   addCanvasElement,
   selectCanvasElement,
   deselectCanvasElement,
+  setInformation,
 } from '../actions/index.js';
 import * as theme from '../constants/theme.js';
 import {store} from '../store/index.js';
@@ -180,7 +181,6 @@ export function createWall(container, wall) {
       store.dispatch(deselectCanvasElement(selectedGroup));
       this.filters = [outlineFilter()];
     }
-
     store.dispatch(
       selectCanvasElement({
         name: this.name,
@@ -193,6 +193,7 @@ export function createWall(container, wall) {
         file: 'none',
       })
     );
+    store.dispatch(setInformation('paint'));
   }
 }
 
@@ -249,7 +250,7 @@ export async function createCovering(container, covering) {
   //   alpha: 0.6,
   //   matrix: (1, 0, 0, 1, 0, 0),
   // });
-  newPolygon.beginFill(0xfcfaf2, 1);
+  newPolygon.beginFill(0xffffe0, 1);
   newPolygon.drawPolygon(
     ...polygon.map((point) => new PIXI.Point(point.x, point.y))
   );
@@ -282,6 +283,7 @@ export async function createCovering(container, covering) {
         file: 'none',
       })
     );
+    store.dispatch(setInformation('texture'));
   }
 }
 

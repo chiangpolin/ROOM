@@ -21,7 +21,7 @@ export function hemisphereLight(intensity) {
 }
 
 export function perspectiveCamera(sizes) {
-  return new THREE.PerspectiveCamera(50, sizes.width / sizes.height, 0.1, 1000);
+  return new THREE.PerspectiveCamera(50, sizes.width / sizes.height, 0.1, 2000);
 }
 
 export function webGLRenderer() {
