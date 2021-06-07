@@ -34,6 +34,7 @@ function Form(props) {
       return (
         <Div>
           <h1>Sign In</h1>
+          <h2>Room</h2>
           <TPLButtons>
             <Button onClick={() => handleClickGoogleSignIn(dispatch, history)}>
               <GoogleIcon width="16" height="16" />
@@ -95,6 +96,7 @@ function Form(props) {
       return (
         <Div>
           <h1>Sign Up</h1>
+          <h2>Room</h2>
           <TPLButtons>
             <Button onClick={() => handleClickGoogleSignIn(dispatch, history)}>
               <GoogleIcon width="16" height="16" />
@@ -262,6 +264,10 @@ const Div = styled.div`
     color: ${theme.GOFUN};
   }
 
+  h2 {
+    display: none;
+  }
+
   h3 {
     font-family: 'Open Sans', sans-serif;
     font-weight: 600;
@@ -291,6 +297,24 @@ const Div = styled.div`
 
   @media (max-width: 480px) {
     width: 100%;
+  }
+
+  @media (max-width: 375px) {
+    width: 300px;
+    border: none;
+
+    h1 {
+      display: none;
+    }
+
+    h2 {
+      display: block;
+      font-family: 'Varela Round';
+      font-weight: 600;
+      font-size: 36px;
+      margin: 10px 20px 5px;
+      color: ${theme.GOFUN};
+    }
   }
 `;
 

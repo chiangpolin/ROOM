@@ -52,7 +52,8 @@ const Div = styled.header`
   display: flex;
   justify-content: center;
   width: 100%;
-  background-color: ${theme.WHITESMOKE};
+  color: ${theme.SUMI};
+  background-color: transparent;
 `;
 
 const Navbar = styled.div`
@@ -82,6 +83,7 @@ const NavbarBrand = styled.div`
     font-size: 36px;
     border: none;
     cursor: pointer;
+    color: ${theme.SUMI};
     background-color: transparent;
 
     :hover {

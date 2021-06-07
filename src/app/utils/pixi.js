@@ -250,7 +250,7 @@ export async function createCovering(container, covering) {
   //   alpha: 0.6,
   //   matrix: (1, 0, 0, 1, 0, 0),
   // });
-  newPolygon.beginFill(0xffffe0, 1);
+  newPolygon.beginFill(0xfffacd, 1);
   newPolygon.drawPolygon(
     ...polygon.map((point) => new PIXI.Point(point.x, point.y))
   );

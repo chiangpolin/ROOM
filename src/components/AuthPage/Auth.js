@@ -24,7 +24,9 @@ function Auth() {
           <Content>
             <h3>Plan and Draw with Designers</h3>
             <h3>Anywhere, and Everywhere,</h3>
-            <h1>Your ROOM Ideas.</h1>
+            <h1>
+              Your <span>Room</span> Ideas.
+            </h1>
           </Content>
           <Img src={room}></Img>
         </VisionDiv>
@@ -42,6 +44,10 @@ const Main = styled.main`
   justify-content: center;
   height: 100%;
   background-color: ${theme.MIZU};
+
+  @media (max-width: 375px) {
+    width: 100%;
+  }
 `;
 
 const Div = styled.div`
@@ -83,10 +89,20 @@ const Content = styled.div`
     color: #fffffb;
   }
 
+  span {
+    font-family: 'Varela Round';
+    font-weight: 600;
+    font-size: 36px;
+  }
+
   @media (max-width: 768px) {
     h1 {
       font-weight: 400;
     }
+  }
+
+  @media (max-width: 375px) {
+    display: none;
   }
 `;
 
