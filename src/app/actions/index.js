@@ -70,7 +70,7 @@ export const facebookSignIn = () => async (dispatch) => {
 export const signOut = () => async (dispatch) => {
   dispatch(setUser({id: '', name: '', email: ''}));
   auth.signOut();
-  alert('Sign out!');
+  // alert('Sign out!');
 };
 
 export const forgetPassword = (email) => async (dispatch) => {

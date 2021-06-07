@@ -16,22 +16,20 @@ import {ReactComponent as PeopleIcon} from '../../static/images/icons/people.svg
 import {ReactComponent as CompassIcon} from '../../static/images/icons/compass.svg';
 import {Header} from './Header.js';
 import {UserCard} from './Cards/UserCard.js';
+import {NewCard} from './Cards/NewCard.js';
 import {ProjectCard} from './Cards/ProjectCard.js';
 import {Modal} from './Modals/Modal.js';
-import {NewCard} from './Cards/NewCard.js';
+import {UserModal} from './Modals/UserModal.js';
 
 function Profile() {
   const history = useHistory();
   const [run, setRun] = useState(false);
   const [steps, setSteps] = useState(profileSteps);
-  const {
-    id,
-    projects,
-    sharedProjects,
-    searchedProjects,
-    shareIsToggled,
-    filter,
-  } = useSelector((state) => state.profile);
+  const [userIsToggled, handleToggleUser] = useState(false);
+  const [shareIsToggled, handleToggleShare] = useState(false);
+  const {id, projects, sharedProjects, searchedProjects, filter} = useSelector(
+    (state) => state.profile
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -48,7 +46,7 @@ function Profile() {
         callback={(data) => handleJoyrideCallback(data, setRun)}
         styles={{options: defaultOptions}}
       ></Joyride>
-      <Header setRun={setRun}></Header>
+      <Header setRun={setRun} handleToggleUser={handleToggleUser}></Header>
       <Section>
         <SideBar>
           <UserCard />
@@ -139,6 +137,7 @@ function Profile() {
                       name={project.name}
                       author_id={project.author_id}
                       imageURL={project.imageURL}
+                      handleToggleShare={handleToggleShare}
                     ></ProjectCard>
                   ))
                 : ''}
@@ -150,6 +149,7 @@ function Profile() {
                       name={project.name}
                       author_id={project.author_id}
                       imageURL={project.imageURL}
+                      handleToggleShare={handleToggleShare}
                     ></ProjectCard>
                   ))
                 : ''}
@@ -161,6 +161,7 @@ function Profile() {
                       name={project.name}
                       author_id={project.author_id}
                       imageURL={project.imageURL}
+                      handleToggleShare={handleToggleShare}
                     ></ProjectCard>
                   ))
                 : ''}
@@ -168,7 +169,12 @@ function Profile() {
           </div>
         </Content>
       </Section>
-      {shareIsToggled ? <Modal /> : ''}
+      {shareIsToggled ? <Modal handleToggleShare={handleToggleShare} /> : ''}
+      {userIsToggled ? (
+        <UserModal handleToggleUser={handleToggleUser}></UserModal>
+      ) : (
+        ''
+      )}
     </Main>
   ) : (
     <Main></Main>
@@ -222,6 +228,18 @@ const Content = styled.div`
 `;
 
 const AddDiv = styled.div`
+  h1 {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+    font-size: 24px;
+  }
+
+  p {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+  }
+
   @media (max-width: 375px) {
     display: none;
   }
@@ -243,6 +261,12 @@ const AddContainer = styled.div`
 `;
 const MainTitle = styled.div`
   display: flex;
+
+  h1 {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+    font-size: 24px;
+  }
 `;
 
 const MainContainer = styled.div`
@@ -276,13 +300,8 @@ const FilterDiv = styled.div`
     }
   }
 
-  @media (max-width: 375px) {
-    margin: 0 5px 0 auto;
-
-    button {
-      margin: 0 5px;
-      }
-    }
+  @media (max-width: 575px) {
+    display: none;
   }
 `;
 

@@ -100,10 +100,6 @@ const Div = styled.div`
 
   @media (max-width: 1024px) {
   }
-
-  p {
-    margin: 0 15px;
-  }
 `;
 
 const InputDiv = styled.div`
@@ -115,11 +111,16 @@ const InputDiv = styled.div`
 const Input = styled.input`
   width: 100%;
   margin: 0 10px 0 0;
+  background-color: transparent;
+  cursor: pointer;
 `;
 
 const Name = styled.p`
-  font-size: 16px;
+  margin: 0 15px;
   width: 100px;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
 `;
 
 export {Settingsbar};

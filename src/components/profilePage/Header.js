@@ -6,6 +6,7 @@ import {searchProjects} from '../../app/actions/index.js';
 import * as theme from '../../app/constants/theme.js';
 import {ReactComponent as LightBulbIcon} from '../../static/images/icons/lightbulb.svg';
 import {ReactComponent as SearchIcon} from '../../static/images/icons/search.svg';
+import {ReactComponent as PersonIcon} from '../../static/images/icons/person-fill.svg';
 
 function Header(props) {
   let history = useHistory();
@@ -26,9 +27,12 @@ function Header(props) {
           </div>
         </SearchBar>
         <NavLinks>
-          <div onClick={() => props.setRun(true)}>
+          <HintDiv onClick={() => props.setRun(true)}>
             <LightBulbIcon width="24" height="24"></LightBulbIcon>
-          </div>
+          </HintDiv>
+          <UserDiv onClick={() => props.handleToggleUser(true)}>
+            <PersonIcon width="24" height="24"></PersonIcon>
+          </UserDiv>
         </NavLinks>
       </Navbar>
     </Div>
@@ -44,7 +48,7 @@ function handleKeyPress(event, dispatch) {
 const Div = styled.header`
   position: fixed;
   top: 0;
-  z-index: 20;
+  z-index: 30;
   display: flex;
   justify-content: center;
   width: 100%;
@@ -110,19 +114,25 @@ const SearchBar = styled.div`
     padding: 0 0 0 50px;
     width: 100%;
     height: 36px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
     font-size: 16px;
     border: none;
     border-radius: 5px;
     outline: none;
     background-color: ${theme.WHITE};
   }
+
+  @media (max-width: 575px) {
+    display: none;
+  }
 `;
 
 const NavLinks = styled.div`
   position: relative;
   z-index: 10;
-  margin: 0 0 0 15px;
-  height: 60px;
+  margin: 10px 0 0 15px;
+  height: 50px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -146,8 +156,22 @@ const NavLinks = styled.div`
     }
   }
 
-  @media (max-width: 767px) {
+  @media (max-width: 575px) {
+    margin: 10px 0 0 auto;
+  }
+`;
+
+const HintDiv = styled.div`
+  @media (max-width: 575px) {
     display: none;
+  }
+`;
+
+const UserDiv = styled.div`
+  display: none;
+
+  @media (max-width: 1024px) {
+    display: block;
   }
 `;
 

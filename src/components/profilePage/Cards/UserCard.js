@@ -52,7 +52,6 @@ function UserCard() {
         <p
           onClick={() => {
             toggleEditProfile(true);
-            // handleClickUpdate(dispatch, nameInput, id);
           }}
         >
           Edit Profile
@@ -69,11 +68,6 @@ function UserCard() {
 function handleChange(event, setValue) {
   setValue(event.target.value);
 }
-
-// function handleClickUpdate(dispatch, name, user_id) {
-//   dispatch(setProfileName(name));
-//   dispatch(updateProfileName(name, user_id, project_id));
-// }
 
 function handleClickSignOut(dispatch, history) {
   dispatch(signOut());
@@ -100,7 +94,9 @@ const InputDiv = styled.div`
   input {
     padding: 1.5px 30px 1.5px 10px;
     width: 100%;
-    font-size: 24px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+    font-size: 20px;
     border: 1px solid ${theme.SUMI};
     border-radius: 5px;
   }
@@ -123,7 +119,7 @@ const ImgDiv = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 30px 0;
+  margin: 30px 0 15px;
 
   img {
     width: 150px;
@@ -133,13 +129,17 @@ const ImgDiv = styled.div`
 `;
 
 const Content = styled.div`
-  margin: 0 15px;
+  margin: 0 15px 30px;
 
   h3 {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
     font-size: 24px;
   }
 
   p {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
     font-size: 16px;
   }
 `;
@@ -149,6 +149,9 @@ const ActionDiv = styled.div`
   margin: 15px 15px 0;
 
   p {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
     margin: 0 15px;
   }
 

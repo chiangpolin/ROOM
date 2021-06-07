@@ -91,11 +91,16 @@ const InputDiv = styled.div`
   p {
     margin: 0 15px;
     width: 80px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
   }
 
   input {
     padding: 0 10px;
     width: 160px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
     font-size: 14px;
   }
 `;

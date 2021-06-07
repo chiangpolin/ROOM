@@ -34,7 +34,7 @@ function Home() {
                 handleClickUpdate(dispatch, nameInput, author_id, id);
               }}
             >
-              <CheckIcon></CheckIcon>
+              <CheckIcon width="24" height="24"></CheckIcon>
             </button>
           </InputDiv>
         ) : (
@@ -67,7 +67,17 @@ const Div = styled.div`
   border-radius: 5px;
   background-color: ${theme.WHITE};
 
+  h3 {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 20px;
+  }
+
   p {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
     margin: 0 15px;
   }
 
@@ -79,13 +89,8 @@ const Div = styled.div`
     background-color: transparent;
 
     h1 {
-      font-size: 28px;
-      line-height: 28px;
-    }
-
-    h3 {
-      font-size: 20px;
-      line-height: 20px;
+      font-size: 32px;
+      line-height: 32px;
     }
 
     :hover {
@@ -102,14 +107,12 @@ const Div = styled.div`
     border-radius: 0;
     box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
 
-    p {
+    h3 {
       display: none;
     }
 
-    button {
-      h3 {
-        display: none;
-      }
+    p {
+      display: none;
     }
   }
 `;
@@ -122,6 +125,14 @@ const NameDiv = styled.div`
 
 const InputDiv = styled.div`
   position: relative;
+
+  input {
+    padding: 0 10px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    font-size: 20px;
+    line-height: 20px;
+  }
 
   svg {
     position: absolute;

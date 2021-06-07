@@ -67,9 +67,14 @@ const ImgDiv = styled.div`
 
 const UserDiv = styled.div`
   h3 {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
   }
 
   p {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
     font-size: 14px;
     overflow-wrap: break-word;
   }
@@ -77,8 +82,10 @@ const UserDiv = styled.div`
 
 const SignOutDiv = styled.div`
   display: flex;
-  font-family: 'Varela Round';
-  font-weight: 600;
+  align-items: center;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
   margin: 15px 0;
   border: none;
   cursor: pointer;

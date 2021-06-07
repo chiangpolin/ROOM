@@ -181,7 +181,6 @@ function handleChange(event, setValue) {
 
 async function handleClickSignIn(dispatch, history, email, password) {
   const credential = await dispatch(signIn(email, password));
-  console.log(credential.user);
   if (credential.user.uid) {
     history.push('/profile');
   } else {
@@ -258,13 +257,15 @@ const Div = styled.div`
   h1 {
     font-family: 'Open Sans', sans-serif;
     font-weight: 600;
+    font-size: 36px;
     margin: 10px 20px 5px;
     color: ${theme.GOFUN};
   }
 
   h3 {
     font-family: 'Open Sans', sans-serif;
-    font-weight: 400;
+    font-weight: 600;
+    font-size: 16px;
     margin: 0 20px;
     color: ${theme.GOFUN};
   }
@@ -272,6 +273,7 @@ const Div = styled.div`
   p {
     font-family: 'Open Sans', sans-serif;
     font-weight: 400;
+    font-size: 16px;
     margin: 0 5px 0;
   }
 
@@ -311,6 +313,8 @@ const Input = styled.input`
   height: 30px;
   border: 1px solid ${theme.GOFUN};
   border-radius: 5px;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
   font-size: 16px;
   color: ${theme.GOFUN};
   background-color: transparent;
@@ -339,6 +343,8 @@ const Button = styled.button`
   height: 30px;
   border: 1px solid ${theme.GOFUN};
   border-radius: 5px;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
   font-size: 16px;
   color: ${theme.GOFUN};
   background-color: transparent;

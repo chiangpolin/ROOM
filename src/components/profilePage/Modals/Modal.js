@@ -1,27 +1,22 @@
 import React, {useState} from 'react';
-import styled, {css} from 'styled-components';
+import styled from 'styled-components';
 import {useSelector, useDispatch} from 'react-redux';
-import {
-  closeShare,
-  fetchSearchTarget,
-  selectSearchTarget,
-  shareProject,
-} from '../../../app/actions/index.js';
+import {fetchSearchTarget, shareProject} from '../../../app/actions/index.js';
+import * as theme from '../../../app/constants/theme.js';
 import {ReactComponent as X} from '../../../static/images/icons/x.svg';
 import {ReactComponent as SearchIcon} from '../../../static/images/icons/search.svg';
+import avatar from '../../../static/images/backgrounds/profile-avatar.png';
 
-function Modal() {
+function Modal(props) {
   const [email, setEmail] = useState('');
-  const {searchTarget, selectedTarget, selectedProject} = useSelector(
-    (state) => state.profile
-  );
+  const {searchTarget, selectedProject} = useSelector((state) => state.profile);
   const dispatch = useDispatch();
 
   return (
     <Div>
       <Mask></Mask>
       <ModalBody>
-        <Button onClick={() => handleClickX(dispatch)}>
+        <Button onClick={() => handleClickX(props)}>
           <X width="24" height="24" />
         </Button>
         <Content>
@@ -36,24 +31,24 @@ function Modal() {
             </SearchButton>
           </SearchBar>
           {searchTarget.id ? (
-            <Target
-              primary={searchTarget.id === selectedTarget.id}
-              onClick={() => handleSelect(dispatch, searchTarget)}
-            >
-              <TargetImg></TargetImg>
-              <TargetName>{searchTarget.name}</TargetName>
+            <Target>
+              <img src={avatar}></img>
+              <p>{searchTarget.name}</p>
+              <button
+                onClick={() =>
+                  handleClickShare(
+                    dispatch,
+                    selectedProject.id,
+                    searchTarget.id
+                  )
+                }
+              >
+                Share
+              </button>
             </Target>
           ) : (
             ''
           )}
-          <ShareButton
-            onClick={() =>
-              handleClickShare(dispatch, selectedProject.id, selectedTarget.id)
-            }
-            disabled={selectedTarget.id === ''}
-          >
-            Share
-          </ShareButton>
         </Content>
       </ModalBody>
     </Div>
@@ -72,17 +67,13 @@ function handleClickShare(dispatch, project_id, target_id) {
   dispatch(shareProject(project_id, target_id));
 }
 
-function handleClickX(dispatch) {
-  dispatch(closeShare());
-}
-
-function handleSelect(dispatch, searchTarget) {
-  dispatch(selectSearchTarget(searchTarget));
+function handleClickX(props) {
+  props.handleToggleShare(false);
 }
 
 const Div = styled.div`
   position: fixed;
-  z-index: 30;
+  z-index: 40;
   width: 100%;
   height: 100%;
 `;
@@ -100,10 +91,25 @@ const ModalBody = styled.div`
   top: 50%;
   left: 50%;
   transform: translate(-50%, -50%);
-  width: 30%;
+  width: 40%;
   height: 60%;
   background-color: white;
+  border-radius: 5px;
   opacity: 1;
+
+  @media (max-width: 1023px) {
+    width: 50%;
+  }
+
+  @media (max-width: 767px) {
+    width: 80%;
+  }
+
+  @media (max-width: 375px) {
+    width: 100%;
+    height: 100%;
+    border-radius: 0;
+  }
 `;
 
 const Button = styled.button`
@@ -132,43 +138,54 @@ const SearchButton = styled.button`
 `;
 
 const Input = styled.input`
+  margin: 0 5px 0 0;
   padding: 0 10px;
   width: 100%;
   font-size: 16px;
   line-height: 24px;
   align-text: center;
+  border: 1px solid ${theme.SUMI}
+  border-radius: 5px;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+
+  :focus{
+    outline: none;
+  }
 `;
 
 const Target = styled.div`
   display: flex;
   align-items: center;
   margin: 15px 0;
-  :hover {
-    border: 1px solid #1c1c1c;
+
+  img {
+    width: 40px;
+    height: 40px;
+    border-radius: 20px;
+    background-color: ${theme.WHITESMOKE};
+  }
+
+  p {
+    margin: 0 0 0 15px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+  }
+
+  button {
+    margin: 0 0 0 auto;
+    padding: 0 5px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    border: 1px solid ${theme.RURI};
+    border-radius: 5px;
+    color: ${theme.WHITE};
+    background-color: ${theme.RURI};
     cursor: pointer;
   }
-  ${(props) =>
-    props.primary &&
-    css`
-      border: 1px solid #1c1c1c;
-    `}
-`;
-
-const TargetImg = styled.img`
-  width: 40px;
-  height: 40px;
-  border-radius: 20px;
-  background-color: pink;
-`;
-
-const TargetName = styled.p`
-  margin: 0 0 0 15px;
-  font-size: 16px;
-`;
-
-const ShareButton = styled.button`
-  width: 100%;
-  margin: auto 0 0;
 `;
 
 export {Modal};

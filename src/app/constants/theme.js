@@ -5,3 +5,7 @@ export const RURIKON = '#0B346E';
 export const WHITE = '#FFFFFF';
 export const WHITESMOKE = '#F5F5F5';
 export const RURI = '#005caf';
+
+export const PRIMARY = '#0275d8';
+export const DANGER = '#d9534f';
+export const SUCCESS = '#5cb85c';

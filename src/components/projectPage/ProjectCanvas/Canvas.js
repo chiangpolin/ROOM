@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import {useSelector} from 'react-redux';
 import {useDrop} from 'react-dnd';
 import {ItemTypes} from '../../../app/constants/dragTypes.js';
+import * as theme from '../../../app/constants/theme.js';
 import * as pixi from '../../../app/utils/pixi.js';
 
 function Canvas() {
@@ -61,8 +62,10 @@ function Canvas() {
     const furnitureContainer = pixi.initContainer(app);
     setFurnitureContainer(furnitureContainer);
 
+    const drawingContainer = pixi.initContainer(app);
+
     // Main
-    pixi.createBackground(backgroundContainer, tool);
+    pixi.createBackground(backgroundContainer, drawingContainer, tool);
     for (let i = 0; i < d_floors.length; i++) {
       if (d_floors[i].method !== 'delete') {
         pixi.createFloor(floorContainer, d_floors[i]);
@@ -270,7 +273,7 @@ const Div = styled.div`
 const ProjectCanvasDiv = styled.div`
   width: 100%;
   height: 100%;
-  background-color: lightgrey;
+  background-color: ${theme.WHITE};
 `;
 
 export {Canvas};

@@ -11,7 +11,7 @@ import * as theme from '../constants/theme.js';
 import {store} from '../store/index.js';
 
 export function outlineFilter() {
-  return new OutlineFilter(2, 0xff0000);
+  return new OutlineFilter(2, 0xffc408);
 }
 
 export function resizeCanvas(canvasRef, app, sizes) {
@@ -237,11 +237,19 @@ export function createOpening(container, obj) {
   }
 }
 
-export function createCovering(container, covering) {
+export async function createCovering(container, covering) {
   const polygon = covering.graphic;
   const newCovering = new PIXI.Container();
   const newPolygon = new PIXI.Graphics();
-  newPolygon.beginFill(0xffff00);
+  // const jpgPath = await import(`../../static/images/texture/kitchen-wood.jpg`);
+  // const texture = PIXI.Texture.from(jpgPath.default);
+  // newPolygon.beginTextureFill({
+  //   texture: texture,
+  //   color: 0xffffff,
+  //   alpha: 0.6,
+  //   matrix: (1, 0, 0, 1, 0, 0),
+  // });
+  newPolygon.beginFill(0xfcfaf2, 1);
   newPolygon.drawPolygon(
     ...polygon.map((point) => new PIXI.Point(point.x, point.y))
   );
@@ -315,30 +323,30 @@ export function createFloor(container, floor) {
   }
 }
 
-export function createBackground(container, tool) {
+export function createBackground(backgroundContainer, drawingContainer, tool) {
   const dots = [];
   const background = new PIXI.Graphics();
-  background.beginFill(0x828282, 0.1);
+  background.beginFill(0xd3d3d3, 0.6);
   background.drawRect(-1000, -1000, 2000, 2000);
   background.endFill();
   background.interactive = true;
-  container.addChild(background);
+  backgroundContainer.addChild(background);
 
   for (let i = -1000; i <= 1000; i += 100) {
     const gridLine = new PIXI.Graphics();
-    gridLine.lineStyle(2, 0x787878, 0.1);
+    gridLine.lineStyle(2, 0xd3d3d3, 0.7);
     gridLine.moveTo(i, -1000);
     gridLine.lineTo(i, 1000);
     gridLine.endFill();
-    container.addChild(gridLine);
+    backgroundContainer.addChild(gridLine);
   }
   for (let i = -1000; i <= 1000; i += 100) {
     const gridLine = new PIXI.Graphics();
-    gridLine.lineStyle(2, 0x787878, 0.2);
+    gridLine.lineStyle(2, 0xd3d3d3, 0.7);
     gridLine.moveTo(-1000, i);
     gridLine.lineTo(1000, i);
     gridLine.endFill();
-    container.addChild(gridLine);
+    backgroundContainer.addChild(gridLine);
   }
 
   // create line
@@ -559,7 +567,7 @@ export function createBackground(container, tool) {
           previewLine.clear();
           previewLine.lineStyle({
             width: 20,
-            color: 0x666666,
+            color: 0x005caf,
             alignment: 0.5,
             alpha: 0.5,
             join: 'miter',
@@ -572,13 +580,13 @@ export function createBackground(container, tool) {
             .lineTo(position.x, position.y)
             .lineTo(background.startPoint.x, position.y)
             .closePath();
-          container.addChild(previewLine);
+          drawingContainer.addChild(previewLine);
           break;
         case 'polygon-frame':
           previewLine.clear();
           previewLine.lineStyle({
             width: 15,
-            color: 0x000000,
+            color: 0x005caf,
             alignment: 0.5,
             alpha: 0.5,
             join: 'miter',
@@ -591,13 +599,13 @@ export function createBackground(container, tool) {
           }
           previewLine.lineTo(position.x, position.y);
           previewLine.closePath();
-          container.addChild(previewLine);
+          drawingContainer.addChild(previewLine);
           break;
         case 'line':
           previewLine.clear();
           previewLine.lineStyle({
             width: 15,
-            color: 0x000000,
+            color: 0x005caf,
             alignment: 0.5,
             alpha: 0.5,
             join: 'miter',
@@ -606,13 +614,13 @@ export function createBackground(container, tool) {
           });
           previewLine.moveTo(background.startPoint.x, background.startPoint.y);
           previewLine.lineTo(position.x, position.y);
-          container.addChild(previewLine);
+          drawingContainer.addChild(previewLine);
           break;
         case 'polyline':
           previewLine.clear();
           previewLine.lineStyle({
             width: 15,
-            color: 0x000000,
+            color: 0x005caf,
             alignment: 0.5,
             alpha: 0.5,
             join: 'miter',
@@ -624,11 +632,11 @@ export function createBackground(container, tool) {
             previewLine.lineTo(dots[i].x, dots[i].y);
           }
           previewLine.lineTo(position.x, position.y);
-          container.addChild(previewLine);
+          drawingContainer.addChild(previewLine);
           break;
         case 'filled-rectangle':
           previewPolygon.clear();
-          previewPolygon.beginFill(0xff0000);
+          previewPolygon.beginFill(0x005caf);
           previewPolygon.drawPolygon(
             new PIXI.Point(background.startPoint.x, background.startPoint.y),
             new PIXI.Point(background.startPoint.x, position.y),
@@ -636,21 +644,21 @@ export function createBackground(container, tool) {
             new PIXI.Point(position.x, background.startPoint.y)
           );
           previewPolygon.endFill();
-          container.addChild(previewPolygon);
+          drawingContainer.addChild(previewPolygon);
           break;
         case 'filled-polygon':
           previewPolygon.clear();
-          previewPolygon.beginFill(0xff0000);
+          previewPolygon.beginFill(0x005caf);
           previewPolygon.drawPolygon(
             ...drawingPolygon.map((point) => new PIXI.Point(point.x, point.y)),
             new PIXI.Point(position.x, position.y)
           );
           previewPolygon.endFill();
-          container.addChild(previewPolygon);
+          drawingContainer.addChild(previewPolygon);
           break;
         case 'rectangle':
           previewPolygon.clear();
-          previewPolygon.beginFill(0xff0000);
+          previewPolygon.beginFill(0x005caf);
           previewPolygon.drawPolygon(
             new PIXI.Point(background.startPoint.x, background.startPoint.y),
             new PIXI.Point(background.startPoint.x, position.y),
@@ -658,17 +666,17 @@ export function createBackground(container, tool) {
             new PIXI.Point(position.x, background.startPoint.y)
           );
           previewPolygon.endFill();
-          container.addChild(previewPolygon);
+          drawingContainer.addChild(previewPolygon);
           break;
         case 'polygon':
           previewPolygon.clear();
-          previewPolygon.beginFill(0xff0000);
+          previewPolygon.beginFill(0x005caf);
           previewPolygon.drawPolygon(
             ...drawingPolygon.map((point) => new PIXI.Point(point.x, point.y)),
             new PIXI.Point(position.x, position.y)
           );
           previewPolygon.endFill();
-          container.addChild(previewPolygon);
+          drawingContainer.addChild(previewPolygon);
           break;
         default:
       }

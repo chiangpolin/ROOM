@@ -72,12 +72,14 @@ const Content = styled.div`
   h1 {
     font-family: 'Open Sans', sans-serif;
     font-weight: 600;
+    font-size: 36px;
     color: #fffffb;
   }
 
   h3 {
     font-family: 'Open Sans', sans-serif;
     font-weight: 400;
+    font-size: 24px;
     color: #fffffb;
   }
 

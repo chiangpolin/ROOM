@@ -30,9 +30,6 @@ const Div = styled.div`
   box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
   background-color: ${theme.WHITE};
   overflow-y: scroll;
-
-  @media (max-width: 1024px) {
-  }
 `;
 
 const Container = styled.div`

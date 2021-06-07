@@ -25,7 +25,7 @@ function Paintsbar() {
             }
           >
             <img style={{backgroundColor: `${paint.code}`}}></img>
-            <p>{paint.name}</p>
+            <h3>{paint.name}</h3>
             <p>{paint.code}</p>
           </Item>
         ))}
@@ -65,14 +65,14 @@ const Item = styled.button`
   border: 1px solid transparent;
 
   :hover {
-    border: 1px solid #1c1c1c;
+    border: 1px solid ${theme.SUMI};
     cursor: pointer;
   }
 
   ${(props) =>
     props.primary &&
     css`
-      border: 1px solid #1c1c1c;
+      border: 1px solid ${theme.SUMI};
     `}
 
   img {
@@ -80,7 +80,15 @@ const Item = styled.button`
     height: 80px;
   }
 
+  h3 {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+  }
+
   p {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 300;
     font-size: 14px;
   }
 `;
