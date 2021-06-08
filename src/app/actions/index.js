@@ -182,7 +182,28 @@ export const fetchSearchTarget = (email) => async (dispatch) => {
   );
 };
 
-export const createProject = (user_id) => async (dispatch) => {
+export const createProject = (user_id, title) => async (dispatch) => {
+  let newSettings;
+  switch (title) {
+    case 'New Project':
+      newSettings = defaultSettings.newProject;
+      break;
+    case 'Single Bedroom':
+      newSettings = defaultSettings.classic;
+      break;
+    case 'Owners Suite':
+      newSettings = defaultSettings.ownersSuite;
+      break;
+    case 'Jungle':
+      newSettings = defaultSettings.jungle;
+      break;
+    case 'Living Room':
+      newSettings = defaultSettings.livingRoom;
+      break;
+    default:
+      newSettings = defaultSettings.newProject;
+  }
+
   const id = await firestore.postProject({
     name: 'Untitled',
     id: user_id,
@@ -190,28 +211,28 @@ export const createProject = (user_id) => async (dispatch) => {
 
   const promises = [];
 
-  for (let i = 0; i < defaultSettings.cameras.length; i++) {
-    promises.push(firestore.postCamera(id, defaultSettings.cameras[i]));
+  for (let i = 0; i < newSettings.cameras.length; i++) {
+    promises.push(firestore.postCamera(id, newSettings.cameras[i]));
   }
 
-  for (let i = 0; i < defaultSettings.furnitures.length; i++) {
-    promises.push(firestore.postFurniture(id, defaultSettings.furnitures[i]));
+  for (let i = 0; i < newSettings.furnitures.length; i++) {
+    promises.push(firestore.postFurniture(id, newSettings.furnitures[i]));
   }
 
-  for (let i = 0; i < defaultSettings.walls.length; i++) {
-    promises.push(firestore.postWall(id, defaultSettings.walls[i]));
+  for (let i = 0; i < newSettings.walls.length; i++) {
+    promises.push(firestore.postWall(id, newSettings.walls[i]));
   }
 
-  for (let i = 0; i < defaultSettings.openings.length; i++) {
-    promises.push(firestore.postOpening(id, defaultSettings.openings[i]));
+  for (let i = 0; i < newSettings.openings.length; i++) {
+    promises.push(firestore.postOpening(id, newSettings.openings[i]));
   }
 
-  for (let i = 0; i < defaultSettings.coverings.length; i++) {
-    promises.push(firestore.postCovering(id, defaultSettings.coverings[i]));
+  for (let i = 0; i < newSettings.coverings.length; i++) {
+    promises.push(firestore.postCovering(id, newSettings.coverings[i]));
   }
 
-  for (let i = 0; i < defaultSettings.floors.length; i++) {
-    promises.push(firestore.postFloor(id, defaultSettings.floors[i]));
+  for (let i = 0; i < newSettings.floors.length; i++) {
+    promises.push(firestore.postFloor(id, newSettings.floors[i]));
   }
 
   await Promise.all(promises);

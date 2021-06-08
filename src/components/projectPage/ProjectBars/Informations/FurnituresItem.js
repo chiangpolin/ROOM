@@ -4,7 +4,7 @@ import {useSelector, useDispatch} from 'react-redux';
 import {useDrag} from 'react-dnd';
 import {addCanvasElement} from '../../../../app/actions/index.js';
 import {ItemTypes} from '../../../../app/constants/dragTypes.js';
-import avatar from '../../../../static/images/backgrounds/profile-avatar.png';
+import noimage from '../../../../static/images/backgrounds/noimage.png';
 
 function FurnituresItem(props) {
   const dispatch = useDispatch();
@@ -38,7 +38,7 @@ function FurnituresItem(props) {
   return (
     <Item>
       <img
-        src={avatar}
+        src={noimage}
         ref={drag}
         style={{opacity: isDragging ? 0.5 : 1}}
       ></img>

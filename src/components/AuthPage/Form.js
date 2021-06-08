@@ -254,14 +254,14 @@ const Div = styled.div`
   height: 90%;
   border: 1px solid ${theme.GOFUN};
   border-radius: 10px;
-  background-color: transparent;
+  background-color: ${theme.GOFUN};
 
   h1 {
     font-family: 'Open Sans', sans-serif;
     font-weight: 600;
     font-size: 36px;
     margin: 10px 20px 5px;
-    color: ${theme.GOFUN};
+    color: ${theme.MIZU};
   }
 
   h2 {
@@ -273,7 +273,7 @@ const Div = styled.div`
     font-weight: 600;
     font-size: 16px;
     margin: 0 20px;
-    color: ${theme.GOFUN};
+    color: ${theme.MIZU};
   }
 
   p {
@@ -285,7 +285,7 @@ const Div = styled.div`
 
   hr {
     margin: 0 15px;
-    border: 1px solid ${theme.GOFUN};
+    border: 1px solid ${theme.MIZU};
   }
 
   @media (max-width: 768px) {
@@ -313,7 +313,7 @@ const Div = styled.div`
       font-weight: 600;
       font-size: 36px;
       margin: 10px 20px 5px;
-      color: ${theme.GOFUN};
+      color: ${theme.MIZU};
     }
   }
 `;
@@ -322,7 +322,7 @@ const InputDiv = styled.div`
   position: relative;
   margin: 5px 15px 5px;
   font-size: 16px;
-  color: ${theme.GOFUN};
+  color: ${theme.MIZU};
 
   div {
     position: absolute;
@@ -335,12 +335,12 @@ const Input = styled.input`
   padding: 0 0 0 50px;
   width: 100%;
   height: 30px;
-  border: 1px solid ${theme.GOFUN};
+  border: 1px solid ${theme.MIZU};
   border-radius: 5px;
   font-family: 'Open Sans', sans-serif;
   font-weight: 400;
   font-size: 16px;
-  color: ${theme.GOFUN};
+  color: ${theme.MIZU};
   background-color: transparent;
 
   :focus {
@@ -348,7 +348,7 @@ const Input = styled.input`
   }
 
   ::placeholder {
-    color: ${theme.GOFUN};
+    color: ${theme.MIZU};
   }
 
   ${(props) =>
@@ -365,12 +365,12 @@ const Button = styled.button`
   margin: 0 0 10px;
   width: 100%;
   height: 30px;
-  border: 1px solid ${theme.GOFUN};
+  border: 1px solid ${theme.MIZU};
   border-radius: 5px;
   font-family: 'Open Sans', sans-serif;
   font-weight: 400;
   font-size: 16px;
-  color: ${theme.GOFUN};
+  color: ${theme.MIZU};
   background-color: transparent;
 
   svg {
@@ -379,16 +379,16 @@ const Button = styled.button`
 
   :hover {
     cursor: pointer;
-    color: #81c7d4;
-    background-color: #fffffb;
+    color: ${theme.GOFUN};
+    background-color: ${theme.MIZU};
   }
 
   ${(props) =>
     props.primary &&
     css`
       margin: 10px 0 10px;
-      color: ${theme.MIZU};
-      background-color: ${theme.GOFUN};
+      color: ${theme.GOFUN};
+      background-color: ${theme.MIZU};
     `}
 `;
 

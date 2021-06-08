@@ -3,22 +3,18 @@
 <svg version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 30 30" style="enable-background:new 0 0 30 30;" xml:space="preserve">
 <style type="text/css">
-	.st0{fill:none;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;}
+	.st0{fill:#999999;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;}
+	.st1{fill:#CCCCCC;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;}
+	.st2{fill:#C7B299;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;}
 </style>
-<line class="st0" x1="0.5" y1="29.5" x2="29.5" y2="29.5"/>
-<line class="st0" x1="17.01" y1="17.01" x2="27.5" y2="27.5"/>
-<line class="st0" x1="27.5" y1="27.5" x2="27.5" y2="2.5"/>
-<line class="st0" x1="17.01" y1="12.99" x2="27.5" y2="2.5"/>
-<line class="st0" x1="12.99" y1="12.99" x2="17.01" y2="12.99"/>
-<line class="st0" x1="27.5" y1="2.5" x2="2.5" y2="2.5"/>
-<line class="st0" x1="12.99" y1="12.99" x2="2.5" y2="2.5"/>
-<line class="st0" x1="12.99" y1="17.01" x2="2.5" y2="27.5"/>
-<line class="st0" x1="2.5" y1="2.5" x2="2.5" y2="27.5"/>
-<line class="st0" x1="12.99" y1="17.01" x2="12.99" y2="12.99"/>
-<line class="st0" x1="17.01" y1="17.01" x2="12.99" y2="17.01"/>
-<line class="st0" x1="17.01" y1="12.99" x2="17.01" y2="17.01"/>
-<line class="st0" x1="0.5" y1="0.5" x2="0.5" y2="29.5"/>
-<line class="st0" x1="29.5" y1="0.5" x2="0.5" y2="0.5"/>
-<line class="st0" x1="29.5" y1="29.5" x2="29.5" y2="0.5"/>
-<line class="st0" x1="2.5" y1="27.5" x2="27.5" y2="27.5"/>
+<rect x="0.5" y="0.5" class="st0" width="29" height="29"/>
+<rect x="2.5" y="2.5" class="st1" width="25" height="25"/>
+<line class="st2" x1="17.01" y1="17.01" x2="27.5" y2="27.5"/>
+<line class="st2" x1="17.01" y1="12.99" x2="27.5" y2="2.5"/>
+<line class="st2" x1="12.99" y1="12.99" x2="17.01" y2="12.99"/>
+<line class="st2" x1="12.99" y1="12.99" x2="2.5" y2="2.5"/>
+<line class="st2" x1="12.99" y1="17.01" x2="2.5" y2="27.5"/>
+<line class="st2" x1="12.99" y1="17.01" x2="12.99" y2="12.99"/>
+<line class="st2" x1="17.01" y1="17.01" x2="12.99" y2="17.01"/>
+<line class="st2" x1="17.01" y1="12.99" x2="17.01" y2="17.01"/>
 </svg>

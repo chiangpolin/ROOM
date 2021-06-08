@@ -11,8 +11,9 @@ function NewCard(props) {
   return (
     <Item>
       <ItemImg
+        src={props.imageURL}
         onClick={() => {
-          dispatch(createProject(id));
+          dispatch(createProject(id, props.name));
         }}
       />
       <p>{props.name}</p>
@@ -36,7 +37,6 @@ const Item = styled.div`
 
 const ItemImg = styled.img`
   width: 100%;
-  height: 100px;
   opacity: 0.8;
   background-color: #bdc0ba;
   border-top-left-radius: 10px;

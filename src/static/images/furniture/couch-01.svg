@@ -3,8 +3,13 @@
 <svg version="1.1" id="圖層_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px"
 	 viewBox="0 0 215 65" style="enable-background:new 0 0 215 65;" xml:space="preserve">
 <style type="text/css">
-	.st0{fill:none;stroke:#000000;stroke-width:5;stroke-linecap:round;stroke-linejoin:round;}
+	.st0{fill:#666666;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;}
+	.st1{fill:#4D4D4D;stroke:#000000;stroke-linecap:round;stroke-linejoin:round;}
 </style>
+<rect x="14.5" y="21.5" class="st0" width="187" height="43"/>
+<rect y="-0.21" class="st1" width="14" height="65"/>
+<polyline class="st1" points="201.93,-0.21 215,-0.21 215,64.79 201.93,64.79 201,64.79 201,21.5 "/>
+<rect x="6.5" y="-0.5" class="st1" width="201" height="22"/>
 <line class="st0" x1="74" y1="12.44" x2="141" y2="12.44"/>
 <line class="st0" x1="73.5" y1="12.44" x2="73.5" y2="4.72"/>
 <line class="st0" x1="7.5" y1="12.44" x2="7.5" y2="4.72"/>
@@ -24,19 +29,12 @@
 <line class="st0" x1="74" y1="64.79" x2="73.5" y2="64.79"/>
 <line class="st0" x1="200.5" y1="21.5" x2="200.5" y2="64.79"/>
 <line class="st0" x1="207.5" y1="64.79" x2="200.5" y2="64.79"/>
-<line class="st0" x1="207.5" y1="21.5" x2="207.5" y2="64.79"/>
 <line class="st0" x1="207.5" y1="21.5" x2="200.5" y2="21.5"/>
 <line class="st0" x1="141" y1="64.79" x2="74" y2="64.79"/>
 <line class="st0" x1="74" y1="64.79" x2="74" y2="21.5"/>
 <line class="st0" x1="208" y1="6.78" x2="208" y2="64.79"/>
-<line class="st0" x1="0" y1="64.79" x2="7" y2="64.79"/>
-<line class="st0" x1="0" y1="-0.21" x2="0" y2="64.79"/>
-<line class="st0" x1="0" y1="-0.21" x2="7" y2="-0.21"/>
 <line class="st0" x1="7" y1="-0.21" x2="208" y2="-0.21"/>
 <line class="st0" x1="208" y1="6.79" x2="208" y2="-0.21"/>
-<line class="st0" x1="215" y1="64.79" x2="208" y2="64.79"/>
-<line class="st0" x1="215" y1="-0.21" x2="215" y2="64.79"/>
-<line class="st0" x1="215" y1="-0.21" x2="208" y2="-0.21"/>
 <line class="st0" x1="73.5" y1="21.5" x2="73.5" y2="64.79"/>
 <line class="st0" x1="73.5" y1="12.44" x2="73.5" y2="21.5"/>
 <line class="st0" x1="7.5" y1="21.5" x2="7.5" y2="12.44"/>
@@ -56,5 +54,4 @@
 <line class="st0" x1="74" y1="21.5" x2="74" y2="12.44"/>
 <line class="st0" x1="141" y1="21.5" x2="74" y2="21.5"/>
 <line class="st0" x1="74" y1="4.72" x2="141" y2="4.72"/>
-<line class="st0" x1="7" y1="-0.21" x2="7" y2="64.79"/>
 </svg>

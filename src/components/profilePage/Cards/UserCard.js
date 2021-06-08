@@ -77,6 +77,7 @@ function handleClickSignOut(dispatch, history) {
 const Div = styled.div`
   position: sticky;
   top: 90px;
+  margin: 30px 0 0;
   padding: 15px;
   width: 300px;
   height: 390px;

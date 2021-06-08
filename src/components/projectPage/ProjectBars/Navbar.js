@@ -71,9 +71,13 @@ function Navbar(props) {
         <div onClick={() => props.setRun(true)}>
           <LightbulbIcon width="24" height="24"></LightbulbIcon>
         </div>
-        <div onClick={() => props.handleClickUser(!props.userIsClicked)}>
-          <PersonIcon width="24" height="24"></PersonIcon>
-        </div>
+        {user_id ? (
+          <div onClick={() => props.handleClickUser(!props.userIsClicked)}>
+            <PersonIcon width="24" height="24"></PersonIcon>
+          </div>
+        ) : (
+          ''
+        )}
       </div>
     </Div>
   );
