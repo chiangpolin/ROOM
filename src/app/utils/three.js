@@ -1,10 +1,10 @@
-import {store} from '../store/index.js';
-import {setRenderingDataURL} from '../actions/index.js';
 import * as THREE from 'three';
 import {CSG} from 'three-csg-ts';
 import {GLTFLoader} from 'three/examples/jsm/loaders/GLTFLoader.js';
 import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
+import {setRenderingDataURL} from '../actions/index.js';
 import {RGBToHex} from '../utils/general.js';
+import {store} from '../store/index.js';
 
 export function scene(color) {
   const scene = new THREE.Scene();
@@ -21,7 +21,7 @@ export function hemisphereLight(intensity) {
 }
 
 export function perspectiveCamera(sizes) {
-  return new THREE.PerspectiveCamera(50, sizes.width / sizes.height, 0.1, 1000);
+  return new THREE.PerspectiveCamera(50, sizes.width / sizes.height, 0.1, 2000);
 }
 
 export function webGLRenderer() {

@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 import {useHistory} from 'react-router-dom';
 import {useSelector, useDispatch} from 'react-redux';
 import Joyride from 'react-joyride';
@@ -16,22 +16,25 @@ import {ReactComponent as PeopleIcon} from '../../static/images/icons/people.svg
 import {ReactComponent as CompassIcon} from '../../static/images/icons/compass.svg';
 import {Header} from './Header.js';
 import {UserCard} from './Cards/UserCard.js';
+import {NewCard} from './Cards/NewCard.js';
 import {ProjectCard} from './Cards/ProjectCard.js';
 import {Modal} from './Modals/Modal.js';
-import {NewCard} from './Cards/NewCard.js';
+import {UserModal} from './Modals/UserModal.js';
+import newroom from '../../static/images/backgrounds/new.jpg';
+import jungle from '../../static/images/backgrounds/jungle.jpg';
+import living from '../../static/images/backgrounds/living.jpg';
+import single from '../../static/images/backgrounds/single.jpg';
+import suite from '../../static/images/backgrounds/suite.jpg';
 
 function Profile() {
   const history = useHistory();
   const [run, setRun] = useState(false);
   const [steps, setSteps] = useState(profileSteps);
-  const {
-    id,
-    projects,
-    sharedProjects,
-    searchedProjects,
-    shareIsToggled,
-    filter,
-  } = useSelector((state) => state.profile);
+  const [userIsToggled, handleToggleUser] = useState(false);
+  const [shareIsToggled, handleToggleShare] = useState(false);
+  const {id, projects, sharedProjects, searchedProjects, filter} = useSelector(
+    (state) => state.profile
+  );
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -48,7 +51,7 @@ function Profile() {
         callback={(data) => handleJoyrideCallback(data, setRun)}
         styles={{options: defaultOptions}}
       ></Joyride>
-      <Header setRun={setRun}></Header>
+      <Header setRun={setRun} handleToggleUser={handleToggleUser}></Header>
       <Section>
         <SideBar>
           <UserCard />
@@ -59,23 +62,59 @@ function Profile() {
               <h1>Create New Project</h1>
               <AddContainer>
                 {[
-                  'New Project',
-                  'Single Bedroom',
-                  'Owners Suite',
-                  'Kitchen',
-                  'Living Room',
+                  {name: 'New Project', imageURL: newroom},
+                  {name: 'Single Bedroom', imageURL: single},
+                  {name: 'Owners Suite', imageURL: suite},
+                  {name: 'Jungle', imageURL: jungle},
+                  {name: 'Living Room', imageURL: living},
                 ].map((item, index) => (
-                  <NewCard key={index} name={item}></NewCard>
+                  <NewCard
+                    key={index}
+                    name={item.name}
+                    imageURL={item.imageURL}
+                  ></NewCard>
                 ))}
               </AddContainer>
             </div>
           </AddDiv>
           <div>
             <MainTitle>
-              <h1>All Projects</h1>
+              {filter.author === true &&
+              filter.shared === true &&
+              filter.searched === true ? (
+                <h1>All Projects</h1>
+              ) : (
+                ''
+              )}
+              {filter.author === true &&
+              filter.shared === false &&
+              filter.searched === false ? (
+                <h1>My Projects</h1>
+              ) : (
+                ''
+              )}
+              {filter.author === false &&
+              filter.shared === true &&
+              filter.searched === false ? (
+                <h1>Shared with me</h1>
+              ) : (
+                ''
+              )}
+              {filter.author === false &&
+              filter.shared === false &&
+              filter.searched === true ? (
+                <h1>Search Results</h1>
+              ) : (
+                ''
+              )}
               <FilterDiv>
                 <div className="step-4">
-                  <button
+                  <FilterButton
+                    active={
+                      filter.author === true &&
+                      filter.shared === true &&
+                      filter.searched === true
+                    }
                     onClick={() =>
                       dispatch(
                         filterProjects({
@@ -87,8 +126,13 @@ function Profile() {
                     }
                   >
                     <FolderIcon width="24" height="24"></FolderIcon>
-                  </button>
-                  <button
+                  </FilterButton>
+                  <FilterButton
+                    active={
+                      filter.author === true &&
+                      filter.shared === false &&
+                      filter.searched === false
+                    }
                     onClick={() =>
                       dispatch(
                         filterProjects({
@@ -100,8 +144,13 @@ function Profile() {
                     }
                   >
                     <PersonIcon width="24" height="24"></PersonIcon>
-                  </button>
-                  <button
+                  </FilterButton>
+                  <FilterButton
+                    active={
+                      filter.author === false &&
+                      filter.shared === true &&
+                      filter.searched === false
+                    }
                     onClick={() =>
                       dispatch(
                         filterProjects({
@@ -113,8 +162,13 @@ function Profile() {
                     }
                   >
                     <PeopleIcon width="24" height="24"></PeopleIcon>
-                  </button>
-                  <button
+                  </FilterButton>
+                  <FilterButton
+                    active={
+                      filter.author === false &&
+                      filter.shared === false &&
+                      filter.searched === true
+                    }
                     onClick={() =>
                       dispatch(
                         filterProjects({
@@ -126,7 +180,7 @@ function Profile() {
                     }
                   >
                     <CompassIcon width="24" height="24"></CompassIcon>
-                  </button>
+                  </FilterButton>
                 </div>
               </FilterDiv>
             </MainTitle>
@@ -139,6 +193,7 @@ function Profile() {
                       name={project.name}
                       author_id={project.author_id}
                       imageURL={project.imageURL}
+                      handleToggleShare={handleToggleShare}
                     ></ProjectCard>
                   ))
                 : ''}
@@ -150,6 +205,7 @@ function Profile() {
                       name={project.name}
                       author_id={project.author_id}
                       imageURL={project.imageURL}
+                      handleToggleShare={handleToggleShare}
                     ></ProjectCard>
                   ))
                 : ''}
@@ -161,6 +217,7 @@ function Profile() {
                       name={project.name}
                       author_id={project.author_id}
                       imageURL={project.imageURL}
+                      handleToggleShare={handleToggleShare}
                     ></ProjectCard>
                   ))
                 : ''}
@@ -168,7 +225,12 @@ function Profile() {
           </div>
         </Content>
       </Section>
-      {shareIsToggled ? <Modal /> : ''}
+      {shareIsToggled ? <Modal handleToggleShare={handleToggleShare} /> : ''}
+      {userIsToggled ? (
+        <UserModal handleToggleUser={handleToggleUser}></UserModal>
+      ) : (
+        ''
+      )}
     </Main>
   ) : (
     <Main></Main>
@@ -222,6 +284,19 @@ const Content = styled.div`
 `;
 
 const AddDiv = styled.div`
+  margin: 30px 0 0;
+  h1 {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+    font-size: 24px;
+  }
+
+  p {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+  }
+
   @media (max-width: 375px) {
     display: none;
   }
@@ -243,6 +318,12 @@ const AddContainer = styled.div`
 `;
 const MainTitle = styled.div`
   display: flex;
+
+  h1 {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+    font-size: 24px;
+  }
 `;
 
 const MainContainer = styled.div`
@@ -265,25 +346,36 @@ const FilterDiv = styled.div`
   justify-content: center;
   margin: 0 0 0 auto;
 
-  button {
-    margin: 0 10px;
-    border: none;
-    background-color: transparent;
-
-    :hover {
-      color: ${theme.RURI};
-      cursor: pointer;
-    }
-  }
-
-  @media (max-width: 375px) {
-    margin: 0 5px 0 auto;
-
-    button {
-      margin: 0 5px;
-      }
-    }
+  @media (max-width: 575px) {
+    display: none;
   }
 `;
 
+const FilterButton = styled.button`
+  margin: 0 5px;
+  padding: 5px 0;
+  width: 36px;
+  heigth: 36px;
+  border: none;
+  background-color: transparent;
+
+  :hover {
+    color: ${theme.WHITESMOKE};
+    background-color: ${theme.RURIKON};
+    border-radius: 5px;
+    cursor: pointer;
+  }
+
+  @media (max-width: 575px) {
+    display: none;
+  }
+
+  ${(props) =>
+    props.active &&
+    css`
+      color: ${theme.WHITESMOKE};
+      background-color: ${theme.RURIKON};
+      border-radius: 5px;
+    `}
+`;
 export {Profile};

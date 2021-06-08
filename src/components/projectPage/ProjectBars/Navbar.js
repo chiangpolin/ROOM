@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
+import styled, {css} from 'styled-components';
 import {useLocation, useParams} from 'react-router';
 import {useSelector, useDispatch} from 'react-redux';
 import {
@@ -11,7 +11,7 @@ import {ReactComponent as LightbulbIcon} from '../../../static/images/icons/ligh
 import {ReactComponent as LinkIcon} from '../../../static/images/icons/link.svg';
 import {ReactComponent as SdCardIcon} from '../../../static/images/icons/sd-card.svg';
 import {ReactComponent as CameraIcon} from '../../../static/images/icons/camera.svg';
-import {ReactComponent as PersonIcon} from '../../../static/images/icons/person.svg';
+import {ReactComponent as PersonIcon} from '../../../static/images/icons/person-fill.svg';
 
 function Navbar(props) {
   let location = useLocation();
@@ -33,7 +33,7 @@ function Navbar(props) {
   return (
     <Div>
       {user_id === author_id && !props.renderIsClicked ? (
-        <button
+        <Button
           onClick={() =>
             handleClickUpdate(dispatch, id, {
               d_cameras,
@@ -47,32 +47,37 @@ function Navbar(props) {
         >
           <SdCardIcon width="20" height="20"></SdCardIcon>
           <p>Save</p>
-        </button>
+        </Button>
       ) : null}
       {user_id === author_id && props.renderIsClicked ? (
-        <button onClick={() => handleClickSnapshot(dispatch, id, dataURL)}>
+        <Button onClick={() => handleClickSnapshot(dispatch, id, dataURL)}>
           <CameraIcon width="24" height="24"></CameraIcon>
           <p>Snapshot</p>
-        </button>
+        </Button>
       ) : null}
       <div className="step-4">
-        <button
+        <Button
+          primary
           onClick={() => {
             navigator.clipboard.writeText(path);
           }}
         >
           <LinkIcon width="24" height="24"></LinkIcon>
           <p>Link</p>
-        </button>
+        </Button>
       </div>
       <p>|</p>
       <div>
         <div onClick={() => props.setRun(true)}>
           <LightbulbIcon width="24" height="24"></LightbulbIcon>
         </div>
-        <div onClick={() => props.handleClickUser(!props.userIsClicked)}>
-          <PersonIcon width="24" height="24"></PersonIcon>
-        </div>
+        {user_id ? (
+          <div onClick={() => props.handleClickUser(!props.userIsClicked)}>
+            <PersonIcon width="24" height="24"></PersonIcon>
+          </div>
+        ) : (
+          ''
+        )}
       </div>
     </Div>
   );
@@ -137,51 +142,60 @@ const Div = styled.div`
     }
   }
 
-  button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 0 5px;
-    padding: 0 15px;
-    height: 30px;
-    border: 1px solid ${theme.SUMI};
-    border-radius: 5px;
-    background-color: transparent;
-    font-size: 16px;
-    cursor: pointer;
-
-    :hover {
-      color: ${theme.GOFUN};
-      background-color: ${theme.SUMI};
-    }
-
-    p {
-      margin: 0;
-    }
-
-    svg {
-      margin: 0 10px 0 0;
-      line-weight: 400;
-    }
-  }
-
-  @media (max-width: 1023px) {
-    button {
-      padding: 0 10px;
-
-      p {
-        display: none;
-      }
-
-      svg {
-        margin: 0;
-      }
-    }
-  }
-
   @media (max-width: 767px) {
     display: none;
   }
 `;
 
+const Button = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 5px;
+  padding: 0 15px;
+  height: 30px;
+  border: 1px solid ${theme.RURI};
+  border-radius: 5px;
+  color: ${theme.RURI};
+  background-color: transparent;
+  font-size: 16px;
+  cursor: pointer;
+
+  :hover {
+    color: ${theme.WHITE};
+    background-color: ${theme.RURI};
+  }
+
+  p {
+    margin: 0;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+  }
+
+  svg {
+    margin: 0 10px 0 0;
+    line-weight: 400;
+  }
+
+  ${(props) =>
+    props.primary &&
+    css`
+      color: ${theme.WHITE};
+      background-color: ${theme.RURI};
+      border: 1px solid ${theme.RURI};
+    `}
+
+  @media (max-width: 1023px) {
+    padding: 0 10px;
+
+    p {
+      display: none;
+    }
+
+    svg {
+      margin: 0;
+    }
+  }
+`;
 export {Navbar};

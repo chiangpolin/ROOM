@@ -1,5 +1,5 @@
 import React from 'react';
-import {useDispatch} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import {useHistory} from 'react-router';
 import styled from 'styled-components';
 import {signOut} from '../../../app/actions/index.js';
@@ -9,6 +9,7 @@ import {ReactComponent as SignOutIcon} from '../../../static/images/icons/box-ar
 
 function Userbar(props) {
   let history = useHistory();
+  const {id, name, email} = useSelector((state) => state.profile);
   const dispatch = useDispatch();
 
   return props.userIsClicked ? (
@@ -18,8 +19,8 @@ function Userbar(props) {
       </ImgDiv>
 
       <UserDiv>
-        <h3>Jeffrey Chiang</h3>
-        <p>polin.chiang1996@gmail.com</p>
+        <h3>{name}</h3>
+        <p>{email}</p>
       </UserDiv>
       <SignOutDiv onClick={() => handleClickSignOut(dispatch, history)}>
         <SignOutIcon width="16" height="16"></SignOutIcon>
@@ -67,9 +68,14 @@ const ImgDiv = styled.div`
 
 const UserDiv = styled.div`
   h3 {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
   }
 
   p {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
     font-size: 14px;
     overflow-wrap: break-word;
   }
@@ -77,8 +83,10 @@ const UserDiv = styled.div`
 
 const SignOutDiv = styled.div`
   display: flex;
-  font-family: 'Varela Round';
-  font-weight: 600;
+  align-items: center;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
   margin: 15px 0;
   border: none;
   cursor: pointer;

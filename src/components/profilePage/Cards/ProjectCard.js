@@ -4,7 +4,6 @@ import {useHistory} from 'react-router-dom';
 import {useSelector, useDispatch} from 'react-redux';
 import {
   selectProject,
-  toggleShare,
   cloneProject,
   deleteProject,
 } from '../../../app/actions/index.js';
@@ -47,7 +46,7 @@ function ProjectCard(props) {
               <ShareIcon
                 width="24"
                 height="24"
-                onClick={() => handleToggleShare(dispatch, props)}
+                onClick={() => handleClickShare(dispatch, props)}
               ></ShareIcon>
             ) : (
               ''
@@ -69,15 +68,15 @@ function ProjectCard(props) {
   );
 }
 
-function handleToggleShare(dispatch, project) {
+function handleClickShare(dispatch, props) {
   dispatch(
     selectProject({
-      id: project.id,
-      name: project.name,
-      author_id: project.author_id,
+      id: props.id,
+      name: props.name,
+      author_id: props.author_id,
     })
   );
-  dispatch(toggleShare());
+  props.handleToggleShare(true);
 }
 
 async function handleClickClone(dispatch, user_id, project_id) {
@@ -98,7 +97,10 @@ const Item = styled.div`
   background-color: ${theme.WHITE};
 
   p {
-    padding: 0 0 0 10px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    font-size: 16px;
+    padding: 5px 0 0 10px;
     overflow: hidden;
   }
 

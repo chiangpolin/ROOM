@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import * as theme from '../../../app/constants/theme.js';
 import {ReactComponent as CameraReelsIcon} from '../../../static/images/icons/camera-reels.svg';
 import {ReactComponent as EaselIcon} from '../../../static/images/icons/easel.svg';
 
@@ -31,12 +32,12 @@ const Button = styled.button`
   border: 0;
   border-radius: 25px;
   box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
-  background-color: white;
+  background-color: ${theme.WHITE};
 
   :hover {
     cursor: pointer;
     color: white;
-    background-color: black;
+    background-color: ${theme.RURI};
   }
 
   @media (max-width: 767px) {

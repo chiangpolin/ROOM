@@ -11,7 +11,7 @@ function Groupbar() {
   const {selectedGroup} = useSelector((state) => state.project);
   const dispatch = useDispatch();
 
-  return (
+  return selectedGroup.id ? (
     <Div>
       <ImgDiv>
         <img />
@@ -19,6 +19,7 @@ function Groupbar() {
       <Content>
         <h3>{selectedGroup.name}</h3>
         <p>{selectedGroup.id}</p>
+
         <Buttons>
           <Button
             primary
@@ -36,6 +37,8 @@ function Groupbar() {
         </Buttons>
       </Content>
     </Div>
+  ) : (
+    <div></div>
   );
 }
 
@@ -96,11 +99,11 @@ const ImgDiv = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 30px 0;
+  margin: 20px 15px 15px;
 
   img {
-    width: 120px;
-    height: 120px;
+    width: 100%;
+    height: 150px;
     background-color: #bdc0ba;
   }
 `;
@@ -108,10 +111,15 @@ const ImgDiv = styled.div`
 const Content = styled.div`
   margin: 0 15px;
   h3 {
-    font-size: 24px;
+    margin: 0 0 5px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
   }
 
   p {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
     font-size: 16px;
   }
 `;
@@ -126,35 +134,30 @@ const Buttons = styled.div`
 const Button = styled.button`
   width: 100%;
   height: 30px;
-  color: #1c1c1c;
-  border: 1px solid #1c1c1c;
+  color: ${theme.RURI};
+  background-color: transparent;
+  border: 1px solid ${theme.RURI};
+  border-radius: 5px;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
   cursor: pointer;
+
+  :hover {
+    color: ${theme.WHITE};
+    background-color: ${theme.RURI};
+    border: 1px solid ${theme.RURI};
+  }
 
   ${(props) =>
     props.primary &&
     css`
-      color: white;
-      background-color: #0275d8;
-      border: 1px solid #0275d8;
+      color: ${theme.WHITE};
+      background-color: ${theme.RURI};
+      border: 1px solid ${theme.RURI};
     `}
 
   ${(props) =>
-    props.danger &&
-    css`
-      color: white;
-      background-color: #d9534f;
-      border: 1px solid #d9534f;
-    `}
-
-    ${(props) =>
-    props.success &&
-    css`
-      color: white;
-      background-color: #5cb85c;
-      border: 1px solid #5cb85c;
-    `}
-
-    ${(props) =>
     props.disabled &&
     css`
       opacity: 0.5;

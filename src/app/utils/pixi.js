@@ -1,11 +1,19 @@
-import {store} from '../store/index.js';
+import * as PIXI from 'pixi.js';
+import {OutlineFilter} from 'pixi-filters';
+import {SVGScene} from '@pixi-essentials/svg';
 import {
-  selectCanvasElement,
   setFurniturePosition,
   addCanvasElement,
+  selectCanvasElement,
+  deselectCanvasElement,
+  setInformation,
 } from '../actions/index.js';
-import * as PIXI from 'pixi.js';
-import {SVGScene} from '@pixi-essentials/svg';
+import * as theme from '../constants/theme.js';
+import {store} from '../store/index.js';
+
+export function outlineFilter() {
+  return new OutlineFilter(2, 0xffc408);
+}
 
 export function resizeCanvas(canvasRef, app, sizes) {
   if (canvasRef.current === null) {
@@ -38,34 +46,71 @@ export function initContainer(app) {
   return container;
 }
 
-export function createOpening(container, obj) {
-  const newWindow = new PIXI.Container();
-  const newRect = new PIXI.Graphics();
-  newRect.lineStyle(1, 0x000000, 1);
-  newRect.beginFill(0xffffff);
-  newRect.drawRect(0, 0, obj.dimension.width, obj.dimension.height - 2);
-  newRect.endFill();
-  newWindow.addChild(newRect);
-  newWindow.position.set(obj.position.x, obj.position.y);
-  newWindow.pivot.x = obj.dimension.width / 2;
-  newWindow.pivot.y = obj.dimension.height / 2;
-  newWindow.angle = obj.rotation.angle;
-  newWindow.interactive = true;
-  newWindow.buttonMode = true;
-  newWindow.id = obj.id;
-  newWindow.on('click', onClick);
-  container.addChild(newWindow);
+export async function createFurniture(contanier, obj) {
+  const svgPath = await import(
+    `../../static/images/furniture/${obj.file.svg_path}`
+  );
+
+  const element = new PIXI.Sprite.from(svgPath.default);
+  element.interactive = true;
+  element.buttonMode = true;
+  element.anchor.set(0.5);
+  element.scale.set(1);
+  element.id = obj.id;
+  element.name = obj.name;
+  element.type = obj.type;
+  element.file = obj.file;
+  element.x = obj.position.x;
+  element.y = obj.position.y;
+  element.width = obj.dimension.width;
+  element.height = obj.dimension.height;
+  element.angle = obj.rotation.angle;
+  element
+    .on('pointerdown', onDragStart)
+    .on('pointerup', onDragEnd)
+    .on('pointerupoutside', onDragEnd)
+    .on('pointermove', onDragMove)
+    .on('click', onClick);
+
+  contanier.addChild(element);
+
+  function onDragStart(event) {
+    this.data = event.data;
+    this.alpha = 0.5;
+    this.dragging = true;
+  }
+
+  function onDragEnd() {
+    this.data = null;
+    this.alpha = 1;
+    this.dragging = false;
+    store.dispatch(setFurniturePosition(this.id, {x: this.x, y: this.y}));
+  }
+
+  function onDragMove() {
+    if (this.dragging) {
+      const newPosition = this.data.getLocalPosition(this.parent);
+      this.x = newPosition.x;
+      this.y = newPosition.y;
+    }
+  }
 
   function onClick() {
+    const selectedGroup = store.getState().project.selectedGroup;
+    if (selectedGroup.id !== this.id) {
+      store.dispatch(deselectCanvasElement(selectedGroup));
+      this.filters = [outlineFilter()];
+    }
+
     store.dispatch(
       selectCanvasElement({
-        name: 'window',
+        name: this.name,
         id: this.id,
-        type: 'window',
+        type: 'furniture',
         position: {x: this.x, y: this.y},
         rotation: {angle: this.angle},
         dimension: {width: this.width, height: this.height},
-        file: 'none',
+        file: this.file,
       })
     );
   }
@@ -131,6 +176,11 @@ export function createWall(container, wall) {
   container.addChild(newWall);
 
   function onClick() {
+    const selectedGroup = store.getState().project.selectedGroup;
+    if (selectedGroup.id !== this.id) {
+      store.dispatch(deselectCanvasElement(selectedGroup));
+      this.filters = [outlineFilter()];
+    }
     store.dispatch(
       selectCanvasElement({
         name: this.name,
@@ -143,14 +193,64 @@ export function createWall(container, wall) {
         file: 'none',
       })
     );
+    store.dispatch(setInformation('paint'));
   }
 }
 
-export function createCovering(container, covering) {
+export function createOpening(container, obj) {
+  const newWindow = new PIXI.Container();
+  const newRect = new PIXI.Graphics();
+  newRect.lineStyle(1, 0x000000, 1);
+  newRect.beginFill(0xffffff);
+  newRect.drawRect(0, 0, obj.dimension.width, obj.dimension.height - 2);
+  newRect.endFill();
+  newWindow.addChild(newRect);
+  newWindow.position.set(obj.position.x, obj.position.y);
+  newWindow.pivot.x = obj.dimension.width / 2;
+  newWindow.pivot.y = obj.dimension.height / 2;
+  newWindow.angle = obj.rotation.angle;
+  newWindow.interactive = true;
+  newWindow.buttonMode = true;
+  newWindow.name = obj.name;
+  newWindow.id = obj.id;
+  newWindow.type = obj.type;
+  newWindow.on('click', onClick);
+  container.addChild(newWindow);
+
+  function onClick() {
+    const selectedGroup = store.getState().project.selectedGroup;
+    if (selectedGroup.id !== this.id) {
+      store.dispatch(deselectCanvasElement(selectedGroup));
+      this.filters = [outlineFilter()];
+    }
+
+    store.dispatch(
+      selectCanvasElement({
+        name: this.name,
+        id: this.id,
+        type: this.type,
+        position: {x: this.x, y: this.y},
+        rotation: {angle: this.angle},
+        dimension: {width: this.width, height: this.height},
+        file: 'none',
+      })
+    );
+  }
+}
+
+export async function createCovering(container, covering) {
   const polygon = covering.graphic;
   const newCovering = new PIXI.Container();
   const newPolygon = new PIXI.Graphics();
-  newPolygon.beginFill(0xffff00);
+  // const jpgPath = await import(`../../static/images/texture/kitchen-wood.jpg`);
+  // const texture = PIXI.Texture.from(jpgPath.default);
+  // newPolygon.beginTextureFill({
+  //   texture: texture,
+  //   color: 0xffffff,
+  //   alpha: 0.6,
+  //   matrix: (1, 0, 0, 1, 0, 0),
+  // });
+  newPolygon.beginFill(0xfffacd, 1);
   newPolygon.drawPolygon(
     ...polygon.map((point) => new PIXI.Point(point.x, point.y))
   );
@@ -158,15 +258,22 @@ export function createCovering(container, covering) {
   newCovering.addChild(newPolygon);
   newCovering.interactive = true;
   newCovering.buttonMode = true;
+  newCovering.name = covering.name;
   newCovering.id = covering.id;
   newCovering.path = covering.path;
   newCovering.on('click', onClick);
   container.addChild(newCovering);
 
   function onClick() {
+    const selectedGroup = store.getState().project.selectedGroup;
+    if (selectedGroup.id !== this.id) {
+      store.dispatch(deselectCanvasElement(selectedGroup));
+      this.filters = [outlineFilter()];
+    }
+
     store.dispatch(
       selectCanvasElement({
-        name: 'covering',
+        name: this.name,
         id: this.id,
         path: this.path,
         type: 'covering',
@@ -176,6 +283,7 @@ export function createCovering(container, covering) {
         file: 'none',
       })
     );
+    store.dispatch(setInformation('texture'));
   }
 }
 
@@ -191,14 +299,21 @@ export function createFloor(container, floor) {
   newFloor.addChild(newPolygon);
   newFloor.interactive = true;
   newFloor.buttonMode = true;
+  newFloor.name = floor.name;
   newFloor.id = floor.id;
   newFloor.on('click', onClick);
   container.addChild(newFloor);
 
   function onClick() {
+    const selectedGroup = store.getState().project.selectedGroup;
+    if (selectedGroup.id !== this.id) {
+      store.dispatch(deselectCanvasElement(selectedGroup));
+      this.filters = [outlineFilter()];
+    }
+
     store.dispatch(
       selectCanvasElement({
-        name: 'floor',
+        name: this.name,
         id: this.id,
         type: 'floor',
         position: {x: this.x, y: this.y},
@@ -210,14 +325,31 @@ export function createFloor(container, floor) {
   }
 }
 
-export function createBackground(container, tool) {
+export function createBackground(backgroundContainer, drawingContainer, tool) {
   const dots = [];
   const background = new PIXI.Graphics();
-  background.beginFill(0xffffff, 0.1);
-  background.drawRect(-500, -500, 1000, 1000);
+  background.beginFill(0xd3d3d3, 0.6);
+  background.drawRect(-1000, -1000, 2000, 2000);
   background.endFill();
   background.interactive = true;
-  container.addChild(background);
+  backgroundContainer.addChild(background);
+
+  for (let i = -1000; i <= 1000; i += 100) {
+    const gridLine = new PIXI.Graphics();
+    gridLine.lineStyle(2, 0xd3d3d3, 0.7);
+    gridLine.moveTo(i, -1000);
+    gridLine.lineTo(i, 1000);
+    gridLine.endFill();
+    backgroundContainer.addChild(gridLine);
+  }
+  for (let i = -1000; i <= 1000; i += 100) {
+    const gridLine = new PIXI.Graphics();
+    gridLine.lineStyle(2, 0xd3d3d3, 0.7);
+    gridLine.moveTo(-1000, i);
+    gridLine.lineTo(1000, i);
+    gridLine.endFill();
+    backgroundContainer.addChild(gridLine);
+  }
 
   // create line
   const previewLine = new PIXI.Graphics();
@@ -437,7 +569,7 @@ export function createBackground(container, tool) {
           previewLine.clear();
           previewLine.lineStyle({
             width: 20,
-            color: 0x666666,
+            color: 0x005caf,
             alignment: 0.5,
             alpha: 0.5,
             join: 'miter',
@@ -450,13 +582,13 @@ export function createBackground(container, tool) {
             .lineTo(position.x, position.y)
             .lineTo(background.startPoint.x, position.y)
             .closePath();
-          container.addChild(previewLine);
+          drawingContainer.addChild(previewLine);
           break;
         case 'polygon-frame':
           previewLine.clear();
           previewLine.lineStyle({
             width: 15,
-            color: 0x000000,
+            color: 0x005caf,
             alignment: 0.5,
             alpha: 0.5,
             join: 'miter',
@@ -469,13 +601,13 @@ export function createBackground(container, tool) {
           }
           previewLine.lineTo(position.x, position.y);
           previewLine.closePath();
-          container.addChild(previewLine);
+          drawingContainer.addChild(previewLine);
           break;
         case 'line':
           previewLine.clear();
           previewLine.lineStyle({
             width: 15,
-            color: 0x000000,
+            color: 0x005caf,
             alignment: 0.5,
             alpha: 0.5,
             join: 'miter',
@@ -484,13 +616,13 @@ export function createBackground(container, tool) {
           });
           previewLine.moveTo(background.startPoint.x, background.startPoint.y);
           previewLine.lineTo(position.x, position.y);
-          container.addChild(previewLine);
+          drawingContainer.addChild(previewLine);
           break;
         case 'polyline':
           previewLine.clear();
           previewLine.lineStyle({
             width: 15,
-            color: 0x000000,
+            color: 0x005caf,
             alignment: 0.5,
             alpha: 0.5,
             join: 'miter',
@@ -502,11 +634,11 @@ export function createBackground(container, tool) {
             previewLine.lineTo(dots[i].x, dots[i].y);
           }
           previewLine.lineTo(position.x, position.y);
-          container.addChild(previewLine);
+          drawingContainer.addChild(previewLine);
           break;
         case 'filled-rectangle':
           previewPolygon.clear();
-          previewPolygon.beginFill(0xff0000);
+          previewPolygon.beginFill(0x005caf);
           previewPolygon.drawPolygon(
             new PIXI.Point(background.startPoint.x, background.startPoint.y),
             new PIXI.Point(background.startPoint.x, position.y),
@@ -514,21 +646,21 @@ export function createBackground(container, tool) {
             new PIXI.Point(position.x, background.startPoint.y)
           );
           previewPolygon.endFill();
-          container.addChild(previewPolygon);
+          drawingContainer.addChild(previewPolygon);
           break;
         case 'filled-polygon':
           previewPolygon.clear();
-          previewPolygon.beginFill(0xff0000);
+          previewPolygon.beginFill(0x005caf);
           previewPolygon.drawPolygon(
             ...drawingPolygon.map((point) => new PIXI.Point(point.x, point.y)),
             new PIXI.Point(position.x, position.y)
           );
           previewPolygon.endFill();
-          container.addChild(previewPolygon);
+          drawingContainer.addChild(previewPolygon);
           break;
         case 'rectangle':
           previewPolygon.clear();
-          previewPolygon.beginFill(0xff0000);
+          previewPolygon.beginFill(0x005caf);
           previewPolygon.drawPolygon(
             new PIXI.Point(background.startPoint.x, background.startPoint.y),
             new PIXI.Point(background.startPoint.x, position.y),
@@ -536,17 +668,17 @@ export function createBackground(container, tool) {
             new PIXI.Point(position.x, background.startPoint.y)
           );
           previewPolygon.endFill();
-          container.addChild(previewPolygon);
+          drawingContainer.addChild(previewPolygon);
           break;
         case 'polygon':
           previewPolygon.clear();
-          previewPolygon.beginFill(0xff0000);
+          previewPolygon.beginFill(0x005caf);
           previewPolygon.drawPolygon(
             ...drawingPolygon.map((point) => new PIXI.Point(point.x, point.y)),
             new PIXI.Point(position.x, position.y)
           );
           previewPolygon.endFill();
-          container.addChild(previewPolygon);
+          drawingContainer.addChild(previewPolygon);
           break;
         default:
       }
@@ -581,106 +713,11 @@ export function createBackground(container, tool) {
   }
 }
 
-export async function createRoom(app, obj) {
-  const svgPath = await import(
-    `../../static/images/furniture/${obj.file.svg_path}`
-  );
-
-  const texture = PIXI.Texture.from(svgPath.default);
-  texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
-
-  const element = new PIXI.Sprite(texture);
-  element.interactive = true;
-  element.buttonMode = true;
-  element.anchor.set(0.5);
-  element.scale.set(1);
-  element.id = obj.id;
-  element.name = obj.name;
-  element.type = obj.type;
-  element.file = obj.file;
-  element.x = obj.position.x;
-  element.y = obj.position.y;
-  element.width = obj.dimension.width;
-  element.height = obj.dimension.height;
-  element.angle = obj.rotation.angle;
-
-  app.stage.addChild(element);
-}
-
-export async function createFurniture(contanier, obj) {
-  const svgPath = await import(
-    `../../static/images/furniture/${obj.file.svg_path}`
-  );
-
-  const texture = PIXI.Texture.from(svgPath.default);
-  texture.baseTexture.scaleMode = PIXI.SCALE_MODES.NEAREST;
-
-  const element = new PIXI.Sprite(texture);
-  element.interactive = true;
-  element.buttonMode = true;
-  element.anchor.set(0.5);
-  element.scale.set(1);
-  element.id = obj.id;
-  element.name = obj.name;
-  element.type = obj.type;
-  element.file = obj.file;
-  element.x = obj.position.x;
-  element.y = obj.position.y;
-  element.width = obj.dimension.width;
-  element.height = obj.dimension.height;
-  element.angle = obj.rotation.angle;
-  element
-    .on('pointerdown', onDragStart)
-    .on('pointerup', onDragEnd)
-    .on('pointerupoutside', onDragEnd)
-    .on('pointermove', onDragMove)
-    .on('click', onClick);
-
-  contanier.addChild(element);
-
-  function onDragStart(event) {
-    this.data = event.data;
-    this.alpha = 0.5;
-    this.dragging = true;
-  }
-
-  function onDragEnd() {
-    this.data = null;
-    this.alpha = 1;
-    this.dragging = false;
-    store.dispatch(setFurniturePosition(this.id, {x: this.x, y: this.y}));
-  }
-
-  function onDragMove() {
-    if (this.dragging) {
-      const newPosition = this.data.getLocalPosition(this.parent);
-      this.x = newPosition.x;
-      this.y = newPosition.y;
-    }
-  }
-
-  function onClick() {
-    store.dispatch(
-      selectCanvasElement({
-        name: this.name,
-        id: this.id,
-        type: 'furniture',
-        position: {x: this.x, y: this.y},
-        rotation: {angle: this.angle},
-        dimension: {width: this.width, height: this.height},
-        file: this.file,
-      })
-    );
-  }
-}
-
-export async function createSVGElement(app) {
+export async function createSVGElement(container) {
   const svgPayload = await fetch(
     'https://upload.wikimedia.org/wikipedia/commons/f/fa/De_Groot_academic_genealogy.svg'
   ).then((data) => data.text());
   const svgDOM = new DOMParser().parseFromString(svgPayload, 'image/svg+xml');
   const svgEl = svgDOM.documentElement;
-  const viewport = app.stage.addChild(new PIXI.Container());
-  viewport.addChild(new SVGScene(svgEl));
-  app.renderer.render(app.stage);
+  container.addChild(new SVGScene(svgEl));
 }

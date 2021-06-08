@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import {useSelector} from 'react-redux';
 import {useDrop} from 'react-dnd';
 import {ItemTypes} from '../../../app/constants/dragTypes.js';
+import * as theme from '../../../app/constants/theme.js';
 import * as pixi from '../../../app/utils/pixi.js';
 
 function Canvas() {
@@ -61,8 +62,10 @@ function Canvas() {
     const furnitureContainer = pixi.initContainer(app);
     setFurnitureContainer(furnitureContainer);
 
+    const drawingContainer = pixi.initContainer(app);
+
     // Main
-    pixi.createBackground(backgroundContainer, tool);
+    pixi.createBackground(backgroundContainer, drawingContainer, tool);
     for (let i = 0; i < d_floors.length; i++) {
       if (d_floors[i].method !== 'delete') {
         pixi.createFloor(floorContainer, d_floors[i]);
@@ -136,6 +139,14 @@ function Canvas() {
                     selectedGroup.rotation.angle;
                 }
               break;
+            case 'deselect':
+              for (let i = 0; i < pixiFurnitureContainer.children.length; i++)
+                if (
+                  pixiFurnitureContainer.children[i].id === selectedGroup.id
+                ) {
+                  pixiFurnitureContainer.children[i].filters = [];
+                }
+              break;
             default:
           }
           break;
@@ -155,6 +166,12 @@ function Canvas() {
                   );
                 }
               }
+              break;
+            case 'deselect':
+              for (let i = 0; i < pixiFloorContainer.children.length; i++)
+                if (pixiFloorContainer.children[i].id === selectedGroup.id) {
+                  pixiFloorContainer.children[i].filters = [];
+                }
               break;
             default:
           }
@@ -176,6 +193,12 @@ function Canvas() {
                 }
               }
               break;
+            case 'deselect':
+              for (let i = 0; i < pixiCoveringContainer.children.length; i++)
+                if (pixiCoveringContainer.children[i].id === selectedGroup.id) {
+                  pixiCoveringContainer.children[i].filters = [];
+                }
+              break;
             default:
           }
           break;
@@ -190,6 +213,12 @@ function Canvas() {
                   pixiWallContainer.removeChild(pixiWallContainer.children[i]);
                 }
               }
+              break;
+            case 'deselect':
+              for (let i = 0; i < pixiWallContainer.children.length; i++)
+                if (pixiWallContainer.children[i].id === selectedGroup.id) {
+                  pixiWallContainer.children[i].filters = [];
+                }
               break;
             default:
           }
@@ -206,6 +235,12 @@ function Canvas() {
                   );
                 }
               }
+              break;
+            case 'deselect':
+              for (let i = 0; i < pixiOpeningContainer.children.length; i++)
+                if (pixiOpeningContainer.children[i].id === selectedGroup.id) {
+                  pixiOpeningContainer.children[i].filters = [];
+                }
               break;
             default:
           }
@@ -238,7 +273,7 @@ const Div = styled.div`
 const ProjectCanvasDiv = styled.div`
   width: 100%;
   height: 100%;
-  background-color: lightgrey;
+  background-color: ${theme.WHITE};
 `;
 
 export {Canvas};

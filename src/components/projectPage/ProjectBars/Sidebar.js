@@ -11,7 +11,7 @@ import {ReactComponent as CameraIcon} from '../../../static/images/icons/camera-
 import {ReactComponent as BricksIcon} from '../../../static/images/icons/bricks.svg';
 
 function Sidebar() {
-  const {information} = useSelector((state) => state.project);
+  const {information, selectedGroup} = useSelector((state) => state.project);
   const dispatch = useDispatch();
 
   return (
@@ -50,11 +50,14 @@ function Sidebar() {
       </div>
       <div className="step-2">
         <SideButton
+          disabled={selectedGroup.type !== 'wall'}
           primary={information === 'paint'}
           onClick={() =>
-            information === 'paint'
-              ? dispatch(setInformation(''))
-              : dispatch(setInformation('paint'))
+            selectedGroup.type === 'wall'
+              ? information === 'paint'
+                ? dispatch(setInformation(''))
+                : dispatch(setInformation('paint'))
+              : ''
           }
         >
           <PaletteIcon width="24" height="24" />
@@ -62,11 +65,14 @@ function Sidebar() {
       </div>
       <div className="step-3">
         <SideButton
+          disabled={selectedGroup.type !== 'covering'}
           primary={information === 'texture'}
           onClick={() =>
-            information === 'texture'
-              ? dispatch(setInformation(''))
-              : dispatch(setInformation('texture'))
+            selectedGroup.type === 'covering'
+              ? information === 'texture'
+                ? dispatch(setInformation(''))
+                : dispatch(setInformation('texture'))
+              : ''
           }
         >
           <BricksIcon width="24" height="24" />
@@ -146,6 +152,17 @@ const SideButton = styled.div`
     props.primary &&
     css`
       color: ${theme.RURI};
+    `}
+
+  ${(props) =>
+    props.disabled &&
+    css`
+      opacity: 0.5;
+
+      :hover {
+        cursor: pointer;
+        color: ${theme.SUMI};
+      }
     `}
 `;
 
