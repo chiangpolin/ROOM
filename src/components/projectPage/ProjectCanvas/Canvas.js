@@ -15,7 +15,7 @@ function Canvas() {
   const [pixiCoveringContainer, setCoveringContainer] = useState('');
   const [pixiFloorContainer, setFloorContainer] = useState('');
   const [{canDrop, isOver}, drop] = useDrop(() => ({
-    accept: ItemTypes.FURNITURE,
+    accept: [ItemTypes.ELEMENT],
     drop: (item, monitor) => ({
       name: 'Canvas',
       position: monitor.getSourceClientOffset(),
@@ -30,6 +30,7 @@ function Canvas() {
     instruction,
     selectedGroup,
     tool,
+    ortho,
     d_furnitures,
     d_walls,
     d_openings,
@@ -65,7 +66,7 @@ function Canvas() {
     const drawingContainer = pixi.initContainer(app);
 
     // Main
-    pixi.createBackground(backgroundContainer, drawingContainer, tool);
+    pixi.createBackground(backgroundContainer, drawingContainer, tool, ortho);
     for (let i = 0; i < d_floors.length; i++) {
       if (d_floors[i].method !== 'delete') {
         pixi.createFloor(floorContainer, d_floors[i]);
@@ -107,7 +108,7 @@ function Canvas() {
       );
     };
     // eslint-disable-next-line
-  }, [tool]);
+  }, [tool, ortho]);
 
   useEffect(() => {
     if (pixiApp) {
@@ -226,6 +227,10 @@ function Canvas() {
         case 'opening':
           switch (instruction.type) {
             case 'add':
+              pixi.createOpening(
+                pixiOpeningContainer,
+                d_openings[d_openings.length - 1]
+              );
               break;
             case 'remove':
               for (let i = 0; i < pixiOpeningContainer.children.length; i++) {
@@ -235,6 +240,13 @@ function Canvas() {
                   );
                 }
               }
+              break;
+            case 'rotate':
+              for (let i = 0; i < pixiOpeningContainer.children.length; i++)
+                if (pixiOpeningContainer.children[i].id === selectedGroup.id) {
+                  pixiOpeningContainer.children[i].angle =
+                    selectedGroup.rotation.angle;
+                }
               break;
             case 'deselect':
               for (let i = 0; i < pixiOpeningContainer.children.length; i++)

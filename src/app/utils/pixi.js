@@ -1,8 +1,8 @@
 import * as PIXI from 'pixi.js';
 import {OutlineFilter} from 'pixi-filters';
-import {SVGScene} from '@pixi-essentials/svg';
 import {
   setFurniturePosition,
+  setOpeningPosition,
   addCanvasElement,
   selectCanvasElement,
   deselectCanvasElement,
@@ -214,7 +214,12 @@ export function createOpening(container, obj) {
   newWindow.name = obj.name;
   newWindow.id = obj.id;
   newWindow.type = obj.type;
-  newWindow.on('click', onClick);
+  newWindow
+    .on('pointerdown', onDragStart)
+    .on('pointerup', onDragEnd)
+    .on('pointerupoutside', onDragEnd)
+    .on('pointermove', onDragMove)
+    .on('click', onClick);
   container.addChild(newWindow);
 
   function onClick() {
@@ -235,6 +240,27 @@ export function createOpening(container, obj) {
         file: 'none',
       })
     );
+  }
+
+  function onDragStart(event) {
+    this.data = event.data;
+    this.alpha = 0.5;
+    this.dragging = true;
+  }
+
+  function onDragEnd() {
+    this.data = null;
+    this.alpha = 1;
+    this.dragging = false;
+    store.dispatch(setOpeningPosition(this.id, {x: this.x, y: this.y}));
+  }
+
+  function onDragMove() {
+    if (this.dragging) {
+      const newPosition = this.data.getLocalPosition(this.parent);
+      this.x = newPosition.x;
+      this.y = newPosition.y;
+    }
   }
 }
 
@@ -325,7 +351,12 @@ export function createFloor(container, floor) {
   }
 }
 
-export function createBackground(backgroundContainer, drawingContainer, tool) {
+export function createBackground(
+  backgroundContainer,
+  drawingContainer,
+  tool,
+  ortho
+) {
   const dots = [];
   const background = new PIXI.Graphics();
   background.beginFill(0xd3d3d3, 0.6);
@@ -437,39 +468,149 @@ export function createBackground(backgroundContainer, drawingContainer, tool) {
         }
         break;
       case 'line':
-        dots.push({x: position.x, y: position.y});
-        if (background.isDrawing) {
-          previewLine.clear();
-          background.isDrawing = false;
-          store.dispatch(
-            addCanvasElement('wall', dots, {type: 'add', target: 'wall'})
-          );
-          dots.length = 0;
-        } else {
-          background.isDrawing = true;
+        switch (ortho) {
+          case true:
+            if (background.startPoint) {
+              if (
+                Math.abs(position.x - background.startPoint.x) >
+                Math.abs(position.y - background.startPoint.y)
+              ) {
+                dots.push({x: position.x, y: background.startPoint.y});
+              } else {
+                dots.push({x: background.startPoint.x, y: position.y});
+              }
+            } else {
+              dots.push({x: position.x, y: position.y});
+            }
+
+            if (background.isDrawing) {
+              previewLine.clear();
+              background.isDrawing = false;
+              store.dispatch(
+                addCanvasElement('wall', dots, {type: 'add', target: 'wall'})
+              );
+              dots.length = 0;
+            } else {
+              background.isDrawing = true;
+            }
+
+            if (background.startPoint) {
+              if (
+                Math.abs(position.x - background.startPoint.x) >
+                Math.abs(position.y - background.startPoint.y)
+              ) {
+                background.startPoint = {
+                  x: position.x,
+                  y: background.startPoint.y,
+                };
+              } else {
+                background.startPoint = {
+                  x: background.startPoint.x,
+                  y: position.y,
+                };
+              }
+            } else {
+              background.startPoint = {x: position.x, y: position.y};
+            }
+            break;
+          default:
+            dots.push({x: position.x, y: position.y});
+
+            if (background.isDrawing) {
+              previewLine.clear();
+              background.isDrawing = false;
+              store.dispatch(
+                addCanvasElement('wall', dots, {type: 'add', target: 'wall'})
+              );
+              dots.length = 0;
+            } else {
+              background.isDrawing = true;
+            }
+
+            background.startPoint = {x: position.x, y: position.y};
+            break;
         }
-        background.startPoint = {x: position.x, y: position.y};
         break;
       case 'polyline':
-        dots.push({x: position.x, y: position.y});
-        drawingLine.push({x: position.x, y: position.y});
-        if (background.isDrawing) {
-          if (
-            background.startPoint.x === position.x &&
-            background.startPoint.y === position.y
-          ) {
-            previewLine.clear();
-            drawingLine.length = 0;
-            background.isDrawing = false;
-            store.dispatch(
-              addCanvasElement('wall', dots, {type: 'add', target: 'wall'})
-            );
-            dots.length = 0;
-          }
-        } else {
-          background.isDrawing = true;
+        switch (ortho) {
+          case true:
+            if (background.startPoint) {
+              if (
+                Math.abs(position.x - background.startPoint.x) >
+                Math.abs(position.y - background.startPoint.y)
+              ) {
+                dots.push({x: position.x, y: background.startPoint.y});
+                drawingLine.push({x: position.x, y: background.startPoint.y});
+              } else {
+                dots.push({x: background.startPoint.x, y: position.y});
+                drawingLine.push({x: background.startPoint.x, y: position.y});
+              }
+            } else {
+              dots.push({x: position.x, y: position.y});
+              drawingLine.push({x: position.x, y: position.y});
+            }
+            if (background.isDrawing) {
+              if (
+                background.clickPoint &&
+                background.clickPoint.x === position.x &&
+                background.clickPoint.y === position.y
+              ) {
+                previewLine.clear();
+                drawingLine.length = 0;
+                background.isDrawing = false;
+                store.dispatch(
+                  addCanvasElement('wall', dots, {type: 'add', target: 'wall'})
+                );
+                dots.length = 0;
+              }
+            } else {
+              background.isDrawing = true;
+            }
+            if (background.startPoint) {
+              if (
+                Math.abs(position.x - background.startPoint.x) >
+                Math.abs(position.y - background.startPoint.y)
+              ) {
+                background.startPoint = {
+                  x: position.x,
+                  y: background.startPoint.y,
+                };
+              } else {
+                background.startPoint = {
+                  x: background.startPoint.x,
+                  y: position.y,
+                };
+              }
+              background.clickPoint = {
+                x: position.x,
+                y: position.y,
+              };
+            } else {
+              background.startPoint = {x: position.x, y: position.y};
+            }
+            break;
+          default:
+            dots.push({x: position.x, y: position.y});
+            drawingLine.push({x: position.x, y: position.y});
+            if (background.isDrawing) {
+              if (
+                background.startPoint.x === position.x &&
+                background.startPoint.y === position.y
+              ) {
+                previewLine.clear();
+                drawingLine.length = 0;
+                background.isDrawing = false;
+                store.dispatch(
+                  addCanvasElement('wall', dots, {type: 'add', target: 'wall'})
+                );
+                dots.length = 0;
+              }
+            } else {
+              background.isDrawing = true;
+            }
+            background.startPoint = {x: position.x, y: position.y};
+            break;
         }
-        background.startPoint = {x: position.x, y: position.y};
         break;
       case 'filled-rectangle':
         if (background.isDrawing) {
@@ -604,37 +745,98 @@ export function createBackground(backgroundContainer, drawingContainer, tool) {
           drawingContainer.addChild(previewLine);
           break;
         case 'line':
-          previewLine.clear();
-          previewLine.lineStyle({
-            width: 15,
-            color: 0x005caf,
-            alignment: 0.5,
-            alpha: 0.5,
-            join: 'miter',
-            cap: 'butt',
-            miterLimit: 100,
-          });
-          previewLine.moveTo(background.startPoint.x, background.startPoint.y);
-          previewLine.lineTo(position.x, position.y);
-          drawingContainer.addChild(previewLine);
+          switch (ortho) {
+            case true:
+              previewLine.clear();
+              previewLine.lineStyle({
+                width: 15,
+                color: 0x005caf,
+                alignment: 0.5,
+                alpha: 0.5,
+                join: 'miter',
+                cap: 'butt',
+                miterLimit: 100,
+              });
+              previewLine.moveTo(
+                background.startPoint.x,
+                background.startPoint.y
+              );
+              if (
+                Math.abs(position.x - background.startPoint.x) >
+                Math.abs(position.y - background.startPoint.y)
+              ) {
+                previewLine.lineTo(position.x, background.startPoint.y);
+              } else {
+                previewLine.lineTo(background.startPoint.x, position.y);
+              }
+              drawingContainer.addChild(previewLine);
+              break;
+            default:
+              previewLine.clear();
+              previewLine.lineStyle({
+                width: 15,
+                color: 0x005caf,
+                alignment: 0.5,
+                alpha: 0.5,
+                join: 'miter',
+                cap: 'butt',
+                miterLimit: 100,
+              });
+              previewLine.moveTo(
+                background.startPoint.x,
+                background.startPoint.y
+              );
+              previewLine.lineTo(position.x, position.y);
+              drawingContainer.addChild(previewLine);
+              break;
+          }
           break;
         case 'polyline':
-          previewLine.clear();
-          previewLine.lineStyle({
-            width: 15,
-            color: 0x005caf,
-            alignment: 0.5,
-            alpha: 0.5,
-            join: 'miter',
-            cap: 'butt',
-            miterLimit: 100,
-          });
-          previewLine.moveTo(dots[0].x, dots[0].y);
-          for (let i = 1; i < dots.length; i++) {
-            previewLine.lineTo(dots[i].x, dots[i].y);
+          switch (ortho) {
+            case true:
+              previewLine.clear();
+              previewLine.lineStyle({
+                width: 15,
+                color: 0x005caf,
+                alignment: 0.5,
+                alpha: 0.5,
+                join: 'miter',
+                cap: 'butt',
+                miterLimit: 100,
+              });
+              previewLine.moveTo(dots[0].x, dots[0].y);
+              for (let i = 1; i < dots.length; i++) {
+                previewLine.lineTo(dots[i].x, dots[i].y);
+              }
+              if (
+                Math.abs(position.x - background.startPoint.x) >
+                Math.abs(position.y - background.startPoint.y)
+              ) {
+                previewLine.lineTo(position.x, background.startPoint.y);
+              } else {
+                previewLine.lineTo(background.startPoint.x, position.y);
+              }
+              drawingContainer.addChild(previewLine);
+              break;
+            default:
+              previewLine.clear();
+              previewLine.lineStyle({
+                width: 15,
+                color: 0x005caf,
+                alignment: 0.5,
+                alpha: 0.5,
+                join: 'miter',
+                cap: 'butt',
+                miterLimit: 100,
+              });
+              previewLine.moveTo(dots[0].x, dots[0].y);
+              for (let i = 1; i < dots.length; i++) {
+                previewLine.lineTo(dots[i].x, dots[i].y);
+              }
+              previewLine.lineTo(position.x, position.y);
+              drawingContainer.addChild(previewLine);
+              break;
           }
-          previewLine.lineTo(position.x, position.y);
-          drawingContainer.addChild(previewLine);
           break;
         case 'filled-rectangle':
           previewPolygon.clear();
@@ -711,13 +913,4 @@ export function createBackground(backgroundContainer, drawingContainer, tool) {
     }
     return new_dots;
   }
-}
-
-export async function createSVGElement(container) {
-  const svgPayload = await fetch(
-    'https://upload.wikimedia.org/wikipedia/commons/f/fa/De_Groot_academic_genealogy.svg'
-  ).then((data) => data.text());
-  const svgDOM = new DOMParser().parseFromString(svgPayload, 'image/svg+xml');
-  const svgEl = svgDOM.documentElement;
-  container.addChild(new SVGScene(svgEl));
 }

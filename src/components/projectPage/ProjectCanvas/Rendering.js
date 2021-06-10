@@ -79,8 +79,9 @@ function Rendering() {
     );
 
     // Animate
+    let request;
     const animate = function () {
-      requestAnimationFrame(animate);
+      request = requestAnimationFrame(animate);
       controls.update();
       renderer.render(scene, camera);
     };
@@ -90,6 +91,7 @@ function Rendering() {
     const current = renderingRef.current;
 
     return () => {
+      cancelAnimationFrame(request);
       current.removeChild(current.children[0]);
       window.removeEventListener('resize', () =>
         three.resizeRendering(renderingRef, sizes, camera, renderer)

@@ -141,13 +141,13 @@ export const fetchProjectData = (project_id) => async (dispatch) => {
     firestore.getSettingByName('Default-Setting'),
   ]);
 
-  const [settingPaints, settingFurnitures, settingTextures] = await Promise.all(
-    [
+  const [settingPaints, settingFurnitures, settingTextures, settingOpenings] =
+    await Promise.all([
       firestore.getSettingPaints(setting.id),
       firestore.getSettingFurnitures(setting.id),
       firestore.getSettingTextures(setting.id),
-    ]
-  );
+      firestore.getSettingOpenings(setting.id),
+    ]);
 
   dispatch(
     setProject({
@@ -166,6 +166,7 @@ export const fetchProjectData = (project_id) => async (dispatch) => {
       paints: settingPaints,
       furnitures: settingFurnitures,
       textures: settingTextures,
+      openings: settingOpenings,
     })
   );
   dispatch(setInformation('canvas'));
@@ -566,6 +567,10 @@ export const setCanvasTool = (type) => ({
   payload: {type},
 });
 
+export const setCanvasOrtho = () => ({
+  type: actionTypes.SET_CANVAS_ORTHO,
+});
+
 export const setCanvasScale = (scale) => ({
   type: actionTypes.SET_CANVAS_SCALE,
   payload: {scale},
@@ -592,6 +597,16 @@ export const setFurnitureRotation = (uuid, rotation) => ({
 export const setWallColor = (uuid, color) => ({
   type: actionTypes.SET_WALL_COLOR,
   payload: {uuid, color},
+});
+
+// openings
+export const setOpeningPosition = (uuid, position) => ({
+  type: actionTypes.SET_OPENING_POSITION,
+  payload: {uuid, position},
+});
+export const setOpeningRotation = (uuid, rotation) => ({
+  type: actionTypes.SET_OPENING_ROTATION,
+  payload: {uuid, rotation},
 });
 
 // floors

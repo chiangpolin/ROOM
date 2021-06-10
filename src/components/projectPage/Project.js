@@ -6,11 +6,11 @@ import Joyride from 'react-joyride';
 import {DndProvider} from 'react-dnd';
 import {HTML5Backend} from 'react-dnd-html5-backend';
 import {fetchProjectData} from '../../app/actions/index.js';
+import {handleJoyrideCallback} from '../../app/utils/joyride.js';
 import {
   projectSteps,
   defaultOptions,
-  handleJoyrideCallback,
-} from '../../app/utils/joyride.js';
+} from '../../app/constants/joyrideSettings.js';
 import {Canvas} from './ProjectCanvas/Canvas.js';
 import {Rendering} from './ProjectCanvas/Rendering.js';
 import {Home} from './ProjectBars/Home.js';

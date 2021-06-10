@@ -12,6 +12,7 @@ const initialState = {
   information: {},
   selectedGroup: {},
   tool: '',
+  ortho: false,
   // pixi instructions
   instruction: {},
   // pixi dots
@@ -105,6 +106,30 @@ const projectReducer = (state = initialState, action) => {
             instruction: {
               type: 'add',
               target: 'furniture',
+              group: action.payload.group,
+            },
+          };
+        case 'opening':
+          return {
+            ...state,
+            d_openings: [
+              ...state.d_openings,
+              {
+                name: action.payload.group.name,
+                id: _uuid(),
+                type: action.payload.group.type,
+                method: 'post',
+                file: action.payload.group.file,
+                dimension: action.payload.group.dimension,
+                position: action.payload.group.position
+                  ? action.payload.group.position
+                  : {x: 0, y: 0},
+                rotation: {angle: 0},
+              },
+            ],
+            instruction: {
+              type: 'add',
+              target: 'opening',
               group: action.payload.group,
             },
           };
@@ -274,6 +299,12 @@ const projectReducer = (state = initialState, action) => {
         tool: action.payload.type,
       };
 
+    case 'SET_CANVAS_ORTHO':
+      return {
+        ...state,
+        ortho: !state.ortho,
+      };
+
     case 'SET_CANVAS_SCALE':
       return {
         ...state,
@@ -338,6 +369,48 @@ const projectReducer = (state = initialState, action) => {
         selectedGroup: {
           ...state.selectedGroup,
           color: action.payload.color,
+        },
+      };
+
+    case 'SET_OPENING_POSITION':
+      return {
+        ...state,
+        d_openings: state.d_openings.map((opening) => {
+          return opening.id === action.payload.uuid
+            ? {
+                ...opening,
+                position: {
+                  x: action.payload.position.x,
+                  y: action.payload.position.y,
+                  z_index: opening.position.z_index,
+                },
+              }
+            : {...opening};
+        }),
+      };
+
+    case 'SET_OPENING_ROTATION':
+      return {
+        ...state,
+        d_openings: state.d_openings.map((opening) => {
+          return opening.id === action.payload.uuid
+            ? {
+                ...opening,
+                rotation: {
+                  angle: action.payload.rotation.angle,
+                },
+              }
+            : {...opening};
+        }),
+        instruction: {
+          type: 'rotate',
+          target: 'opening',
+        },
+        selectedGroup: {
+          ...state.selectedGroup,
+          rotation: {
+            angle: action.payload.rotation.angle,
+          },
         },
       };
 

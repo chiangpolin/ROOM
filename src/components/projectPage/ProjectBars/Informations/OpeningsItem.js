@@ -6,17 +6,17 @@ import {addCanvasElement} from '../../../../app/actions/index.js';
 import {ItemTypes} from '../../../../app/constants/dragTypes.js';
 import noimage from '../../../../static/images/backgrounds/noimage.png';
 
-function FurnituresItem(props) {
+function OpeningsItem(props) {
   const dispatch = useDispatch();
   const {scale} = useSelector((state) => state.project);
   const [{isDragging}, drag] = useDrag(() => ({
     type: ItemTypes.ELEMENT,
-    item: props.furniture,
+    item: props.opening,
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult();
       if (item && dropResult) {
         dispatch(
-          addCanvasElement('furniture', {
+          addCanvasElement('opening', {
             ...item,
             position: {
               x:
@@ -24,6 +24,7 @@ function FurnituresItem(props) {
               y:
                 (dropResult.position.y - document.body.clientHeight / 2) /
                 scale,
+              z_index: item.position.z_index,
             },
           })
         );
@@ -42,7 +43,7 @@ function FurnituresItem(props) {
         ref={drag}
         style={{opacity: isDragging ? 0.5 : 1}}
       ></img>
-      <p>{props.furniture.name}</p>
+      <p>{props.opening.name}</p>
     </Item>
   );
 }
@@ -71,4 +72,4 @@ const Item = styled.button`
   }
 `;
 
-export {FurnituresItem};
+export {OpeningsItem};

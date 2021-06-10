@@ -135,6 +135,7 @@ export async function setFurniture(renderer, scene, camera, obj) {
 }
 
 export async function setWall(renderer, scene, camera, wall, openings) {
+  console.log(openings);
   const line = wall.graphic;
   const color = RGBToHex(wall.color.r, wall.color.g, wall.color.b);
   const subtractCubes = [];
