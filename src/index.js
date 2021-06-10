@@ -2,9 +2,12 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 import App from './App';
-import {store} from './app/store';
+import * as firebase from './app/utils/firebase.js';
+import {store} from './app/store/index.js';
 import {Provider} from 'react-redux';
 import * as serviceWorker from './serviceWorker';
+
+firebase.init();
 
 ReactDOM.render(
   <React.StrictMode>

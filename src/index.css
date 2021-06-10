@@ -5,14 +5,7 @@
 }
 
 html,
-body {
-  height: 100%;
-}
-
+body,
 #root {
-  height: 100%;
-}
-
-.App {
   height: 100%;
 }
