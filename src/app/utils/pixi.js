@@ -429,42 +429,108 @@ export function createBackground(
         }
         break;
       case 'polygon-frame':
-        if (background.isDrawing) {
-          if (
-            background.startPoint.x === position.x &&
-            background.startPoint.y === position.y
-          ) {
-            const floorDots = offsetDotsOfPolygon(dots, 15 / 2);
-            const coveringDots = offsetDotsOfPolygon(dots, -15 / 2);
-            dots.push(dots[0]);
-            store.dispatch(
-              addCanvasElement('floor', floorDots, {
-                type: 'add',
-                target: 'floor',
-              })
-            );
-            store.dispatch(
-              addCanvasElement('covering', coveringDots, {
-                type: 'add',
-                target: 'covering',
-              })
-            );
-            store.dispatch(
-              addCanvasElement('wall', dots, {type: 'add', target: 'wall'})
-            );
-            dots.length = 0;
-            drawingLine.length = 0;
-            background.isDrawing = false;
-          } else {
-            dots.push({x: position.x, y: position.y});
-            drawingLine.push({x: position.x, y: position.y});
-            background.startPoint = {x: position.x, y: position.y};
-          }
-        } else {
-          dots.push({x: position.x, y: position.y});
-          drawingLine.push({x: position.x, y: position.y});
-          background.startPoint = {x: position.x, y: position.y};
-          background.isDrawing = true;
+        switch (ortho) {
+          case true:
+            if (background.isDrawing) {
+              if (
+                background.clickPoint.x === position.x &&
+                background.clickPoint.y === position.y
+              ) {
+                const floorDots = offsetDotsOfPolygon(dots, 15 / 2);
+                const coveringDots = offsetDotsOfPolygon(dots, -15 / 2);
+                dots.push(dots[0]);
+                store.dispatch(
+                  addCanvasElement('floor', floorDots, {
+                    type: 'add',
+                    target: 'floor',
+                  })
+                );
+                store.dispatch(
+                  addCanvasElement('covering', coveringDots, {
+                    type: 'add',
+                    target: 'covering',
+                  })
+                );
+                store.dispatch(
+                  addCanvasElement('wall', dots, {type: 'add', target: 'wall'})
+                );
+                dots.length = 0;
+                drawingLine.length = 0;
+                background.isDrawing = false;
+              } else {
+                if (
+                  Math.abs(position.x - background.startPoint.x) >
+                  Math.abs(position.y - background.startPoint.y)
+                ) {
+                  dots.push({x: position.x, y: background.startPoint.y});
+                  drawingLine.push({x: position.x, y: background.startPoint.y});
+                  background.startPoint = {
+                    x: position.x,
+                    y: background.startPoint.y,
+                  };
+                } else {
+                  dots.push({x: background.startPoint.x, y: position.y});
+                  drawingLine.push({x: background.startPoint.x, y: position.y});
+                  background.startPoint = {
+                    x: background.startPoint.x,
+                    y: position.y,
+                  };
+                }
+                background.clickPoint = {
+                  x: position.x,
+                  y: position.y,
+                };
+              }
+            } else {
+              dots.push({x: position.x, y: position.y});
+              drawingLine.push({x: position.x, y: position.y});
+              background.startPoint = {x: position.x, y: position.y};
+              background.clickPoint = {
+                x: position.x,
+                y: position.y,
+              };
+              background.isDrawing = true;
+            }
+            break;
+          default:
+            if (background.isDrawing) {
+              if (
+                background.startPoint.x === position.x &&
+                background.startPoint.y === position.y
+              ) {
+                const floorDots = offsetDotsOfPolygon(dots, 15 / 2);
+                const coveringDots = offsetDotsOfPolygon(dots, -15 / 2);
+                dots.push(dots[0]);
+                store.dispatch(
+                  addCanvasElement('floor', floorDots, {
+                    type: 'add',
+                    target: 'floor',
+                  })
+                );
+                store.dispatch(
+                  addCanvasElement('covering', coveringDots, {
+                    type: 'add',
+                    target: 'covering',
+                  })
+                );
+                store.dispatch(
+                  addCanvasElement('wall', dots, {type: 'add', target: 'wall'})
+                );
+                dots.length = 0;
+                drawingLine.length = 0;
+                background.isDrawing = false;
+              } else {
+                dots.push({x: position.x, y: position.y});
+                drawingLine.push({x: position.x, y: position.y});
+                background.startPoint = {x: position.x, y: position.y};
+              }
+            } else {
+              dots.push({x: position.x, y: position.y});
+              drawingLine.push({x: position.x, y: position.y});
+              background.startPoint = {x: position.x, y: position.y};
+              background.isDrawing = true;
+            }
+            break;
         }
         break;
       case 'line':
@@ -539,11 +605,39 @@ export function createBackground(
                 Math.abs(position.x - background.startPoint.x) >
                 Math.abs(position.y - background.startPoint.y)
               ) {
-                dots.push({x: position.x, y: background.startPoint.y});
-                drawingLine.push({x: position.x, y: background.startPoint.y});
+                if (
+                  background.clickPoint.x === position.x &&
+                  background.clickPoint.y === position.y
+                ) {
+                  dots.push({
+                    x: background.startPoint.x,
+                    y: background.startPoint.y,
+                  });
+                  drawingLine.push({
+                    x: background.startPoint.x,
+                    y: background.startPoint.y,
+                  });
+                } else {
+                  dots.push({x: position.x, y: background.startPoint.y});
+                  drawingLine.push({x: position.x, y: background.startPoint.y});
+                }
               } else {
-                dots.push({x: background.startPoint.x, y: position.y});
-                drawingLine.push({x: background.startPoint.x, y: position.y});
+                if (
+                  background.clickPoint.x === position.x &&
+                  background.clickPoint.y === position.y
+                ) {
+                  dots.push({
+                    x: background.startPoint.x,
+                    y: background.startPoint.y,
+                  });
+                  drawingLine.push({
+                    x: background.startPoint.x,
+                    y: background.startPoint.y,
+                  });
+                } else {
+                  dots.push({x: background.startPoint.x, y: position.y});
+                  drawingLine.push({x: background.startPoint.x, y: position.y});
+                }
               }
             } else {
               dots.push({x: position.x, y: position.y});
@@ -551,7 +645,6 @@ export function createBackground(
             }
             if (background.isDrawing) {
               if (
-                background.clickPoint &&
                 background.clickPoint.x === position.x &&
                 background.clickPoint.y === position.y
               ) {
@@ -587,6 +680,10 @@ export function createBackground(
               };
             } else {
               background.startPoint = {x: position.x, y: position.y};
+              background.clickPoint = {
+                x: position.x,
+                y: position.y,
+              };
             }
             break;
           default:
@@ -632,30 +729,85 @@ export function createBackground(
         }
         break;
       case 'filled-polygon':
-        if (background.isDrawing) {
-          if (
-            background.startPoint.x === position.x &&
-            background.startPoint.y === position.y
-          ) {
-            store.dispatch(
-              addCanvasElement('covering', dots, {
-                type: 'add',
-                target: 'covering',
-              })
-            );
-            dots.length = 0;
-            drawingPolygon.length = 0;
-            background.isDrawing = false;
-          } else {
-            dots.push({x: position.x, y: position.y});
-            background.startPoint = {x: position.x, y: position.y};
-            drawingPolygon.push({x: position.x, y: position.y});
-          }
-        } else {
-          dots.push({x: position.x, y: position.y});
-          background.startPoint = {x: position.x, y: position.y};
-          drawingPolygon.push({x: position.x, y: position.y});
-          background.isDrawing = true;
+        switch (ortho) {
+          case true:
+            if (background.isDrawing) {
+              if (
+                background.clickPoint.x === position.x &&
+                background.clickPoint.y === position.y
+              ) {
+                store.dispatch(
+                  addCanvasElement('covering', dots, {
+                    type: 'add',
+                    target: 'covering',
+                  })
+                );
+                dots.length = 0;
+                drawingPolygon.length = 0;
+                background.isDrawing = false;
+              } else {
+                if (
+                  Math.abs(position.x - background.startPoint.x) >
+                  Math.abs(position.y - background.startPoint.y)
+                ) {
+                  dots.push({x: position.x, y: background.startPoint.y});
+                  background.startPoint = {
+                    x: position.x,
+                    y: background.startPoint.y,
+                  };
+                  background.clickPoint = {x: position.x, y: position.y};
+                  drawingPolygon.push({
+                    x: position.x,
+                    y: background.startPoint.y,
+                  });
+                } else {
+                  dots.push({x: background.startPoint.x, y: position.y});
+                  background.startPoint = {
+                    x: background.startPoint.x,
+                    y: position.y,
+                  };
+                  background.clickPoint = {x: position.x, y: position.y};
+                  drawingPolygon.push({
+                    x: background.startPoint.x,
+                    y: position.y,
+                  });
+                }
+              }
+            } else {
+              dots.push({x: position.x, y: position.y});
+              background.startPoint = {x: position.x, y: position.y};
+              background.clickPoint = {x: position.x, y: position.y};
+              drawingPolygon.push({x: position.x, y: position.y});
+              background.isDrawing = true;
+            }
+            break;
+          default:
+            if (background.isDrawing) {
+              if (
+                background.startPoint.x === position.x &&
+                background.startPoint.y === position.y
+              ) {
+                store.dispatch(
+                  addCanvasElement('covering', dots, {
+                    type: 'add',
+                    target: 'covering',
+                  })
+                );
+                dots.length = 0;
+                drawingPolygon.length = 0;
+                background.isDrawing = false;
+              } else {
+                dots.push({x: position.x, y: position.y});
+                background.startPoint = {x: position.x, y: position.y};
+                drawingPolygon.push({x: position.x, y: position.y});
+              }
+            } else {
+              dots.push({x: position.x, y: position.y});
+              background.startPoint = {x: position.x, y: position.y};
+              drawingPolygon.push({x: position.x, y: position.y});
+              background.isDrawing = true;
+            }
+            break;
         }
         break;
       case 'rectangle':
@@ -675,27 +827,85 @@ export function createBackground(
         }
         break;
       case 'polygon':
-        if (background.isDrawing) {
-          if (
-            background.startPoint.x === position.x &&
-            background.startPoint.y === position.y
-          ) {
-            store.dispatch(
-              addCanvasElement('floor', dots, {type: 'add', target: 'floor'})
-            );
-            dots.length = 0;
-            drawingPolygon.length = 0;
-            background.isDrawing = false;
-          } else {
-            dots.push({x: position.x, y: position.y});
-            background.startPoint = {x: position.x, y: position.y};
-            drawingPolygon.push({x: position.x, y: position.y});
-          }
-        } else {
-          dots.push({x: position.x, y: position.y});
-          background.startPoint = {x: position.x, y: position.y};
-          drawingPolygon.push({x: position.x, y: position.y});
-          background.isDrawing = true;
+        switch (ortho) {
+          case true:
+            if (background.isDrawing) {
+              if (
+                background.clickPoint.x === position.x &&
+                background.clickPoint.y === position.y
+              ) {
+                store.dispatch(
+                  addCanvasElement('floor', dots, {
+                    type: 'add',
+                    target: 'floor',
+                  })
+                );
+                dots.length = 0;
+                drawingPolygon.length = 0;
+                background.isDrawing = false;
+              } else {
+                if (
+                  Math.abs(position.x - background.startPoint.x) >
+                  Math.abs(position.y - background.startPoint.y)
+                ) {
+                  dots.push({x: position.x, y: background.startPoint.y});
+                  background.startPoint = {
+                    x: position.x,
+                    y: background.startPoint.y,
+                  };
+                  background.clickPoint = {x: position.x, y: position.y};
+                  drawingPolygon.push({
+                    x: position.x,
+                    y: background.startPoint.y,
+                  });
+                } else {
+                  dots.push({x: background.startPoint.x, y: position.y});
+                  background.startPoint = {
+                    x: background.startPoint.x,
+                    y: position.y,
+                  };
+                  background.clickPoint = {x: position.x, y: position.y};
+                  drawingPolygon.push({
+                    x: background.startPoint.x,
+                    y: position.y,
+                  });
+                }
+              }
+            } else {
+              dots.push({x: position.x, y: position.y});
+              background.startPoint = {x: position.x, y: position.y};
+              background.clickPoint = {x: position.x, y: position.y};
+              drawingPolygon.push({x: position.x, y: position.y});
+              background.isDrawing = true;
+            }
+            break;
+          default:
+            if (background.isDrawing) {
+              if (
+                background.startPoint.x === position.x &&
+                background.startPoint.y === position.y
+              ) {
+                store.dispatch(
+                  addCanvasElement('floor', dots, {
+                    type: 'add',
+                    target: 'floor',
+                  })
+                );
+                dots.length = 0;
+                drawingPolygon.length = 0;
+                background.isDrawing = false;
+              } else {
+                dots.push({x: position.x, y: position.y});
+                background.startPoint = {x: position.x, y: position.y};
+                drawingPolygon.push({x: position.x, y: position.y});
+              }
+            } else {
+              dots.push({x: position.x, y: position.y});
+              background.startPoint = {x: position.x, y: position.y};
+              drawingPolygon.push({x: position.x, y: position.y});
+              background.isDrawing = true;
+            }
+            break;
         }
         break;
       default:
@@ -726,23 +936,53 @@ export function createBackground(
           drawingContainer.addChild(previewLine);
           break;
         case 'polygon-frame':
-          previewLine.clear();
-          previewLine.lineStyle({
-            width: 15,
-            color: 0x005caf,
-            alignment: 0.5,
-            alpha: 0.5,
-            join: 'miter',
-            cap: 'butt',
-            miterLimit: 100,
-          });
-          previewLine.moveTo(dots[0].x, dots[0].y);
-          for (let i = 1; i < dots.length; i++) {
-            previewLine.lineTo(dots[i].x, dots[i].y);
+          switch (ortho) {
+            case true:
+              previewLine.clear();
+              previewLine.lineStyle({
+                width: 15,
+                color: 0x005caf,
+                alignment: 0.5,
+                alpha: 0.5,
+                join: 'miter',
+                cap: 'butt',
+                miterLimit: 100,
+              });
+              previewLine.moveTo(dots[0].x, dots[0].y);
+              for (let i = 1; i < dots.length; i++) {
+                previewLine.lineTo(dots[i].x, dots[i].y);
+              }
+              if (
+                Math.abs(position.x - background.startPoint.x) >
+                Math.abs(position.y - background.startPoint.y)
+              ) {
+                previewLine.lineTo(position.x, background.startPoint.y);
+              } else {
+                previewLine.lineTo(background.startPoint.x, position.y);
+              }
+              previewLine.closePath();
+              drawingContainer.addChild(previewLine);
+              break;
+            default:
+              previewLine.clear();
+              previewLine.lineStyle({
+                width: 15,
+                color: 0x005caf,
+                alignment: 0.5,
+                alpha: 0.5,
+                join: 'miter',
+                cap: 'butt',
+                miterLimit: 100,
+              });
+              previewLine.moveTo(dots[0].x, dots[0].y);
+              for (let i = 1; i < dots.length; i++) {
+                previewLine.lineTo(dots[i].x, dots[i].y);
+              }
+              previewLine.lineTo(position.x, position.y);
+              previewLine.closePath();
+              drawingContainer.addChild(previewLine);
+              break;
           }
-          previewLine.lineTo(position.x, position.y);
-          previewLine.closePath();
-          drawingContainer.addChild(previewLine);
           break;
         case 'line':
           switch (ortho) {
@@ -851,14 +1091,44 @@ export function createBackground(
           drawingContainer.addChild(previewPolygon);
           break;
         case 'filled-polygon':
-          previewPolygon.clear();
-          previewPolygon.beginFill(0x005caf);
-          previewPolygon.drawPolygon(
-            ...drawingPolygon.map((point) => new PIXI.Point(point.x, point.y)),
-            new PIXI.Point(position.x, position.y)
-          );
-          previewPolygon.endFill();
-          drawingContainer.addChild(previewPolygon);
+          switch (ortho) {
+            case true:
+              previewPolygon.clear();
+              previewPolygon.beginFill(0x005caf);
+              if (
+                Math.abs(position.x - background.startPoint.x) >
+                Math.abs(position.y - background.startPoint.y)
+              ) {
+                previewPolygon.drawPolygon(
+                  ...drawingPolygon.map(
+                    (point) => new PIXI.Point(point.x, point.y)
+                  ),
+                  new PIXI.Point(position.x, background.startPoint.y)
+                );
+              } else {
+                previewPolygon.drawPolygon(
+                  ...drawingPolygon.map(
+                    (point) => new PIXI.Point(point.x, point.y)
+                  ),
+                  new PIXI.Point(background.startPoint.x, position.y)
+                );
+              }
+              previewPolygon.endFill();
+              drawingContainer.addChild(previewPolygon);
+              break;
+            default:
+              previewPolygon.clear();
+              previewPolygon.beginFill(0x005caf);
+              previewPolygon.drawPolygon(
+                ...drawingPolygon.map(
+                  (point) => new PIXI.Point(point.x, point.y)
+                ),
+                new PIXI.Point(position.x, position.y)
+              );
+              previewPolygon.endFill();
+              drawingContainer.addChild(previewPolygon);
+              break;
+          }
           break;
         case 'rectangle':
           previewPolygon.clear();
@@ -873,14 +1143,45 @@ export function createBackground(
           drawingContainer.addChild(previewPolygon);
           break;
         case 'polygon':
-          previewPolygon.clear();
-          previewPolygon.beginFill(0x005caf);
-          previewPolygon.drawPolygon(
-            ...drawingPolygon.map((point) => new PIXI.Point(point.x, point.y)),
-            new PIXI.Point(position.x, position.y)
-          );
-          previewPolygon.endFill();
-          drawingContainer.addChild(previewPolygon);
+          switch (ortho) {
+            case true:
+              previewPolygon.clear();
+              previewPolygon.beginFill(0x005caf);
+              if (
+                Math.abs(position.x - background.startPoint.x) >
+                Math.abs(position.y - background.startPoint.y)
+              ) {
+                previewPolygon.drawPolygon(
+                  ...drawingPolygon.map(
+                    (point) => new PIXI.Point(point.x, point.y)
+                  ),
+                  new PIXI.Point(position.x, background.startPoint.y)
+                );
+              } else {
+                previewPolygon.drawPolygon(
+                  ...drawingPolygon.map(
+                    (point) => new PIXI.Point(point.x, point.y)
+                  ),
+                  new PIXI.Point(background.startPoint.x, position.y)
+                );
+              }
+
+              previewPolygon.endFill();
+              drawingContainer.addChild(previewPolygon);
+              break;
+            default:
+              previewPolygon.clear();
+              previewPolygon.beginFill(0x005caf);
+              previewPolygon.drawPolygon(
+                ...drawingPolygon.map(
+                  (point) => new PIXI.Point(point.x, point.y)
+                ),
+                new PIXI.Point(position.x, position.y)
+              );
+              previewPolygon.endFill();
+              drawingContainer.addChild(previewPolygon);
+              break;
+          }
           break;
         default:
       }
