@@ -8,23 +8,23 @@ import * as theme from '../../app/constants/theme.js';
 import {
   profileSteps,
   defaultOptions,
-  handleJoyrideCallback,
-} from '../../app/utils/joyride.js';
+} from '../../app/constants/joyrideSettings.js';
+import {handleJoyrideCallback} from '../../app/utils/joyride.js';
 import {ReactComponent as FolderIcon} from '../../static/images/icons/folder.svg';
 import {ReactComponent as PersonIcon} from '../../static/images/icons/person.svg';
 import {ReactComponent as PeopleIcon} from '../../static/images/icons/people.svg';
 import {ReactComponent as CompassIcon} from '../../static/images/icons/compass.svg';
+import newroom from '../../static/images/backgrounds/new.jpg';
+import jungle from '../../static/images/backgrounds/jungle.jpg';
+import living from '../../static/images/backgrounds/living.jpg';
+import single from '../../static/images/backgrounds/single.jpg';
+import suite from '../../static/images/backgrounds/suite.jpg';
 import {Header} from './Header.js';
 import {UserCard} from './Cards/UserCard.js';
 import {NewCard} from './Cards/NewCard.js';
 import {ProjectCard} from './Cards/ProjectCard.js';
 import {Modal} from './Modals/Modal.js';
 import {UserModal} from './Modals/UserModal.js';
-import newroom from '../../static/images/backgrounds/new.jpg';
-import jungle from '../../static/images/backgrounds/jungle.jpg';
-import living from '../../static/images/backgrounds/living.jpg';
-import single from '../../static/images/backgrounds/single.jpg';
-import suite from '../../static/images/backgrounds/suite.jpg';
 
 function Profile() {
   const history = useHistory();

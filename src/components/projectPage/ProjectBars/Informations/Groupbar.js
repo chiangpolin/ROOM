@@ -4,6 +4,7 @@ import * as theme from '../../../../app/constants/theme.js';
 import {useSelector, useDispatch} from 'react-redux';
 import {
   setFurnitureRotation,
+  setOpeningRotation,
   removeCanvasElement,
 } from '../../../../app/actions/index.js';
 
@@ -23,7 +24,11 @@ function Groupbar() {
         <Buttons>
           <Button
             primary
-            disabled={selectedGroup.type !== 'furniture'}
+            disabled={
+              selectedGroup.type !== 'furniture' &&
+              selectedGroup.type !== 'window' &&
+              selectedGroup.type !== 'door'
+            }
             onClick={() => handleClickRotate(dispatch, selectedGroup)}
           >
             Rotate
@@ -47,6 +52,20 @@ function handleClickRotate(dispatch, group) {
     case 'furniture':
       dispatch(
         setFurnitureRotation(group.id, {
+          angle: group.rotation.angle + 90,
+        })
+      );
+      break;
+    case 'window':
+      dispatch(
+        setOpeningRotation(group.id, {
+          angle: group.rotation.angle + 90,
+        })
+      );
+      break;
+    case 'door':
+      dispatch(
+        setOpeningRotation(group.id, {
           angle: group.rotation.angle + 90,
         })
       );

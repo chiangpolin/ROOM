@@ -1,7 +1,7 @@
 import React from 'react';
 import styled, {css} from 'styled-components';
 import {useSelector, useDispatch} from 'react-redux';
-import {setCanvasTool} from '../../../app/actions';
+import {setCanvasTool, setCanvasOrtho} from '../../../app/actions';
 import * as theme from '../../../app/constants/theme.js';
 import {ReactComponent as BoxIcon} from '../../../static/images/icons/box.svg';
 import {ReactComponent as SquareIcon} from '../../../static/images/icons/square.svg';
@@ -11,14 +11,19 @@ import {ReactComponent as PentagonFillIcon} from '../../../static/images/icons/p
 import {ReactComponent as SlashIcon} from '../../../static/images/icons/slash-lg.svg';
 import {ReactComponent as PencilIcon} from '../../../static/images/icons/pencil.svg';
 import {ReactComponent as XIcon} from '../../../static/images/icons/x.svg';
+import {ReactComponent as RulersIcon} from '../../../static/images/icons/rulers.svg';
 
 function Tools() {
   const user_id = useSelector((state) => state.profile.id);
-  const {author_id, tool} = useSelector((state) => state.project);
+  const {author_id, tool, ortho} = useSelector((state) => state.project);
   const dispatch = useDispatch();
 
   return user_id === author_id ? (
     <Div>
+      <Tool onClick={() => dispatch(setCanvasOrtho())} primary={ortho === true}>
+        <RulersIcon width="24" height="24"></RulersIcon>
+      </Tool>
+      <p> | </p>
       <Tool onClick={() => dispatch(setCanvasTool(''))}>
         <XIcon width="24" height="24"></XIcon>
       </Tool>
@@ -89,6 +94,10 @@ const Div = styled.div`
   border-radius: 5px;
   box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
   background-color: ${theme.WHITE};
+
+  p {
+    margin: 0 15px;
+  }
 
   @media (max-width: 767px) {
     display: none;

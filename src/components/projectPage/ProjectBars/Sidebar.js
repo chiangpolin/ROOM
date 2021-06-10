@@ -5,10 +5,11 @@ import {useSelector, useDispatch} from 'react-redux';
 import {setInformation} from '../../../app/actions/index.js';
 import {ReactComponent as GearIcon} from '../../../static/images/icons/gear.svg';
 import {ReactComponent as InfoCircleIcon} from '../../../static/images/icons/info-circle.svg';
-import {ReactComponent as InboxesIcon} from '../../../static/images/icons/inboxes.svg';
-import {ReactComponent as PaletteIcon} from '../../../static/images/icons/palette2.svg';
-import {ReactComponent as CameraIcon} from '../../../static/images/icons/camera-reels.svg';
+import {ReactComponent as ShopIcon} from '../../../static/images/icons/shop.svg';
+import {ReactComponent as WindowIcon} from '../../../static/images/icons/shop-window.svg';
+import {ReactComponent as PaletteIcon} from '../../../static/images/icons/palette.svg';
 import {ReactComponent as BricksIcon} from '../../../static/images/icons/bricks.svg';
+import {ReactComponent as CameraIcon} from '../../../static/images/icons/camera-reels.svg';
 
 function Sidebar() {
   const {information, selectedGroup} = useSelector((state) => state.project);
@@ -45,9 +46,19 @@ function Sidebar() {
               : dispatch(setInformation('furniture'))
           }
         >
-          <InboxesIcon width="24" height="24" />
+          <ShopIcon width="24" height="24" />
         </SideButton>
       </div>
+      <SideButton
+        primary={information === 'opening'}
+        onClick={() =>
+          information === 'opening'
+            ? dispatch(setInformation(''))
+            : dispatch(setInformation('opening'))
+        }
+      >
+        <WindowIcon width="24" height="24"></WindowIcon>
+      </SideButton>
       <div className="step-2">
         <SideButton
           disabled={selectedGroup.type !== 'wall'}

@@ -913,12 +913,12 @@ export function getSettingTextures(settings_id) {
   });
 }
 
-export function postSettingFurniture(setting_id, data) {
+export function postSettingTexture(setting_id, data) {
   const db = firebase.firestore();
   return new Promise((resolve) => {
     db.collection('settings')
       .doc(setting_id)
-      .collection('furnitures')
+      .collection('textures')
       .add(data)
       .then((docRef) => {
         resolve(docRef.id);
@@ -946,12 +946,45 @@ export function getSettingFurnitures(settings_id) {
   });
 }
 
-export function postSettingTexture(setting_id, data) {
+export function postSettingFurniture(setting_id, data) {
   const db = firebase.firestore();
   return new Promise((resolve) => {
     db.collection('settings')
       .doc(setting_id)
-      .collection('textures')
+      .collection('furnitures')
+      .add(data)
+      .then((docRef) => {
+        resolve(docRef.id);
+      })
+      .catch((error) => {
+        console.error('Error adding document: ', error);
+      });
+  });
+}
+
+export function getSettingOpenings(settings_id) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('settings')
+      .doc(settings_id)
+      .collection('openings')
+      .get()
+      .then((querySnapshot) => {
+        const openings = [];
+        querySnapshot.forEach((doc) => {
+          openings.push({...doc.data(), id: doc.id});
+        });
+        resolve(openings);
+      });
+  });
+}
+
+export function postSettingOpening(setting_id, data) {
+  const db = firebase.firestore();
+  return new Promise((resolve) => {
+    db.collection('settings')
+      .doc(setting_id)
+      .collection('openings')
       .add(data)
       .then((docRef) => {
         resolve(docRef.id);
