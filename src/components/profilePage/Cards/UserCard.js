@@ -76,12 +76,12 @@ function handleClickSignOut(dispatch, history) {
 
 const Div = styled.div`
   position: sticky;
-  top: 90px;
-  margin: 30px 0 0;
+  top: 140px;
   padding: 15px;
   width: 300px;
   height: 390px;
   border-radius: 10px;
+  box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
   background-color: ${theme.WHITE};
 
   @media (max-width: 1024px) {

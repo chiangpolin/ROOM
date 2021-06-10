@@ -59,11 +59,10 @@ const Div = styled.header`
 const Navbar = styled.div`
   display: flex;
   align-items: center;
-  margin: 10px 0 0 0;
-  padding: 30px;
+  padding: 10px 30px 0 30px;
   width: 100%;
   max-width: 1200px;
-  height: 80px;
+  height: 70px;
   background-color: transparent;
 `;
 

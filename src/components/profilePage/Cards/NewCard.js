@@ -26,6 +26,7 @@ const Item = styled.div`
   width: 100%;
   border: none;
   background-color: '#ffffff';
+  box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
   border-radius: 10px;
   background-color: ${theme.WHITE};
 

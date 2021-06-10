@@ -52,6 +52,7 @@ function Profile() {
         styles={{options: defaultOptions}}
       ></Joyride>
       <Header setRun={setRun} handleToggleUser={handleToggleUser}></Header>
+      <Visual></Visual>
       <Section>
         <SideBar>
           <UserCard />
@@ -190,6 +191,7 @@ function Profile() {
                     <ProjectCard
                       key={project.id}
                       id={project.id}
+                      tag={'author'}
                       name={project.name}
                       author_id={project.author_id}
                       imageURL={project.imageURL}
@@ -202,6 +204,7 @@ function Profile() {
                     <ProjectCard
                       key={project.id}
                       id={project.id}
+                      tag={'shared'}
                       name={project.name}
                       author_id={project.author_id}
                       imageURL={project.imageURL}
@@ -214,6 +217,7 @@ function Profile() {
                     <ProjectCard
                       key={project.id}
                       id={project.id}
+                      tag={'searched'}
                       name={project.name}
                       author_id={project.author_id}
                       imageURL={project.imageURL}
@@ -247,25 +251,37 @@ const Main = styled.main`
 const Section = styled.section`
   position: relative;
   display: flex;
-  padding: 90px 30px 30px;
+  padding: 60px 30px 30px;
   width: 100%;
   max-width: 1200px;
   background-color: transparent;
 
   @media (max-width: 1024px) {
-    padding: 90px 30px 30px 30px;
+    padding: 60px 30px 30px 30px;
   }
 
   @media (max-width: 375px) {
-    padding: 90px 30px 30px 30px;
+    padding: 60px 30px 30px 30px;
   }
 `;
 
 const SideBar = styled.div`
-  margin: 53px 0 0 0;
+  margin: 80px 0 0 0;
+
   h1 {
     padding: 0 0 15px 0;
     font-size: 24px;
+  }
+`;
+
+const Visual = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 305px;
+  background-color: ${theme.RURIKON};
+
+  @media (max-width: 375px) {
+    display: none;
   }
 `;
 
@@ -276,6 +292,7 @@ const Content = styled.div`
   h1 {
     padding: 10px 0 10px 0;
     font-size: 24px;
+    line-height: 30px;
   }
 
   @media (max-width: 1024px) {
@@ -284,8 +301,9 @@ const Content = styled.div`
 `;
 
 const AddDiv = styled.div`
-  margin: 30px 0 0;
+  margin: 30px 0 30px;
   h1 {
+    color: ${theme.WHITE};
     font-family: 'Open Sans', sans-serif;
     font-weight: 600;
     font-size: 24px;
@@ -306,7 +324,6 @@ const AddContainer = styled.div`
   display: grid;
   grid-template-columns: repeat(5, 1fr);
   grid-gap: 15px 15px;
-  margin: 0 0 30px 0;
 
   @media (max-width: 768px) {
     grid-template-columns: repeat(3, 1fr);
@@ -323,6 +340,12 @@ const MainTitle = styled.div`
     font-family: 'Open Sans', sans-serif;
     font-weight: 600;
     font-size: 24px;
+  }
+
+  @media (max-width: 375px) {
+    h1 {
+      margin: 15px 0 0;
+    }
   }
 `;
 

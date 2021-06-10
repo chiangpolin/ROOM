@@ -13,3 +13,6 @@ export const NAMARI = '#787878';
 export const PRIMARY = '#0275d8';
 export const DANGER = '#d9534f';
 export const SUCCESS = '#5cb85c';
+
+export const GOOGLE = '#4285f4';
+export const FACEBOOK = '#4267b2';

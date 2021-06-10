@@ -11,8 +11,8 @@ import {
 } from '../../app/actions/index.js';
 import * as theme from '../../app/constants/theme.js';
 import {checkValidation} from '../../app/utils/validate.js';
-import {ReactComponent as GoogleIcon} from '../../static/images/icons/google.svg';
-import {ReactComponent as FacebookIcon} from '../../static/images/icons/facebook.svg';
+import {ReactComponent as GoogleIcon} from '../../static/images/brands/google.svg';
+import {ReactComponent as FacebookIcon} from '../../static/images/brands/facebook.svg';
 import {ReactComponent as PersonIcon} from '../../static/images/icons/person.svg';
 import {ReactComponent as EnvelopeIcon} from '../../static/images/icons/envelope.svg';
 import {ReactComponent as LockIcon} from '../../static/images/icons/lock.svg';
@@ -36,16 +36,18 @@ function Form(props) {
           <h1>Sign In</h1>
           <h2>Room</h2>
           <TPLButtons>
-            <Button onClick={() => handleClickGoogleSignIn(dispatch, history)}>
-              <GoogleIcon width="16" height="16" />
+            <GoogleButton
+              onClick={() => handleClickGoogleSignIn(dispatch, history)}
+            >
+              <GoogleIcon width="20" height="20" />
               <p>Google</p>
-            </Button>
-            <Button
+            </GoogleButton>
+            <FacebookButton
               onClick={() => handleClickFacebookSignIn(dispatch, history)}
             >
-              <FacebookIcon width="24" hieght="24" />
+              <FacebookIcon width="20" height="20" />
               <p>Facebook</p>
-            </Button>
+            </FacebookButton>
           </TPLButtons>
           <h3>or use your email to sign in:</h3>
           <InputDiv>
@@ -98,16 +100,18 @@ function Form(props) {
           <h1>Sign Up</h1>
           <h2>Room</h2>
           <TPLButtons>
-            <Button onClick={() => handleClickGoogleSignIn(dispatch, history)}>
-              <GoogleIcon width="16" height="16" />
+            <GoogleButton
+              onClick={() => handleClickGoogleSignIn(dispatch, history)}
+            >
+              <GoogleIcon width="20" height="20" />
               <p>Google</p>
-            </Button>
-            <Button
+            </GoogleButton>
+            <FacebookButton
               onClick={() => handleClickFacebookSignIn(dispatch, history)}
             >
-              <FacebookIcon width="24" hieght="24" />
+              <FacebookIcon width="20" height="20" />
               <p>Facebook</p>
-            </Button>
+            </FacebookButton>
           </TPLButtons>
           <InputDiv>
             <Input
@@ -251,9 +255,10 @@ const Div = styled.div`
   display: flex;
   flex-direction: column;
   width: 360px;
-  height: 90%;
+  height: 100%;
   border: 1px solid ${theme.GOFUN};
   border-radius: 10px;
+  box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
   background-color: ${theme.GOFUN};
 
   h1 {
@@ -261,7 +266,7 @@ const Div = styled.div`
     font-weight: 600;
     font-size: 36px;
     margin: 10px 20px 5px;
-    color: ${theme.MIZU};
+    color: ${theme.NAMARI};
   }
 
   h2 {
@@ -273,7 +278,7 @@ const Div = styled.div`
     font-weight: 600;
     font-size: 16px;
     margin: 0 20px;
-    color: ${theme.MIZU};
+    color: ${theme.NAMARI};
   }
 
   p {
@@ -285,7 +290,7 @@ const Div = styled.div`
 
   hr {
     margin: 0 15px;
-    border: 1px solid ${theme.MIZU};
+    border: 1px solid ${theme.LIGHTGREY};
   }
 
   @media (max-width: 768px) {
@@ -302,6 +307,8 @@ const Div = styled.div`
   @media (max-width: 375px) {
     width: 300px;
     border: none;
+    box-shadow: none;
+    background-color: transparent;
 
     h1 {
       display: none;
@@ -313,7 +320,15 @@ const Div = styled.div`
       font-weight: 600;
       font-size: 36px;
       margin: 10px 20px 5px;
-      color: ${theme.MIZU};
+      color: ${theme.GOFUN};
+    }
+
+    h3 {
+      color: ${theme.GOFUN};
+    }
+
+    hr {
+      border: 1px solid ${theme.GOFUN};
     }
   }
 `;
@@ -322,25 +337,30 @@ const InputDiv = styled.div`
   position: relative;
   margin: 5px 15px 5px;
   font-size: 16px;
-  color: ${theme.MIZU};
+  color: ${theme.NAMARI};
 
   div {
     position: absolute;
-    top: 5px;
+    top: 10px;
     left: 20px;
+  }
+
+  @media (max-width: 375px) {
+    color: ${theme.GOFUN};
   }
 `;
 
 const Input = styled.input`
+  margin: 5px 0 0;
   padding: 0 0 0 50px;
   width: 100%;
   height: 30px;
-  border: 1px solid ${theme.MIZU};
+  border: 1px solid ${theme.LIGHTGREY};
   border-radius: 5px;
   font-family: 'Open Sans', sans-serif;
   font-weight: 400;
   font-size: 16px;
-  color: ${theme.MIZU};
+  color: ${theme.NAMARI};
   background-color: transparent;
 
   :focus {
@@ -348,7 +368,16 @@ const Input = styled.input`
   }
 
   ::placeholder {
-    color: ${theme.MIZU};
+    color: ${theme.NAMARI};
+  }
+
+  @media (max-width: 375px) {
+    border: 1px solid ${theme.GOFUN};
+    color: ${theme.GOFUN};
+
+    ::placeholder {
+      color: ${theme.GOFUN};
+    }
   }
 
   ${(props) =>
@@ -358,6 +387,58 @@ const Input = styled.input`
     `}
 `;
 
+const GoogleButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0 10px;
+  width: 100%;
+  height: 30px;
+  border: 1px solid ${theme.LIGHTGREY};
+  border-radius: 5px;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: ${theme.NAMARI};
+  background-color: ${theme.WHITE};
+
+  :hover {
+    cursor: pointer;
+  }
+
+  svg {
+    margin: 0 5px 0 0;
+  }
+
+  @media (max-width: 375px) {
+    border: 1px solid ${theme.WHITE};
+  }
+`;
+
+const FacebookButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0 10px;
+  width: 100%;
+  height: 30px;
+  border: 1px solid ${theme.FACEBOOK};
+  border-radius: 5px;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: ${theme.WHITE};
+  background-color: ${theme.FACEBOOK};
+
+  :hover {
+    cursor: pointer;
+  }
+
+  svg {
+    margin: 0 5px 0 0;
+  }
+`;
+
 const Button = styled.button`
   display: flex;
   align-items: center;
@@ -365,12 +446,12 @@ const Button = styled.button`
   margin: 0 0 10px;
   width: 100%;
   height: 30px;
-  border: 1px solid ${theme.MIZU};
+  border: 1px solid ${theme.LIGHTGREY};
   border-radius: 5px;
   font-family: 'Open Sans', sans-serif;
   font-weight: 400;
   font-size: 16px;
-  color: ${theme.MIZU};
+  color: ${theme.NAMARI};
   background-color: transparent;
 
   svg {
@@ -380,7 +461,19 @@ const Button = styled.button`
   :hover {
     cursor: pointer;
     color: ${theme.GOFUN};
-    background-color: ${theme.MIZU};
+    background-color: ${theme.LIGHTGREY};
+    border: 1px solid ${theme.LIGHTGREY};
+  }
+
+  @media (max-width: 375px) {
+    color: ${theme.GOFUN};
+    border: 1px solid ${theme.GOFUN};
+
+    :hover {
+      cursor: pointer;
+      color: ${theme.GOFUN};
+      background-color: ${theme.MIZU};
+    }
   }
 
   ${(props) =>
@@ -389,6 +482,25 @@ const Button = styled.button`
       margin: 10px 0 10px;
       color: ${theme.GOFUN};
       background-color: ${theme.MIZU};
+      border: 1px solid ${theme.MIZU};
+
+      :hover {
+        cursor: pointer;
+        color: ${theme.GOFUN};
+        background-color: ${theme.MIZU};
+      }
+
+      @media (max-width: 375px) {
+        border: 1px solid ${theme.GOFUN};
+        color: ${theme.MIZU};
+        background-color: ${theme.GOFUN};
+
+        :hover {
+          cursor: pointer;
+          color: ${theme.MIZU};
+          background-color: ${theme.GOFUN};
+        }
+      }
     `}
 `;
 

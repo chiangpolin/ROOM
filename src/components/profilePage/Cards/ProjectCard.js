@@ -31,7 +31,7 @@ function ProjectCard(props) {
             onClick={() => history.push(`project/${props.id}`)}
           ></ImgContainer>
           <Trash>
-            {props.author_id === id ? (
+            {props.tag === 'author' ? (
               <TrashIcon
                 width="24"
                 height="24"
@@ -42,7 +42,7 @@ function ProjectCard(props) {
             )}
           </Trash>
           <Share>
-            {props.author_id === id ? (
+            {props.tag === 'author' ? (
               <ShareIcon
                 width="24"
                 height="24"
@@ -53,13 +53,17 @@ function ProjectCard(props) {
             )}
           </Share>
           <Stickies>
-            <div className="step-3">
-              <StickiesIcon
-                width="24"
-                height="24"
-                onClick={() => handleClickClone(dispatch, id, props.id)}
-              ></StickiesIcon>
-            </div>
+            {props.tag === 'author' || props.tag === 'shared' ? (
+              <div className="step-3">
+                <StickiesIcon
+                  width="24"
+                  height="24"
+                  onClick={() => handleClickClone(dispatch, id, props.id)}
+                ></StickiesIcon>
+              </div>
+            ) : (
+              ''
+            )}
           </Stickies>
         </ImgDiv>
         <p>{props.name}</p>
@@ -93,6 +97,7 @@ const Item = styled.div`
   width: 100%;
   border: none;
   background-color: '#ffffff';
+  box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
   border-radius: 10px;
   background-color: ${theme.WHITE};
 
