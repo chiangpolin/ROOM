@@ -1,7 +1,12 @@
-import React, {useState} from 'react';
-import styled from 'styled-components';
+import React, {useEffect, useState} from 'react';
+import styled, {css} from 'styled-components';
 import {useSelector, useDispatch} from 'react-redux';
-import {fetchSearchTarget, shareProject} from '../../../app/actions/index.js';
+import {
+  resetSearchTargets,
+  fetchSearchTargets,
+  fetchSearchTarget,
+  shareProject,
+} from '../../../app/actions/index.js';
 import * as theme from '../../../app/constants/theme.js';
 import {ReactComponent as X} from '../../../static/images/icons/x.svg';
 import {ReactComponent as SearchIcon} from '../../../static/images/icons/search.svg';
@@ -9,8 +14,17 @@ import avatar from '../../../static/images/backgrounds/profile-avatar.png';
 
 function Modal(props) {
   const [email, setEmail] = useState('');
-  const {searchTarget, selectedProject} = useSelector((state) => state.profile);
+  const [shareIsClicked, setIsClicked] = useState(false);
+  const {searchTargets, selectedProject} = useSelector(
+    (state) => state.profile
+  );
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(resetSearchTargets());
+    dispatch(fetchSearchTargets(selectedProject.share_id));
+    // eslint-disable-next-line
+  }, []);
 
   return (
     <Div>
@@ -20,35 +34,36 @@ function Modal(props) {
           <X width="24" height="24" />
         </Button>
         <Content>
+          <h3>Share Project "{selectedProject.name}"</h3>
           <SearchBar>
             <Input
               type="text"
               value={email}
               onChange={(event) => handleChange(event, setEmail)}
+              placeholder={'Search User by Email'}
             ></Input>
             <SearchButton onClick={() => handleSubmit(dispatch, email)}>
               <SearchIcon />
             </SearchButton>
           </SearchBar>
-          {searchTarget.id ? (
+          {searchTargets.map((target) => (
             <Target>
               <img src={avatar}></img>
-              <p>{searchTarget.name}</p>
-              <button
-                onClick={() =>
-                  handleClickShare(
-                    dispatch,
-                    selectedProject.id,
-                    searchTarget.id
-                  )
+              <p>{target.name}</p>
+              <ShareButton
+                disabled={
+                  shareIsClicked ||
+                  selectedProject.share_id.filter((id) => id === target.id)[0]
                 }
+                onClick={() => {
+                  handleClickShare(dispatch, selectedProject.id, target.id);
+                  setIsClicked(true);
+                }}
               >
                 Share
-              </button>
+              </ShareButton>
             </Target>
-          ) : (
-            ''
-          )}
+          ))}
         </Content>
       </ModalBody>
     </Div>
@@ -122,7 +137,14 @@ const Button = styled.button`
 `;
 
 const Content = styled.div`
-  margin: 45px 30px 30px;
+  margin: 30px;
+
+  h3 {
+    margin: 0 0 5px;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 600;
+    font-size: 16px;
+  }
 `;
 
 const SearchBar = styled.div`
@@ -173,19 +195,25 @@ const Target = styled.div`
     font-weight: 400;
     font-size: 16px;
   }
+`;
 
-  button {
-    margin: 0 0 0 auto;
-    padding: 0 5px;
-    font-family: 'Open Sans', sans-serif;
-    font-weight: 400;
-    font-size: 16px;
-    border: 1px solid ${theme.RURI};
-    border-radius: 5px;
-    color: ${theme.WHITE};
-    background-color: ${theme.RURI};
-    cursor: pointer;
-  }
+const ShareButton = styled.button`
+  margin: 0 0 0 auto;
+  padding: 0 5px;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  border: 1px solid ${theme.RURI};
+  border-radius: 5px;
+  color: ${theme.WHITE};
+  background-color: ${theme.RURI};
+  cursor: pointer;
+
+  ${(props) =>
+    props.disabled &&
+    css`
+      opacity: 0.6;
+    `}
 `;
 
 export {Modal};

@@ -19,6 +19,7 @@ import jungle from '../../static/images/backgrounds/jungle.jpg';
 import living from '../../static/images/backgrounds/living.jpg';
 import single from '../../static/images/backgrounds/single.jpg';
 import suite from '../../static/images/backgrounds/suite.jpg';
+import {Alert} from '../Notification/Alert.js';
 import {Header} from './Header.js';
 import {UserCard} from './Cards/UserCard.js';
 import {NewCard} from './Cards/NewCard.js';
@@ -44,6 +45,7 @@ function Profile() {
 
   return id ? (
     <Main>
+      <Alert></Alert>
       <Joyride
         run={run}
         steps={steps}
@@ -194,6 +196,7 @@ function Profile() {
                       tag={'author'}
                       name={project.name}
                       author_id={project.author_id}
+                      share_id={project.share_id}
                       imageURL={project.imageURL}
                       handleToggleShare={handleToggleShare}
                     ></ProjectCard>
@@ -251,7 +254,7 @@ const Main = styled.main`
 const Section = styled.section`
   position: relative;
   display: flex;
-  padding: 60px 30px 30px;
+  padding: 60px 30px 60px;
   width: 100%;
   max-width: 1200px;
   background-color: transparent;

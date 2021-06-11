@@ -1,8 +1,12 @@
+// alert
+export const ADD_MESSAGE = 'ADD_MESSAGE';
+export const REMOVE_MESSAGE = 'REMOVE_MESSAGE';
+
 // user
 export const SET_USER = 'SET_USER';
 export const SET_USER_NAME = 'SET_USER_NAME';
-export const SET_SEARCH_TARGET = 'SET_SEARCH_TARGET';
-export const SELECT_SEARCH_TARGET = 'SELECT_SEARCH_TARGET';
+export const ADD_SEARCH_TARGET = 'ADD_SEARCH_TARGET';
+export const RESET_SEARCH_TARGETS = 'RESET_SEARCH_TARGETS';
 
 // projects
 export const SET_PROJECTS = 'SET_PROJECTS';
@@ -18,9 +22,6 @@ export const RESET_PROJECT_STATUS = 'RESET_PROJECT_STATUS';
 
 export const SET_PROJECT_NAME = 'SET_PROJECT_NAME';
 export const TOGGLE_PROJECT_NAME = 'TOGGLE_PROJECT_NAME';
-
-export const TOGGLE_SHARE = 'TOGGLE_SHARE';
-export const CLOSE_SHARE = 'CLOSE_SHARE';
 
 // settings
 export const SET_SETTING = 'SET_SETTING';

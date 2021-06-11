@@ -488,6 +488,7 @@ const Button = styled.button`
         cursor: pointer;
         color: ${theme.GOFUN};
         background-color: ${theme.MIZU};
+        border: 1px solid ${theme.MIZU};
       }
 
       @media (max-width: 375px) {

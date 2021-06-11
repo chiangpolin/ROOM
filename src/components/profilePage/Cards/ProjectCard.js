@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import {useHistory} from 'react-router-dom';
 import {useSelector, useDispatch} from 'react-redux';
 import {
+  alertMessage,
   selectProject,
   cloneProject,
   deleteProject,
@@ -35,7 +36,9 @@ function ProjectCard(props) {
               <TrashIcon
                 width="24"
                 height="24"
-                onClick={() => handleClickDelete(dispatch, id, props.id)}
+                onClick={() =>
+                  handleClickDelete(dispatch, id, props.id, props.name)
+                }
               ></TrashIcon>
             ) : (
               ''
@@ -58,7 +61,9 @@ function ProjectCard(props) {
                 <StickiesIcon
                   width="24"
                   height="24"
-                  onClick={() => handleClickClone(dispatch, id, props.id)}
+                  onClick={() =>
+                    handleClickClone(dispatch, id, props.id, props.name)
+                  }
                 ></StickiesIcon>
               </div>
             ) : (
@@ -78,17 +83,20 @@ function handleClickShare(dispatch, props) {
       id: props.id,
       name: props.name,
       author_id: props.author_id,
+      share_id: props.share_id,
     })
   );
   props.handleToggleShare(true);
 }
 
-async function handleClickClone(dispatch, user_id, project_id) {
+async function handleClickClone(dispatch, user_id, project_id, project_name) {
   dispatch(cloneProject(user_id, project_id));
+  dispatch(alertMessage(`Clone ${project_name}`));
 }
 
-async function handleClickDelete(dispatch, user_id, project_id) {
+async function handleClickDelete(dispatch, user_id, project_id, project_name) {
   dispatch(deleteProject(user_id, project_id));
+  dispatch(alertMessage(`Delete ${project_name}`));
 }
 
 const Item = styled.div`
