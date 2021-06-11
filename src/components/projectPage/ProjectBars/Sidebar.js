@@ -26,6 +26,7 @@ function Sidebar() {
         }
       >
         <GearIcon width="24" height="24" />
+        <p>Settings</p>
       </SideButton>
       <SideButton
         primary={information === 'group'}
@@ -36,6 +37,7 @@ function Sidebar() {
         }
       >
         <InfoCircleIcon width="24" height="24" />
+        <p>Group</p>
       </SideButton>
       <div className="step-1">
         <SideButton
@@ -47,6 +49,7 @@ function Sidebar() {
           }
         >
           <ShopIcon width="24" height="24" />
+          <p>Furnitures</p>
         </SideButton>
       </div>
       <SideButton
@@ -58,6 +61,7 @@ function Sidebar() {
         }
       >
         <WindowIcon width="24" height="24"></WindowIcon>
+        <p>Openings</p>
       </SideButton>
       <div className="step-2">
         <SideButton
@@ -72,6 +76,7 @@ function Sidebar() {
           }
         >
           <PaletteIcon width="24" height="24" />
+          <p>Paints</p>
         </SideButton>
       </div>
       <div className="step-3">
@@ -87,6 +92,7 @@ function Sidebar() {
           }
         >
           <BricksIcon width="24" height="24" />
+          <p>Textures</p>
         </SideButton>
       </div>
       <SideButton
@@ -98,6 +104,7 @@ function Sidebar() {
         }
       >
         <CameraIcon width="24" height="24" />
+        <p>Camera</p>
       </SideButton>
     </Div>
   );
@@ -137,7 +144,7 @@ const Div = styled.div`
     }
 
     :hover {
-      color: ${theme.RURI};
+      color: ${theme.KASHMIRBLUE};
     }
   }
 
@@ -156,13 +163,47 @@ const SideButton = styled.div`
 
   :hover {
     cursor: pointer;
-    color: ${theme.RURI};
+    color: ${theme.KASHMIRBLUE};
+  }
+
+  :hover p {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  p {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s;
+    position: absolute;
+    left: 75%;
+    width: 80px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    border-radius: 5px;
+    color: ${theme.WHITE};
+    background-color: ${theme.MINESHAFT};
+
+    ::after {
+      content: '';
+      position: absolute;
+      top: 35%;
+      right: 100%;
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent #555 transparent transparent;
+    }
   }
 
   ${(props) =>
     props.primary &&
     css`
-      color: ${theme.RURI};
+      color: ${theme.KASHMIRBLUE};
     `}
 
   ${(props) =>
@@ -172,7 +213,7 @@ const SideButton = styled.div`
 
       :hover {
         cursor: pointer;
-        color: ${theme.SUMI};
+        color: ${theme.MINESHAFT};
       }
     `}
 `;

@@ -52,8 +52,8 @@ const Div = styled.header`
   display: flex;
   justify-content: center;
   width: 100%;
-  color: ${theme.WHITESMOKE};
-  background-color: ${theme.RURIKON};
+  color: ${theme.ATHENSGRAY};
+  background-color: ${theme.KASHMIRBLUE};
 `;
 
 const Navbar = styled.div`
@@ -82,7 +82,7 @@ const NavbarBrand = styled.div`
     font-size: 36px;
     border: none;
     cursor: pointer;
-    color: ${theme.WHITESMOKE};
+    color: ${theme.ATHENSGRAY};
     background-color: transparent;
 
     :hover {
@@ -109,7 +109,7 @@ const SearchBar = styled.div`
     position: absolute;
     top: 22px;
     left: 20px;
-    color: ${theme.SUMI};
+    color: ${theme.MINESHAFT};
   }
 
   input {
@@ -122,7 +122,7 @@ const SearchBar = styled.div`
     border: none;
     border-radius: 5px;
     outline: none;
-    background-color: ${theme.WHITESMOKE};
+    background-color: ${theme.ATHENSGRAY};
   }
 
   @media (max-width: 575px) {

@@ -70,10 +70,14 @@ function Form(props) {
               <LockIcon></LockIcon>
             </div>
             <p
-              style={{cursor: 'pointer'}}
+              style={{
+                display: 'inline-block',
+                margin: '10px 0 0 5px',
+                cursor: 'pointer',
+              }}
               onClick={() => handleClickForgetPassword(dispatch, email)}
             >
-              Forgot Password?
+              Forget Password?
             </p>
           </InputDiv>
           <Buttons>
@@ -256,17 +260,17 @@ const Div = styled.div`
   flex-direction: column;
   width: 360px;
   height: 100%;
-  border: 1px solid ${theme.GOFUN};
+  border: 1px solid ${theme.WHITE};
   border-radius: 10px;
   box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
-  background-color: ${theme.GOFUN};
+  background-color: ${theme.WHITE};
 
   h1 {
     font-family: 'Open Sans', sans-serif;
     font-weight: 600;
     font-size: 36px;
     margin: 10px 20px 5px;
-    color: ${theme.NAMARI};
+    color: ${theme.PALESKY};
   }
 
   h2 {
@@ -278,7 +282,7 @@ const Div = styled.div`
     font-weight: 600;
     font-size: 16px;
     margin: 0 20px;
-    color: ${theme.NAMARI};
+    color: ${theme.PALESKY};
   }
 
   p {
@@ -290,7 +294,7 @@ const Div = styled.div`
 
   hr {
     margin: 0 15px;
-    border: 1px solid ${theme.LIGHTGREY};
+    border: 1px solid ${theme.IRON};
   }
 
   @media (max-width: 768px) {
@@ -320,15 +324,15 @@ const Div = styled.div`
       font-weight: 600;
       font-size: 36px;
       margin: 10px 20px 5px;
-      color: ${theme.GOFUN};
+      color: ${theme.WHITE};
     }
 
     h3 {
-      color: ${theme.GOFUN};
+      color: ${theme.WHITE};
     }
 
     hr {
-      border: 1px solid ${theme.GOFUN};
+      border: 1px solid ${theme.WHITE};
     }
   }
 `;
@@ -337,7 +341,7 @@ const InputDiv = styled.div`
   position: relative;
   margin: 5px 15px 5px;
   font-size: 16px;
-  color: ${theme.NAMARI};
+  color: ${theme.PALESKY};
 
   div {
     position: absolute;
@@ -346,7 +350,7 @@ const InputDiv = styled.div`
   }
 
   @media (max-width: 375px) {
-    color: ${theme.GOFUN};
+    color: ${theme.WHITE};
   }
 `;
 
@@ -355,12 +359,12 @@ const Input = styled.input`
   padding: 0 0 0 50px;
   width: 100%;
   height: 30px;
-  border: 1px solid ${theme.LIGHTGREY};
+  border: 1px solid ${theme.IRON};
   border-radius: 5px;
   font-family: 'Open Sans', sans-serif;
   font-weight: 400;
   font-size: 16px;
-  color: ${theme.NAMARI};
+  color: ${theme.PALESKY};
   background-color: transparent;
 
   :focus {
@@ -368,22 +372,22 @@ const Input = styled.input`
   }
 
   ::placeholder {
-    color: ${theme.NAMARI};
+    color: ${theme.PALESKY};
   }
 
   @media (max-width: 375px) {
-    border: 1px solid ${theme.GOFUN};
-    color: ${theme.GOFUN};
+    border: 1px solid ${theme.WHITE};
+    color: ${theme.WHITE};
 
     ::placeholder {
-      color: ${theme.GOFUN};
+      color: ${theme.WHITE};
     }
   }
 
   ${(props) =>
     props.invalid &&
     css`
-      background-color: ${theme.RURIKON};
+      background-color: ${theme.KASHMIRBLUE};
     `}
 `;
 
@@ -394,12 +398,12 @@ const GoogleButton = styled.button`
   margin: 0 0 10px;
   width: 100%;
   height: 30px;
-  border: 1px solid ${theme.LIGHTGREY};
+  border: 1px solid ${theme.IRON};
   border-radius: 5px;
   font-family: 'Open Sans', sans-serif;
   font-weight: 400;
   font-size: 16px;
-  color: ${theme.NAMARI};
+  color: ${theme.PALESKY};
   background-color: ${theme.WHITE};
 
   :hover {
@@ -446,12 +450,12 @@ const Button = styled.button`
   margin: 0 0 10px;
   width: 100%;
   height: 30px;
-  border: 1px solid ${theme.LIGHTGREY};
+  border: 1px solid ${theme.IRON};
   border-radius: 5px;
   font-family: 'Open Sans', sans-serif;
   font-weight: 400;
   font-size: 16px;
-  color: ${theme.NAMARI};
+  color: ${theme.PALESKY};
   background-color: transparent;
 
   svg {
@@ -460,19 +464,19 @@ const Button = styled.button`
 
   :hover {
     cursor: pointer;
-    color: ${theme.GOFUN};
-    background-color: ${theme.LIGHTGREY};
-    border: 1px solid ${theme.LIGHTGREY};
+    color: ${theme.WHITE};
+    background-color: ${theme.KASHMIRBLUE};
+    border: 1px solid ${theme.KASHMIRBLUE};
   }
 
   @media (max-width: 375px) {
-    color: ${theme.GOFUN};
-    border: 1px solid ${theme.GOFUN};
+    color: ${theme.WHITE};
+    border: 1px solid ${theme.WHITE};
 
     :hover {
       cursor: pointer;
-      color: ${theme.GOFUN};
-      background-color: ${theme.MIZU};
+      color: ${theme.WHITE};
+      background-color: ${theme.KASHMIRBLUE};
     }
   }
 
@@ -480,26 +484,26 @@ const Button = styled.button`
     props.primary &&
     css`
       margin: 10px 0 10px;
-      color: ${theme.GOFUN};
-      background-color: ${theme.MIZU};
-      border: 1px solid ${theme.MIZU};
+      color: ${theme.WHITE};
+      background-color: ${theme.KASHMIRBLUE};
+      border: 1px solid ${theme.KASHMIRBLUE};
 
       :hover {
         cursor: pointer;
-        color: ${theme.GOFUN};
-        background-color: ${theme.MIZU};
-        border: 1px solid ${theme.MIZU};
+        color: ${theme.WHITE};
+        background-color: ${theme.KASHMIRBLUE};
+        border: 1px solid ${theme.KASHMIRBLUE};
       }
 
       @media (max-width: 375px) {
-        border: 1px solid ${theme.GOFUN};
-        color: ${theme.MIZU};
-        background-color: ${theme.GOFUN};
+        border: 1px solid ${theme.WHITE};
+        color: ${theme.KASHMIRBLUE};
+        background-color: ${theme.WHITE};
 
         :hover {
           cursor: pointer;
-          color: ${theme.MIZU};
-          background-color: ${theme.GOFUN};
+          color: ${theme.KASHMIRBLUE};
+          background-color: ${theme.WHITE};
         }
       }
     `}

@@ -166,7 +166,7 @@ const Input = styled.input`
   font-size: 16px;
   line-height: 24px;
   align-text: center;
-  border: 1px solid ${theme.SUMI}
+  border: 1px solid ${theme.MINESHAFT}
   border-radius: 5px;
   font-family: 'Open Sans', sans-serif;
   font-weight: 400;
@@ -186,7 +186,7 @@ const Target = styled.div`
     width: 40px;
     height: 40px;
     border-radius: 20px;
-    background-color: ${theme.WHITESMOKE};
+    background-color: ${theme.ATHENSGRAY};
   }
 
   p {
@@ -203,10 +203,10 @@ const ShareButton = styled.button`
   font-family: 'Open Sans', sans-serif;
   font-weight: 400;
   font-size: 16px;
-  border: 1px solid ${theme.RURI};
+  border: 1px solid ${theme.KASHMIRBLUE};
   border-radius: 5px;
   color: ${theme.WHITE};
-  background-color: ${theme.RURI};
+  background-color: ${theme.KASHMIRBLUE};
   cursor: pointer;
 
   ${(props) =>

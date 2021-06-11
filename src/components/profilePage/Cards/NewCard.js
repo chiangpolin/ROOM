@@ -1,10 +1,12 @@
 import React from 'react';
 import styled from 'styled-components';
+import {useHistory} from 'react-router';
 import {useSelector, useDispatch} from 'react-redux';
 import {createProject} from '../../../app/actions/index.js';
 import * as theme from '../../../app/constants/theme.js';
 
 function NewCard(props) {
+  let history = useHistory();
   const {id} = useSelector((state) => state.profile);
   const dispatch = useDispatch();
 
@@ -13,7 +15,7 @@ function NewCard(props) {
       <ItemImg
         src={props.imageURL}
         onClick={() => {
-          dispatch(createProject(id, props.name));
+          dispatch(createProject(history, id, props.name));
         }}
       />
       <p>{props.name}</p>

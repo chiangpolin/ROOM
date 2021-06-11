@@ -248,7 +248,7 @@ const Main = styled.main`
   display: flex;
   justify-content: center;
   min-height: 100%;
-  background-color: ${theme.WHITESMOKE};
+  background-color: ${theme.ATHENSGRAY};
 `;
 
 const Section = styled.section`
@@ -281,7 +281,7 @@ const Visual = styled.div`
   position: absolute;
   width: 100%;
   height: 305px;
-  background-color: ${theme.RURIKON};
+  background-color: ${theme.KASHMIRBLUE};
 
   @media (max-width: 375px) {
     display: none;
@@ -386,8 +386,8 @@ const FilterButton = styled.button`
   background-color: transparent;
 
   :hover {
-    color: ${theme.WHITESMOKE};
-    background-color: ${theme.RURIKON};
+    color: ${theme.ATHENSGRAY};
+    background-color: ${theme.KASHMIRBLUE};
     border-radius: 5px;
     cursor: pointer;
   }
@@ -399,8 +399,8 @@ const FilterButton = styled.button`
   ${(props) =>
     props.active &&
     css`
-      color: ${theme.WHITESMOKE};
-      background-color: ${theme.RURIKON};
+      color: ${theme.ATHENSGRAY};
+      background-color: ${theme.KASHMIRBLUE};
       border-radius: 5px;
     `}
 `;

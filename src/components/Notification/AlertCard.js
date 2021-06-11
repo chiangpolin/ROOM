@@ -30,7 +30,7 @@ const Div = styled.div`
   border-radius: 5px;
   box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
   color: ${theme.WHITE};
-  background-color: ${theme.SUMI};
+  background-color: ${theme.MINESHAFT};
   opacity: 0;
   overflow: hidden;
 

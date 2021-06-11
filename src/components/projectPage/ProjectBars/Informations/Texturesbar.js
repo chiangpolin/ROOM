@@ -61,14 +61,14 @@ const Item = styled.button`
   border: 1px solid transparent;
 
   :hover {
-    border: 1px solid ${theme.SUMI};
+    border: 1px solid ${theme.MINESHAFT};
     cursor: pointer;
   }
 
   ${(props) =>
     props.primary &&
     css`
-      border: 1px solid ${theme.SUMI};
+      border: 1px solid ${theme.MINESHAFT};
     `}
 
   img {

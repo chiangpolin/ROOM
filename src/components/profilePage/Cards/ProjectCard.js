@@ -120,7 +120,7 @@ const Item = styled.div`
   svg {
     color: ${theme.WHITE};
     :hover {
-      color: ${theme.RURI};
+      color: ${theme.KASHMIRBLUE};
       cursor: pointer;
     }
   }

@@ -37,7 +37,7 @@ const Button = styled.button`
   :hover {
     cursor: pointer;
     color: white;
-    background-color: ${theme.RURI};
+    background-color: ${theme.KASHMIRBLUE};
   }
 
   @media (max-width: 767px) {

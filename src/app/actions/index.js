@@ -201,7 +201,8 @@ export const fetchSearchTarget = (email) => async (dispatch) => {
   );
 };
 
-export const createProject = (user_id, title) => async (dispatch) => {
+export const createProject = (history, user_id, title) => async (dispatch) => {
+  dispatch(alertMessage('Loading'));
   let newSettings;
   switch (title) {
     case 'New Project':
@@ -224,7 +225,7 @@ export const createProject = (user_id, title) => async (dispatch) => {
   }
 
   const id = await firestore.postProject({
-    name: 'Untitled',
+    name: title,
     id: user_id,
   });
 
@@ -255,9 +256,10 @@ export const createProject = (user_id, title) => async (dispatch) => {
   }
 
   await Promise.all(promises);
+  history.push(`/project/${id}`);
 
-  const projects = await firestore.getProjects(user_id);
-  dispatch(setProjects(projects));
+  // const projects = await firestore.getProjects(user_id);
+  // dispatch(setProjects(projects));
 };
 
 export const cloneProject = (user_id, project_id) => async (dispatch) => {

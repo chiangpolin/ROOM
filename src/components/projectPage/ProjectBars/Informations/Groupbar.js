@@ -153,9 +153,9 @@ const Buttons = styled.div`
 const Button = styled.button`
   width: 100%;
   height: 30px;
-  color: ${theme.RURI};
+  color: ${theme.KASHMIRBLUE};
   background-color: transparent;
-  border: 1px solid ${theme.RURI};
+  border: 1px solid ${theme.KASHMIRBLUE};
   border-radius: 5px;
   font-family: 'Open Sans', sans-serif;
   font-weight: 400;
@@ -164,16 +164,16 @@ const Button = styled.button`
 
   :hover {
     color: ${theme.WHITE};
-    background-color: ${theme.RURI};
-    border: 1px solid ${theme.RURI};
+    background-color: ${theme.KASHMIRBLUE};
+    border: 1px solid ${theme.KASHMIRBLUE};
   }
 
   ${(props) =>
     props.primary &&
     css`
       color: ${theme.WHITE};
-      background-color: ${theme.RURI};
-      border: 1px solid ${theme.RURI};
+      background-color: ${theme.KASHMIRBLUE};
+      border: 1px solid ${theme.KASHMIRBLUE};
     `}
 
   ${(props) =>

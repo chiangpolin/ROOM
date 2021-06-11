@@ -22,58 +22,68 @@ function Tools() {
     <Div>
       <Tool onClick={() => dispatch(setCanvasOrtho())} primary={ortho === true}>
         <RulersIcon width="24" height="24"></RulersIcon>
+        <p>Ortho</p>
       </Tool>
       <p> | </p>
       <Tool onClick={() => dispatch(setCanvasTool(''))}>
         <XIcon width="24" height="24"></XIcon>
+        <p>None</p>
       </Tool>
       <Tool
         onClick={() => dispatch(setCanvasTool('line'))}
         primary={tool === 'line'}
       >
         <SlashIcon width="24" height="24"></SlashIcon>
+        <p>Wall</p>
       </Tool>
       <Tool
         onClick={() => dispatch(setCanvasTool('polyline'))}
         primary={tool === 'polyline'}
       >
         <PencilIcon width="24" height="24"></PencilIcon>
+        <p>P-Wall</p>
       </Tool>
       <Tool
         onClick={() => dispatch(setCanvasTool('filled-rectangle'))}
         primary={tool === 'filled-rectangle'}
       >
         <SquareFillIcon width="24" height="24"></SquareFillIcon>
+        <p>Cover</p>
       </Tool>
       <Tool
         onClick={() => dispatch(setCanvasTool('filled-polygon'))}
         primary={tool === 'filled-polygon'}
       >
         <PentagonFillIcon width="24" height="24"></PentagonFillIcon>
+        <p>P-Cover</p>
       </Tool>
       <Tool
         onClick={() => dispatch(setCanvasTool('rectangle'))}
         primary={tool === 'rectangle'}
       >
         <SquareIcon width="24" height="24"></SquareIcon>
+        <p>Floor</p>
       </Tool>
       <Tool
         onClick={() => dispatch(setCanvasTool('polygon'))}
         primary={tool === 'polygon'}
       >
         <PentagonIcon width="24" height="24"></PentagonIcon>
+        <p>P-Floor</p>
       </Tool>
       <Tool
         onClick={() => dispatch(setCanvasTool('frame'))}
         primary={tool === 'frame'}
       >
         <BoxIcon width="24" height="24"></BoxIcon>
+        <p>Room</p>
       </Tool>
       <Tool
         onClick={() => dispatch(setCanvasTool('polygon-frame'))}
         primary={tool === 'polygon-frame'}
       >
         <BoxIcon width="24" height="24"></BoxIcon>
+        <p>P-Room</p>
       </Tool>
     </Div>
   ) : (
@@ -115,13 +125,48 @@ const Tool = styled.button`
 
   :hover {
     cursor: pointer;
-    color: ${theme.RURI};
+    color: ${theme.KASHMIRBLUE};
+  }
+
+  :hover p {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  p {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s;
+    position: absolute;
+    bottom: 100%;
+    width: 60px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    border-radius: 5px;
+    color: ${theme.WHITE};
+    background-color: ${theme.MINESHAFT};
+
+    ::after {
+      content: '';
+      position: absolute;
+      top: 100%;
+      left: 50%;
+      margin-left: -5px;
+      border-width: 5px;
+      border-style: solid;
+      border-color: #555 transparent transparent transparent;
+    }
   }
 
   ${(props) =>
     props.primary &&
     css`
-      color: ${theme.RURI};
+      color: ${theme.KASHMIRBLUE};
     `}
 `;
 

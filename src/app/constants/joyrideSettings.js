@@ -3,8 +3,8 @@ import * as theme from '../constants/theme.js';
 export const defaultOptions = {
   arrowColor: `${theme.WHITE}`,
   backgroundColor: `${theme.WHITE}`,
-  primaryColor: `${theme.RURI}`,
-  textColor: `${theme.SUMI}`,
+  primaryColor: `${theme.KASHMIRBLUE}`,
+  textColor: `${theme.MINESHAFT}`,
   overlayColor: 'rgba(0, 0, 0, 0.5)',
   spotlightShadow: '0 0 15px rgba(0, 0, 0, 0.5)',
   beaconSize: 36,

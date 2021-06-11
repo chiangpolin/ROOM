@@ -94,7 +94,7 @@ const Div = styled.div`
     }
 
     :hover {
-      color: ${theme.RURI};
+      color: ${theme.KASHMIRBLUE};
     }
   }
 

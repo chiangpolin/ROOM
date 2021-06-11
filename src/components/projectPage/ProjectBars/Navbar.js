@@ -128,7 +128,7 @@ const Div = styled.div`
       line-weight: 400;
 
       :hover {
-        color: blue;
+        color: ${theme.KASHMIRBLUE};
         cursor: pointer;
       }
     }
@@ -154,16 +154,16 @@ const Button = styled.button`
   margin: 0 5px;
   padding: 0 15px;
   height: 30px;
-  border: 1px solid ${theme.RURI};
+  border: 1px solid ${theme.KASHMIRBLUE};
   border-radius: 5px;
-  color: ${theme.RURI};
+  color: ${theme.KASHMIRBLUE};
   background-color: transparent;
   font-size: 16px;
   cursor: pointer;
 
   :hover {
     color: ${theme.WHITE};
-    background-color: ${theme.RURI};
+    background-color: ${theme.KASHMIRBLUE};
   }
 
   p {
@@ -182,8 +182,8 @@ const Button = styled.button`
     props.primary &&
     css`
       color: ${theme.WHITE};
-      background-color: ${theme.RURI};
-      border: 1px solid ${theme.RURI};
+      background-color: ${theme.KASHMIRBLUE};
+      border: 1px solid ${theme.KASHMIRBLUE};
     `}
 
   @media (max-width: 1023px) {

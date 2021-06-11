@@ -93,7 +93,7 @@ const SignOutDiv = styled.div`
   background-color: transparent;
 
   :hover {
-    color: ${theme.RURI};
+    color: ${theme.KASHMIRBLUE};
   }
 
   p {
