@@ -283,6 +283,10 @@ const Visual = styled.div`
   height: 305px;
   background-color: ${theme.KASHMIRBLUE};
 
+  @media (max-width: 767px) {
+    height: 420px;
+  }
+
   @media (max-width: 375px) {
     display: none;
   }

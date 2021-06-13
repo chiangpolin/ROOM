@@ -14,7 +14,7 @@ import {ReactComponent as PenIcon} from '../../../static/images/icons/vector-pen
 import {ReactComponent as CheckIcon} from '../../../static/images/icons/check.svg';
 
 function UserCard() {
-  const {id, name, email} = useSelector((state) => state.profile);
+  const {id, name, email, photoURL} = useSelector((state) => state.profile);
   const [nameInput, setNameInput] = useState(name);
   const [profileIsEditing, toggleEditProfile] = useState(false);
   const dispatch = useDispatch();
@@ -23,7 +23,7 @@ function UserCard() {
   return (
     <Div>
       <ImgDiv>
-        <img src={avatar} />
+        <img src={photoURL ? photoURL : avatar} />
       </ImgDiv>
       <Content>
         {profileIsEditing ? (
@@ -139,6 +139,7 @@ const ImgDiv = styled.div`
   img {
     width: 150px;
     height: 150px;
+    border: 1px solid ${theme.ATHENSGRAY};
     border-radius: 75px;
   }
 `;

@@ -4,17 +4,26 @@ import * as theme from '../../../../app/constants/theme.js';
 import {useSelector, useDispatch} from 'react-redux';
 
 function Groupbar() {
-  const {selectedGroup} = useSelector((state) => state.project);
+  const {selectedGroup, setting} = useSelector((state) => state.project);
   const dispatch = useDispatch();
+  const main_groups = setting.furnitures.filter(
+    (furniture) => furniture.name === selectedGroup.name
+  );
+  let main_image, description;
+  if (main_groups.length > 0) {
+    main_image = main_groups[0].main_image;
+    description = main_groups[0].description;
+  }
 
   return selectedGroup.id ? (
     <Div>
       <ImgDiv>
-        <img />
+        <img src={main_image} />
       </ImgDiv>
       <Content>
         <h3>{selectedGroup.name}</h3>
-        <p>{selectedGroup.id}</p>
+        {/* <p>{selectedGroup.id}</p> */}
+        <p>{description}</p>
       </Content>
     </Div>
   ) : (
@@ -28,13 +37,13 @@ const Div = styled.div`
   left: 80px;
   z-index: 10;
   width: 240px;
-  height: 330px;
   border: none;
   border-radius: 5px;
   box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
   background-color: ${theme.WHITE};
 
-  @media (max-width: 1024px) {
+  @media (max-width: 767px) {
+    display: none;
   }
 `;
 
@@ -46,13 +55,13 @@ const ImgDiv = styled.div`
 
   img {
     width: 100%;
-    height: 150px;
+    min-height: 150px;
     background-color: #bdc0ba;
   }
 `;
 
 const Content = styled.div`
-  margin: 0 15px;
+  margin: 0 15px 15px;
   h3 {
     margin: 0 0 5px;
     font-family: 'Open Sans', sans-serif;

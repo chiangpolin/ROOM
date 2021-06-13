@@ -75,7 +75,8 @@ const Div = styled.div`
   box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
   background-color: ${theme.WHITE};
 
-  @media (max-width: 1024px) {
+  @media (max-width: 767px) {
+    display: none;
   }
 
   h3 {

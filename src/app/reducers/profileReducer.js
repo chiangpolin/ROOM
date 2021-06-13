@@ -26,6 +26,7 @@ const profileReducer = (state = initialState, action) => {
         id: action.payload.user.id,
         name: action.payload.user.name,
         email: action.payload.user.email,
+        photoURL: action.payload.user.photoURL,
       };
 
     case 'SET_USER_NAME':

@@ -48,7 +48,8 @@ const Div = styled.div`
   background-color: ${theme.WHITE};
   overflow-y: scroll;
 
-  @media (max-width: 1024px) {
+  @media (max-width: 767px) {
+    display: none;
   }
 `;
 

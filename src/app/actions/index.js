@@ -77,7 +77,7 @@ export const facebookSignIn = () => async (dispatch) => {
 };
 
 export const signOut = () => async (dispatch) => {
-  dispatch(setUser({id: '', name: '', email: ''}));
+  dispatch(setUser({id: '', name: '', email: '', photoURL: ''}));
   auth.signOut();
   // alert('Sign out!');
 };
@@ -107,7 +107,15 @@ export const fetchProfileData = (history) => async (dispatch) => {
   const credentialUser = await auth.getAuthState();
   if (credentialUser.uid) {
     user = await firestore.getUserByEmail(credentialUser.email);
-    dispatch(setUser({id: user.id, name: user.name, email: user.email}));
+    console.log(user);
+    dispatch(
+      setUser({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        photoURL: user.photoURL,
+      })
+    );
   } else {
     history.push('/');
     return;

@@ -18,7 +18,7 @@ function Sidebar(props) {
   return (
     <Div>
       <SideButton
-        disabled={props.renderIsClicked}
+        disabled={props.renderIsClicked || !selectedGroup.id}
         primary={information === 'group'}
         onClick={() =>
           information === 'group'
@@ -30,6 +30,7 @@ function Sidebar(props) {
         <p>Group</p>
       </SideButton>
       <SideButton
+        disabled={props.renderIsClicked}
         primary={information === 'settings'}
         onClick={() =>
           information === 'settings'

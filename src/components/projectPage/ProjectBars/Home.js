@@ -79,6 +79,7 @@ const Div = styled.div`
   height: 50px;
   border: none;
   border-radius: 5px;
+  box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
   background-color: ${theme.WHITE};
 
   h3 {
