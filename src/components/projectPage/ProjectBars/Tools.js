@@ -13,12 +13,12 @@ import {ReactComponent as PencilIcon} from '../../../static/images/icons/pencil.
 import {ReactComponent as XIcon} from '../../../static/images/icons/x.svg';
 import {ReactComponent as RulersIcon} from '../../../static/images/icons/rulers.svg';
 
-function Tools() {
+function Tools(props) {
   const user_id = useSelector((state) => state.profile.id);
   const {author_id, tool, ortho} = useSelector((state) => state.project);
   const dispatch = useDispatch();
 
-  return user_id === author_id ? (
+  return user_id === author_id && !props.renderIsClicked ? (
     <Div>
       <Tool onClick={() => dispatch(setCanvasOrtho())} primary={ortho === true}>
         <RulersIcon width="24" height="24"></RulersIcon>

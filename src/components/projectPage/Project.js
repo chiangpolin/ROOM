@@ -59,7 +59,7 @@ function Project() {
           <Userbar userIsClicked={userIsClicked}></Userbar>
           <Infobar></Infobar>
           <Sidebar renderIsClicked={renderIsClicked}></Sidebar>
-          <Tools></Tools>
+          <Tools renderIsClicked={renderIsClicked}></Tools>
           {renderIsClicked ? '' : <Zooms></Zooms>}
           {renderIsClicked ? <Rendering /> : <Canvas />}
           <CameraReels

@@ -16,6 +16,8 @@ import {ReactComponent as FacebookIcon} from '../../static/images/brands/faceboo
 import {ReactComponent as PersonIcon} from '../../static/images/icons/person.svg';
 import {ReactComponent as EnvelopeIcon} from '../../static/images/icons/envelope.svg';
 import {ReactComponent as LockIcon} from '../../static/images/icons/lock.svg';
+import signin from '../../static/images/backgrounds/signin.png';
+import signup from '../../static/images/backgrounds/signup.png';
 
 function Form(props) {
   let history = useHistory();
@@ -92,7 +94,13 @@ function Form(props) {
           </Buttons>
           <hr></hr>
           <Buttons>
-            <Button onClick={() => props.setType('sign-up')}>
+            <Button
+              onClick={() => {
+                props.setType('sign-up');
+                props.setOrder('row-reverse');
+                props.setSource(signup);
+              }}
+            >
               Create New Account
             </Button>
           </Buttons>
@@ -174,7 +182,13 @@ function Form(props) {
           </Buttons>
           <hr></hr>
           <Buttons>
-            <Button onClick={() => props.setType('sign-in')}>
+            <Button
+              onClick={() => {
+                props.setType('sign-in');
+                props.setOrder('row');
+                props.setSource(signin);
+              }}
+            >
               Use an Existing Account
             </Button>
           </Buttons>
@@ -270,7 +284,7 @@ const Div = styled.div`
     font-weight: 600;
     font-size: 36px;
     margin: 10px 20px 5px;
-    color: ${theme.PALESKY};
+    color: ${theme.KASHMIRBLUE};
   }
 
   h2 {
@@ -324,15 +338,15 @@ const Div = styled.div`
       font-weight: 600;
       font-size: 36px;
       margin: 10px 20px 5px;
-      color: ${theme.WHITE};
+      color: ${theme.KASHMIRBLUE};
     }
 
     h3 {
-      color: ${theme.WHITE};
+      color: ${theme.KASHMIRBLUE};
     }
 
     hr {
-      border: 1px solid ${theme.WHITE};
+      border: 1px solid ${theme.KASHMIRBLUE};
     }
   }
 `;
@@ -350,7 +364,7 @@ const InputDiv = styled.div`
   }
 
   @media (max-width: 375px) {
-    color: ${theme.WHITE};
+    color: ${theme.KASHMIRBLUE};
   }
 `;
 
@@ -376,11 +390,11 @@ const Input = styled.input`
   }
 
   @media (max-width: 375px) {
-    border: 1px solid ${theme.WHITE};
-    color: ${theme.WHITE};
+    border: 1px solid ${theme.KASHMIRBLUE};
+    color: ${theme.KASHMIRBLUE};
 
     ::placeholder {
-      color: ${theme.WHITE};
+      color: ${theme.KASHMIRBLUE};
     }
   }
 
@@ -412,10 +426,6 @@ const GoogleButton = styled.button`
 
   svg {
     margin: 0 5px 0 0;
-  }
-
-  @media (max-width: 375px) {
-    border: 1px solid ${theme.WHITE};
   }
 `;
 
@@ -470,8 +480,8 @@ const Button = styled.button`
   }
 
   @media (max-width: 375px) {
-    color: ${theme.WHITE};
-    border: 1px solid ${theme.WHITE};
+    color: ${theme.KASHMIRBLUE};
+    border: 1px solid ${theme.KASHMIRBLUE};
 
     :hover {
       cursor: pointer;
@@ -496,14 +506,14 @@ const Button = styled.button`
       }
 
       @media (max-width: 375px) {
-        border: 1px solid ${theme.WHITE};
-        color: ${theme.KASHMIRBLUE};
-        background-color: ${theme.WHITE};
+        border: 1px solid ${theme.KASHMIRBLUE};
+        color: ${theme.ATHENSGRAY};
+        background-color: ${theme.KASHMIRBLUE};
 
         :hover {
           cursor: pointer;
-          color: ${theme.KASHMIRBLUE};
-          background-color: ${theme.WHITE};
+          color: ${theme.WHITE};
+          background-color: ${theme.KASHMIRBLUE};
         }
       }
     `}
