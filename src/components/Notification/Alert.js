@@ -8,8 +8,8 @@ function Alert() {
 
   return (
     <Div>
-      {messages.map((message) => (
-        <AlertCard message={message}></AlertCard>
+      {messages.map((message, index) => (
+        <AlertCard key={index} message={message}></AlertCard>
       ))}
     </Div>
   );

@@ -107,7 +107,6 @@ export const fetchProfileData = (history) => async (dispatch) => {
   const credentialUser = await auth.getAuthState();
   if (credentialUser.uid) {
     user = await firestore.getUserByEmail(credentialUser.email);
-    console.log(user);
     dispatch(
       setUser({
         id: user.id,
