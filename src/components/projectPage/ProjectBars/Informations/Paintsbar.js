@@ -48,7 +48,8 @@ const Div = styled.div`
   background-color: ${theme.WHITE};
   overflow-y: scroll;
 
-  @media (max-width: 1024px) {
+  @media (max-width: 767px) {
+    display: none;
   }
 `;
 
@@ -65,14 +66,14 @@ const Item = styled.button`
   border: 1px solid transparent;
 
   :hover {
-    border: 1px solid ${theme.SUMI};
+    border: 1px solid ${theme.MINESHAFT};
     cursor: pointer;
   }
 
   ${(props) =>
     props.primary &&
     css`
-      border: 1px solid ${theme.SUMI};
+      border: 1px solid ${theme.MINESHAFT};
     `}
 
   img {

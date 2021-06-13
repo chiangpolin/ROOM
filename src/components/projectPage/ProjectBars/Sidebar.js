@@ -4,20 +4,33 @@ import * as theme from '../../../app/constants/theme.js';
 import {useSelector, useDispatch} from 'react-redux';
 import {setInformation} from '../../../app/actions/index.js';
 import {ReactComponent as GearIcon} from '../../../static/images/icons/gear.svg';
-import {ReactComponent as InfoCircleIcon} from '../../../static/images/icons/info-circle.svg';
+import {ReactComponent as InfoCircleIcon} from '../../../static/images/icons/info.svg';
 import {ReactComponent as ShopIcon} from '../../../static/images/icons/shop.svg';
 import {ReactComponent as WindowIcon} from '../../../static/images/icons/shop-window.svg';
 import {ReactComponent as PaletteIcon} from '../../../static/images/icons/palette.svg';
 import {ReactComponent as BricksIcon} from '../../../static/images/icons/bricks.svg';
 import {ReactComponent as CameraIcon} from '../../../static/images/icons/camera-reels.svg';
 
-function Sidebar() {
+function Sidebar(props) {
   const {information, selectedGroup} = useSelector((state) => state.project);
   const dispatch = useDispatch();
 
   return (
     <Div>
       <SideButton
+        disabled={props.renderIsClicked || !selectedGroup.id}
+        primary={information === 'group'}
+        onClick={() =>
+          information === 'group'
+            ? dispatch(setInformation(''))
+            : dispatch(setInformation('group'))
+        }
+      >
+        <InfoCircleIcon width="30" height="30" />
+        <p>Group</p>
+      </SideButton>
+      <SideButton
+        disabled={props.renderIsClicked}
         primary={information === 'settings'}
         onClick={() =>
           information === 'settings'
@@ -26,19 +39,11 @@ function Sidebar() {
         }
       >
         <GearIcon width="24" height="24" />
-      </SideButton>
-      <SideButton
-        primary={information === 'group'}
-        onClick={() =>
-          information === 'group'
-            ? dispatch(setInformation(''))
-            : dispatch(setInformation('group'))
-        }
-      >
-        <InfoCircleIcon width="24" height="24" />
+        <p>Settings</p>
       </SideButton>
       <div className="step-1">
         <SideButton
+          disabled={props.renderIsClicked}
           primary={information === 'furniture'}
           onClick={() =>
             information === 'furniture'
@@ -47,9 +52,11 @@ function Sidebar() {
           }
         >
           <ShopIcon width="24" height="24" />
+          <p>Furnitures</p>
         </SideButton>
       </div>
       <SideButton
+        disabled={props.renderIsClicked}
         primary={information === 'opening'}
         onClick={() =>
           information === 'opening'
@@ -58,6 +65,7 @@ function Sidebar() {
         }
       >
         <WindowIcon width="24" height="24"></WindowIcon>
+        <p>Openings</p>
       </SideButton>
       <div className="step-2">
         <SideButton
@@ -72,6 +80,7 @@ function Sidebar() {
           }
         >
           <PaletteIcon width="24" height="24" />
+          <p>Paints</p>
         </SideButton>
       </div>
       <div className="step-3">
@@ -87,6 +96,7 @@ function Sidebar() {
           }
         >
           <BricksIcon width="24" height="24" />
+          <p>Textures</p>
         </SideButton>
       </div>
       <SideButton
@@ -98,6 +108,7 @@ function Sidebar() {
         }
       >
         <CameraIcon width="24" height="24" />
+        <p>Camera</p>
       </SideButton>
     </Div>
   );
@@ -137,7 +148,7 @@ const Div = styled.div`
     }
 
     :hover {
-      color: ${theme.RURI};
+      color: ${theme.KASHMIRBLUE};
     }
   }
 
@@ -146,7 +157,7 @@ const Div = styled.div`
   }
 `;
 
-const SideButton = styled.div`
+const SideButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
@@ -156,13 +167,47 @@ const SideButton = styled.div`
 
   :hover {
     cursor: pointer;
-    color: ${theme.RURI};
+    color: ${theme.KASHMIRBLUE};
+  }
+
+  :hover p {
+    visibility: visible;
+    opacity: 1;
+  }
+
+  p {
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.3s;
+    position: absolute;
+    left: 75%;
+    width: 80px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+    font-size: 14px;
+    border-radius: 5px;
+    color: ${theme.WHITE};
+    background-color: ${theme.MINESHAFT};
+
+    ::after {
+      content: '';
+      position: absolute;
+      top: 35%;
+      right: 100%;
+      border-width: 5px;
+      border-style: solid;
+      border-color: transparent #555 transparent transparent;
+    }
   }
 
   ${(props) =>
     props.primary &&
     css`
-      color: ${theme.RURI};
+      color: ${theme.KASHMIRBLUE};
     `}
 
   ${(props) =>
@@ -172,7 +217,7 @@ const SideButton = styled.div`
 
       :hover {
         cursor: pointer;
-        color: ${theme.SUMI};
+        color: ${theme.MINESHAFT};
       }
     `}
 `;

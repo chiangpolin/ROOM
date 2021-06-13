@@ -43,7 +43,7 @@ const Main = styled.main`
   align-items: center;
   justify-content: center;
   height: 100%;
-  background-color: ${theme.MIZU};
+  background-color: ${theme.KASHMIRBLUE};
 
   @media (max-width: 375px) {
     width: 100%;

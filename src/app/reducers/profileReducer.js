@@ -9,13 +9,13 @@ const initialState = {
     id: '',
     name: '',
     author_id: '',
+    share_id: [],
     isEditing: false,
     type: '',
   },
   filter: {shared: true, author: true, searched: true},
   shareIsToggled: false,
-  searchTarget: {id: '', name: '', photo: ''},
-  selectedTarget: {id: '', name: '', photo: ''},
+  searchTargets: [],
 };
 
 const profileReducer = (state = initialState, action) => {
@@ -26,6 +26,7 @@ const profileReducer = (state = initialState, action) => {
         id: action.payload.user.id,
         name: action.payload.user.name,
         email: action.payload.user.email,
+        photoURL: action.payload.user.photoURL,
       };
 
     case 'SET_USER_NAME':
@@ -34,16 +35,16 @@ const profileReducer = (state = initialState, action) => {
         name: action.payload.name,
       };
 
-    case 'SET_SEARCH_TARGET':
+    case 'ADD_SEARCH_TARGET':
       return {
         ...state,
-        searchTarget: action.payload.target,
+        searchTargets: [action.payload.target, ...state.searchTargets],
       };
 
-    case 'SELECT_SEARCH_TARGET':
+    case 'RESET_SEARCH_TARGETS':
       return {
         ...state,
-        selectedTarget: action.payload.target,
+        searchTargets: [],
       };
 
     case 'SET_PROJECTS':
@@ -78,6 +79,9 @@ const profileReducer = (state = initialState, action) => {
           id: action.payload.project.id,
           name: action.payload.project.name,
           author_id: action.payload.project.author_id,
+          share_id: action.payload.project.share_id
+            ? action.payload.project.share_id
+            : [],
           isEditing: false,
         },
       };
@@ -99,20 +103,6 @@ const profileReducer = (state = initialState, action) => {
           ...state.selectedProject,
           isEditing: true,
         },
-      };
-
-    case 'TOGGLE_SHARE':
-      return {
-        ...state,
-        shareIsToggled: true,
-      };
-
-    case 'CLOSE_SHARE':
-      return {
-        ...state,
-        searchTarget: {id: '', name: '', photo: ''},
-        selectedTarget: {id: '', name: '', photo: ''},
-        shareIsToggled: false,
       };
 
     default:

@@ -1,12 +1,21 @@
 import React from 'react';
+import {useDispatch} from 'react-redux';
 import styled from 'styled-components';
+import {setInformation} from '../../../app/actions/index.js';
 import * as theme from '../../../app/constants/theme.js';
 import {ReactComponent as CameraReelsIcon} from '../../../static/images/icons/camera-reels.svg';
 import {ReactComponent as EaselIcon} from '../../../static/images/icons/easel.svg';
 
 function CameraReels(props) {
+  const dispatch = useDispatch();
+
   return (
-    <Button onClick={() => props.handleClickRender(!props.renderIsClicked)}>
+    <Button
+      onClick={() => {
+        dispatch(setInformation(''));
+        props.handleClickRender(!props.renderIsClicked);
+      }}
+    >
       {props.renderIsClicked ? (
         <div className="step-5">
           <EaselIcon width="28" height="28" />
@@ -37,7 +46,7 @@ const Button = styled.button`
   :hover {
     cursor: pointer;
     color: white;
-    background-color: ${theme.RURI};
+    background-color: ${theme.KASHMIRBLUE};
   }
 
   @media (max-width: 767px) {

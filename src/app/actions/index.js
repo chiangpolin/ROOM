@@ -3,8 +3,17 @@ import * as defaultSettings from '../constants/defaultSettings';
 import * as firestore from '../../app/utils/firestore.js';
 import * as auth from '../../app/utils/auth.js';
 import * as storage from '../../app/utils/storage.js';
+import {_uuid} from '../../app/utils/general.js';
 
 // thunk
+export const alertMessage = (text) => (dispatch) => {
+  const id = _uuid();
+  dispatch(addMessage({text: text, id: id}));
+  setTimeout(function () {
+    dispatch(removeMessage({text: text, id: id}));
+  }, 5000);
+};
+
 export const signUp = (name, email, password) => async (dispatch) => {
   const credential = await auth.signUp(email, password);
   auth.sendEmailVerification();
@@ -68,7 +77,7 @@ export const facebookSignIn = () => async (dispatch) => {
 };
 
 export const signOut = () => async (dispatch) => {
-  dispatch(setUser({id: '', name: '', email: ''}));
+  dispatch(setUser({id: '', name: '', email: '', photoURL: ''}));
   auth.signOut();
   // alert('Sign out!');
 };
@@ -98,7 +107,14 @@ export const fetchProfileData = (history) => async (dispatch) => {
   const credentialUser = await auth.getAuthState();
   if (credentialUser.uid) {
     user = await firestore.getUserByEmail(credentialUser.email);
-    dispatch(setUser({id: user.id, name: user.name, email: user.email}));
+    dispatch(
+      setUser({
+        id: user.id,
+        name: user.name,
+        email: user.email,
+        photoURL: user.photoURL,
+      })
+    );
   } else {
     history.push('/');
     return;
@@ -172,6 +188,15 @@ export const fetchProjectData = (project_id) => async (dispatch) => {
   dispatch(setInformation('canvas'));
 };
 
+export const fetchSearchTargets = (share_id) => async (dispatch) => {
+  for (let i = 0; i < share_id.length; i++) {
+    const user = await firestore.getUser(share_id[i]);
+    dispatch(
+      addSearchTarget({id: user.id, name: user.name, photoURL: user.photoURL})
+    );
+  }
+};
+
 export const fetchSearchTarget = (email) => async (dispatch) => {
   const user = await firestore.getUserByEmail(email);
   if (!user) {
@@ -179,11 +204,12 @@ export const fetchSearchTarget = (email) => async (dispatch) => {
     return;
   }
   dispatch(
-    setSearchTarget({id: user.id, name: user.name, photoURL: user.photoURL})
+    addSearchTarget({id: user.id, name: user.name, photoURL: user.photoURL})
   );
 };
 
-export const createProject = (user_id, title) => async (dispatch) => {
+export const createProject = (history, user_id, title) => async (dispatch) => {
+  dispatch(alertMessage('Loading'));
   let newSettings;
   switch (title) {
     case 'New Project':
@@ -206,7 +232,7 @@ export const createProject = (user_id, title) => async (dispatch) => {
   }
 
   const id = await firestore.postProject({
-    name: 'Untitled',
+    name: title,
     id: user_id,
   });
 
@@ -237,9 +263,10 @@ export const createProject = (user_id, title) => async (dispatch) => {
   }
 
   await Promise.all(promises);
+  history.push(`/project/${id}`);
 
-  const projects = await firestore.getProjects(user_id);
-  dispatch(setProjects(projects));
+  // const projects = await firestore.getProjects(user_id);
+  // dispatch(setProjects(projects));
 };
 
 export const cloneProject = (user_id, project_id) => async (dispatch) => {
@@ -296,7 +323,7 @@ export const shareProject = (project_id, target_id) => async (dispatch) => {
   }
   share_id.push(target_id);
   firestore.putProjectShareId(project_id, {share_id: share_id});
-  dispatch(closeShare());
+  // dispatch(closeShare());
 };
 
 export const updateProject = (project_id, data) => async (dispatch) => {
@@ -449,6 +476,17 @@ export const deselectCanvasElement = (selectedGroup) => async (dispatch) => {
   }
 };
 
+// alert
+export const addMessage = (message) => ({
+  type: actionTypes.ADD_MESSAGE,
+  payload: {message},
+});
+
+export const removeMessage = (message) => ({
+  type: actionTypes.REMOVE_MESSAGE,
+  payload: {message},
+});
+
 // user
 export const setUser = (user) => ({
   type: actionTypes.SET_USER,
@@ -460,14 +498,13 @@ export const setUserName = (name) => ({
   payload: {name},
 });
 
-export const setSearchTarget = (target) => ({
-  type: actionTypes.SET_SEARCH_TARGET,
+export const addSearchTarget = (target) => ({
+  type: actionTypes.ADD_SEARCH_TARGET,
   payload: {target},
 });
 
-export const selectSearchTarget = (target) => ({
-  type: actionTypes.SELECT_SEARCH_TARGET,
-  payload: {target},
+export const resetSearchTargets = () => ({
+  type: actionTypes.RESET_SEARCH_TARGETS,
 });
 
 // projects
@@ -518,14 +555,6 @@ export const setProjectName = (name) => ({
 
 export const toggleProjectName = () => ({
   type: actionTypes.TOGGLE_PROJECT_NAME,
-});
-
-export const toggleShare = () => ({
-  type: actionTypes.TOGGLE_SHARE,
-});
-
-export const closeShare = () => ({
-  type: actionTypes.CLOSE_SHARE,
 });
 
 // settings

@@ -146,7 +146,7 @@ const InputDiv = styled.div`
     font-family: 'Open Sans', sans-serif;
     font-weight: 600;
     font-size: 20px;
-    border: 1px solid ${theme.SUMI};
+    border: 1px solid ${theme.MINESHAFT};
     border-radius: 5px;
   }
 
@@ -158,7 +158,7 @@ const InputDiv = styled.div`
     background-color: transparent;
 
     :hover {
-      color: ${theme.RURI};
+      color: ${theme.KASHMIRBLUE};
       cursor: pointer;
     }
   }
@@ -205,7 +205,7 @@ const ActionDiv = styled.div`
   }
 
   :hover {
-    color: ${theme.RURI};
+    color: ${theme.KASHMIRBLUE};
     cursor: pointer;
   }
 `;

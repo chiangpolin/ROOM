@@ -49,7 +49,7 @@ export const classic = {
   ],
   furnitures: [
     {
-      name: 'Bed',
+      name: 'Bed 01',
       id: _uuid(),
       type: 'furniture',
       position: {
@@ -69,7 +69,7 @@ export const classic = {
       },
     },
     {
-      name: 'Cabinet',
+      name: 'Cabinet 01',
       id: _uuid(),
       type: 'furniture',
       position: {
@@ -89,7 +89,7 @@ export const classic = {
       },
     },
     {
-      name: 'Cabinet',
+      name: 'Cabinet 01',
       id: _uuid(),
       type: 'furniture',
       position: {
@@ -109,7 +109,7 @@ export const classic = {
       },
     },
     {
-      name: 'Desk',
+      name: 'Desk 02',
       id: _uuid(),
       type: 'furniture',
       position: {
@@ -129,7 +129,7 @@ export const classic = {
       },
     },
     {
-      name: 'Closet',
+      name: 'Closet 01',
       id: _uuid(),
       type: 'furniture',
       position: {
@@ -149,7 +149,7 @@ export const classic = {
       },
     },
     {
-      name: 'Lamp',
+      name: 'Lamp 01',
       id: _uuid(),
       type: 'furniture',
       position: {
@@ -169,7 +169,7 @@ export const classic = {
       },
     },
     {
-      name: 'Plant',
+      name: 'Plant 01',
       id: _uuid(),
       type: 'furniture',
       position: {

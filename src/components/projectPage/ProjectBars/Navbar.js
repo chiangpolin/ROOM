@@ -1,8 +1,9 @@
-import React from 'react';
+import React, {useState} from 'react';
 import styled, {css} from 'styled-components';
 import {useLocation, useParams} from 'react-router';
 import {useSelector, useDispatch} from 'react-redux';
 import {
+  alertMessage,
   updateProject,
   uploadRenderingImage,
 } from '../../../app/actions/index.js';
@@ -12,6 +13,7 @@ import {ReactComponent as LinkIcon} from '../../../static/images/icons/link.svg'
 import {ReactComponent as SdCardIcon} from '../../../static/images/icons/sd-card.svg';
 import {ReactComponent as CameraIcon} from '../../../static/images/icons/camera.svg';
 import {ReactComponent as PersonIcon} from '../../../static/images/icons/person-fill.svg';
+import {Controls} from './Controls.js';
 
 function Navbar(props) {
   let location = useLocation();
@@ -34,7 +36,7 @@ function Navbar(props) {
     <Div>
       {user_id === author_id && !props.renderIsClicked ? (
         <Button
-          onClick={() =>
+          onClick={() => {
             handleClickUpdate(dispatch, id, {
               d_cameras,
               d_furnitures,
@@ -42,8 +44,8 @@ function Navbar(props) {
               d_openings,
               d_coverings,
               d_floors,
-            })
-          }
+            });
+          }}
         >
           <SdCardIcon width="20" height="20"></SdCardIcon>
           <p>Save</p>
@@ -60,6 +62,7 @@ function Navbar(props) {
           primary
           onClick={() => {
             navigator.clipboard.writeText(path);
+            dispatch(alertMessage('Link Copied'));
           }}
         >
           <LinkIcon width="24" height="24"></LinkIcon>
@@ -68,23 +71,25 @@ function Navbar(props) {
       </div>
       <p>|</p>
       <div>
-        <div onClick={() => props.setRun(true)}>
+        <RightDiv onClick={() => props.setRun(true)}>
           <LightbulbIcon width="24" height="24"></LightbulbIcon>
-        </div>
+        </RightDiv>
         {user_id ? (
-          <div onClick={() => props.handleClickUser(!props.userIsClicked)}>
+          <RightDiv onClick={() => props.handleClickUser(!props.userIsClicked)}>
             <PersonIcon width="24" height="24"></PersonIcon>
-          </div>
+          </RightDiv>
         ) : (
           ''
         )}
       </div>
+      <Controls></Controls>
     </Div>
   );
 }
 
 function handleClickUpdate(dispatch, project_id, data) {
   dispatch(updateProject(project_id, data));
+  dispatch(alertMessage('Project Updated'));
 }
 
 function handleClickSnapshot(dispatch, id, uri) {
@@ -113,6 +118,7 @@ const Div = styled.div`
   height: 50px;
   border: none;
   border-radius: 5px;
+  box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
   background-color: ${theme.WHITE};
 
   p {
@@ -122,28 +128,30 @@ const Div = styled.div`
   div {
     display: flex;
     align-items: center;
-
-    svg {
-      margin: 0 10px;
-      line-weight: 400;
-
-      :hover {
-        color: blue;
-        cursor: pointer;
-      }
-    }
-
-    img {
-      margin: 0 0 0 10px;
-      width: 32px;
-      height: 32px;
-      border-radius: 16px;
-      cursor: pointer;
-    }
   }
 
   @media (max-width: 767px) {
     display: none;
+  }
+`;
+
+const RightDiv = styled.div`
+  svg {
+    margin: 0 10px;
+    line-weight: 400;
+
+    :hover {
+      color: ${theme.KASHMIRBLUE};
+      cursor: pointer;
+    }
+  }
+
+  img {
+    margin: 0 0 0 10px;
+    width: 32px;
+    height: 32px;
+    border-radius: 16px;
+    cursor: pointer;
   }
 `;
 
@@ -154,16 +162,16 @@ const Button = styled.button`
   margin: 0 5px;
   padding: 0 15px;
   height: 30px;
-  border: 1px solid ${theme.RURI};
+  border: 1px solid ${theme.KASHMIRBLUE};
   border-radius: 5px;
-  color: ${theme.RURI};
+  color: ${theme.KASHMIRBLUE};
   background-color: transparent;
   font-size: 16px;
   cursor: pointer;
 
   :hover {
     color: ${theme.WHITE};
-    background-color: ${theme.RURI};
+    background-color: ${theme.KASHMIRBLUE};
   }
 
   p {
@@ -182,8 +190,8 @@ const Button = styled.button`
     props.primary &&
     css`
       color: ${theme.WHITE};
-      background-color: ${theme.RURI};
-      border: 1px solid ${theme.RURI};
+      background-color: ${theme.KASHMIRBLUE};
+      border: 1px solid ${theme.KASHMIRBLUE};
     `}
 
   @media (max-width: 1023px) {
