@@ -64,7 +64,7 @@ function Camerabar() {
 
 const Div = styled.div`
   position: absolute;
-  top: 290px;
+  top: 340px;
   left: 80px;
   z-index: 10;
   padding: 15px 5px;

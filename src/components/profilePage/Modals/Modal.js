@@ -46,24 +46,26 @@ function Modal(props) {
               <SearchIcon />
             </SearchButton>
           </SearchBar>
-          {searchTargets.map((target) => (
-            <Target>
-              <img src={avatar}></img>
-              <p>{target.name}</p>
-              <ShareButton
-                disabled={
-                  shareIsClicked ||
-                  selectedProject.share_id.filter((id) => id === target.id)[0]
-                }
-                onClick={() => {
-                  handleClickShare(dispatch, selectedProject.id, target.id);
-                  setIsClicked(true);
-                }}
-              >
-                Share
-              </ShareButton>
-            </Target>
-          ))}
+          <Targets>
+            {searchTargets.map((target) => (
+              <Target>
+                <img src={avatar}></img>
+                <p>{target.name}</p>
+                <ShareButton
+                  disabled={
+                    shareIsClicked ||
+                    selectedProject.share_id.filter((id) => id === target.id)[0]
+                  }
+                  onClick={() => {
+                    handleClickShare(dispatch, selectedProject.id, target.id);
+                    setIsClicked(true);
+                  }}
+                >
+                  Share
+                </ShareButton>
+              </Target>
+            ))}
+          </Targets>
         </Content>
       </ModalBody>
     </Div>
@@ -137,7 +139,7 @@ const Button = styled.button`
 `;
 
 const Content = styled.div`
-  margin: 30px;
+  margin: 30px 20px 30px 30px;
 
   h3 {
     margin: 0 0 5px;
@@ -149,6 +151,7 @@ const Content = styled.div`
 
 const SearchBar = styled.div`
   display: flex;
+  margin: 0 30px 0 0;
 `;
 
 const SearchButton = styled.button`
@@ -177,10 +180,15 @@ const Input = styled.input`
   }
 `;
 
+const Targets = styled.div`
+  height: 300px;
+  overflow-y: scroll;
+`;
+
 const Target = styled.div`
   display: flex;
   align-items: center;
-  margin: 15px 0;
+  margin: 15px 15px 15px 0;
 
   img {
     width: 40px;

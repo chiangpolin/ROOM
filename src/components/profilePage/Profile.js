@@ -340,6 +340,7 @@ const MainTitle = styled.div`
   display: flex;
 
   h1 {
+    color: ${theme.MINESHAFT};
     font-family: 'Open Sans', sans-serif;
     font-weight: 600;
     font-size: 24px;

@@ -31,9 +31,22 @@ function UserCard() {
             <input
               value={nameInput}
               onChange={(event) => handleChange(event, setNameInput)}
+              onKeyPress={(event) => {
+                if (event.code === 'Enter') {
+                  if (!nameInput) {
+                    return;
+                  }
+                  toggleEditProfile(false);
+                  dispatch(setUserName(nameInput));
+                  dispatch(updateUserName(id, nameInput));
+                }
+              }}
             ></input>
             <button
               onClick={() => {
+                if (!nameInput) {
+                  return;
+                }
                 toggleEditProfile(false);
                 dispatch(setUserName(nameInput));
                 dispatch(updateUserName(id, nameInput));
@@ -47,9 +60,10 @@ function UserCard() {
         )}
         <p>{email}</p>
       </Content>
-      <ActionDiv>
+      <ActionDiv style={{margin: '15px 15px 0 13px'}}>
         <PenIcon width="24" height="24"></PenIcon>
         <p
+          style={{margin: '0 15px 0 17px'}}
           onClick={() => {
             toggleEditProfile(true);
           }}
@@ -133,15 +147,19 @@ const Content = styled.div`
   margin: 0 15px 30px;
 
   h3 {
+    color: ${theme.MINESHAFT};
     font-family: 'Open Sans', sans-serif;
     font-weight: 600;
     font-size: 24px;
+    overflow: hidden;
   }
 
   p {
+    color: ${theme.MINESHAFT};
     font-family: 'Open Sans', sans-serif;
     font-weight: 400;
     font-size: 16px;
+    overflow: hidden;
   }
 `;
 

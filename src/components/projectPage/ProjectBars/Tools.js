@@ -25,61 +25,89 @@ function Tools() {
         <p>Ortho</p>
       </Tool>
       <p> | </p>
-      <Tool onClick={() => dispatch(setCanvasTool(''))}>
-        <XIcon width="24" height="24"></XIcon>
-        <p>None</p>
-      </Tool>
       <Tool
-        onClick={() => dispatch(setCanvasTool('line'))}
+        onClick={() => {
+          tool === 'line'
+            ? dispatch(setCanvasTool(''))
+            : dispatch(setCanvasTool('line'));
+        }}
         primary={tool === 'line'}
       >
         <SlashIcon width="24" height="24"></SlashIcon>
         <p>Wall</p>
       </Tool>
       <Tool
-        onClick={() => dispatch(setCanvasTool('polyline'))}
+        onClick={() => {
+          tool === 'polyline'
+            ? dispatch(setCanvasTool(''))
+            : dispatch(setCanvasTool('polyline'));
+        }}
         primary={tool === 'polyline'}
       >
         <PencilIcon width="24" height="24"></PencilIcon>
         <p>P-Wall</p>
       </Tool>
       <Tool
-        onClick={() => dispatch(setCanvasTool('filled-rectangle'))}
+        onClick={() => {
+          tool === 'filled-rectangle'
+            ? dispatch(setCanvasTool(''))
+            : dispatch(setCanvasTool('filled-rectangle'));
+        }}
         primary={tool === 'filled-rectangle'}
       >
         <SquareFillIcon width="24" height="24"></SquareFillIcon>
         <p>Cover</p>
       </Tool>
       <Tool
-        onClick={() => dispatch(setCanvasTool('filled-polygon'))}
+        onClick={() => {
+          tool === 'filled-polygon'
+            ? dispatch(setCanvasTool(''))
+            : dispatch(setCanvasTool('filled-polygon'));
+        }}
         primary={tool === 'filled-polygon'}
       >
         <PentagonFillIcon width="24" height="24"></PentagonFillIcon>
         <p>P-Cover</p>
       </Tool>
       <Tool
-        onClick={() => dispatch(setCanvasTool('rectangle'))}
+        onClick={() => {
+          tool === 'rectangle'
+            ? dispatch(setCanvasTool(''))
+            : dispatch(setCanvasTool('rectangle'));
+        }}
         primary={tool === 'rectangle'}
       >
         <SquareIcon width="24" height="24"></SquareIcon>
         <p>Floor</p>
       </Tool>
       <Tool
-        onClick={() => dispatch(setCanvasTool('polygon'))}
+        onClick={() => {
+          tool === 'polygon'
+            ? dispatch(setCanvasTool(''))
+            : dispatch(setCanvasTool('polygon'));
+        }}
         primary={tool === 'polygon'}
       >
         <PentagonIcon width="24" height="24"></PentagonIcon>
         <p>P-Floor</p>
       </Tool>
       <Tool
-        onClick={() => dispatch(setCanvasTool('frame'))}
+        onClick={() => {
+          tool === 'frame'
+            ? dispatch(setCanvasTool(''))
+            : dispatch(setCanvasTool('frame'));
+        }}
         primary={tool === 'frame'}
       >
         <BoxIcon width="24" height="24"></BoxIcon>
         <p>Room</p>
       </Tool>
       <Tool
-        onClick={() => dispatch(setCanvasTool('polygon-frame'))}
+        onClick={() => {
+          tool === 'polygon-frame'
+            ? dispatch(setCanvasTool(''))
+            : dispatch(setCanvasTool('polygon-frame'));
+        }}
         primary={tool === 'polygon-frame'}
       >
         <BoxIcon width="24" height="24"></BoxIcon>

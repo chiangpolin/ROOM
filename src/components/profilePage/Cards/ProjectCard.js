@@ -110,6 +110,8 @@ const Item = styled.div`
   background-color: ${theme.WHITE};
 
   p {
+    height: 24px;
+    line-height: 20px;
     font-family: 'Open Sans', sans-serif;
     font-weight: 400;
     font-size: 16px;

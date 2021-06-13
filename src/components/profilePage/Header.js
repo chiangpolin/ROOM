@@ -2,11 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 import {useHistory} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
-import {searchProjects} from '../../app/actions/index.js';
+import {searchProjects, filterProjects} from '../../app/actions/index.js';
 import * as theme from '../../app/constants/theme.js';
 import {ReactComponent as LightBulbIcon} from '../../static/images/icons/lightbulb.svg';
 import {ReactComponent as SearchIcon} from '../../static/images/icons/search.svg';
 import {ReactComponent as PersonIcon} from '../../static/images/icons/person-fill.svg';
+import {ReactComponent as RoomIcon} from '../../static/images/brands/room-white.svg';
 
 function Header(props) {
   let history = useHistory();
@@ -16,6 +17,7 @@ function Header(props) {
     <Div>
       <Navbar>
         <NavbarBrand>
+          <RoomIcon width="36" height="36"></RoomIcon>
           <button onClick={() => history.push('/profile')}>Room</button>
         </NavbarBrand>
         <SearchBar>
@@ -42,6 +44,13 @@ function Header(props) {
 function handleKeyPress(event, dispatch) {
   if (event.code === 'Enter') {
     dispatch(searchProjects(event.target.value));
+    dispatch(
+      filterProjects({
+        shared: false,
+        author: false,
+        searched: true,
+      })
+    );
   }
 }
 
@@ -71,10 +80,14 @@ const NavbarBrand = styled.div`
   z-index: 10;
   display: flex;
   align-items: center;
-  padding: 0 225px 0 0;
+  padding: 0 181px 0 0;
   height: 60px;
   border: none;
   background-color: transparent;
+
+  svg {
+    margin: 0 10px 0 0;
+  }
 
   button {
     font-family: 'Varela Round';

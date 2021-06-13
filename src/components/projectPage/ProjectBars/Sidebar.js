@@ -4,19 +4,31 @@ import * as theme from '../../../app/constants/theme.js';
 import {useSelector, useDispatch} from 'react-redux';
 import {setInformation} from '../../../app/actions/index.js';
 import {ReactComponent as GearIcon} from '../../../static/images/icons/gear.svg';
-import {ReactComponent as InfoCircleIcon} from '../../../static/images/icons/info-circle.svg';
+import {ReactComponent as InfoCircleIcon} from '../../../static/images/icons/info.svg';
 import {ReactComponent as ShopIcon} from '../../../static/images/icons/shop.svg';
 import {ReactComponent as WindowIcon} from '../../../static/images/icons/shop-window.svg';
 import {ReactComponent as PaletteIcon} from '../../../static/images/icons/palette.svg';
 import {ReactComponent as BricksIcon} from '../../../static/images/icons/bricks.svg';
 import {ReactComponent as CameraIcon} from '../../../static/images/icons/camera-reels.svg';
 
-function Sidebar() {
+function Sidebar(props) {
   const {information, selectedGroup} = useSelector((state) => state.project);
   const dispatch = useDispatch();
 
   return (
     <Div>
+      <SideButton
+        disabled={props.renderIsClicked}
+        primary={information === 'group'}
+        onClick={() =>
+          information === 'group'
+            ? dispatch(setInformation(''))
+            : dispatch(setInformation('group'))
+        }
+      >
+        <InfoCircleIcon width="30" height="30" />
+        <p>Group</p>
+      </SideButton>
       <SideButton
         primary={information === 'settings'}
         onClick={() =>
@@ -28,19 +40,9 @@ function Sidebar() {
         <GearIcon width="24" height="24" />
         <p>Settings</p>
       </SideButton>
-      <SideButton
-        primary={information === 'group'}
-        onClick={() =>
-          information === 'group'
-            ? dispatch(setInformation(''))
-            : dispatch(setInformation('group'))
-        }
-      >
-        <InfoCircleIcon width="24" height="24" />
-        <p>Group</p>
-      </SideButton>
       <div className="step-1">
         <SideButton
+          disabled={props.renderIsClicked}
           primary={information === 'furniture'}
           onClick={() =>
             information === 'furniture'
@@ -53,6 +55,7 @@ function Sidebar() {
         </SideButton>
       </div>
       <SideButton
+        disabled={props.renderIsClicked}
         primary={information === 'opening'}
         onClick={() =>
           information === 'opening'
@@ -153,7 +156,7 @@ const Div = styled.div`
   }
 `;
 
-const SideButton = styled.div`
+const SideButton = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;

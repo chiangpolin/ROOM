@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import {updateProjectName} from '../../../app/actions/index.js';
 import * as theme from '../../../app/constants/theme.js';
 import {ReactComponent as CheckIcon} from '../../../static/images/icons/check.svg';
+import {ReactComponent as RoomIcon} from '../../../static/images/brands/room.svg';
 
 function Home() {
   const {id} = useParams();
@@ -18,6 +19,7 @@ function Home() {
   return (
     <Div>
       <button onClick={() => history.push('/')}>
+        <RoomIcon width="32" height="32"></RoomIcon>
         <h1>Room</h1>
       </button>
       <p>|</p>
@@ -27,9 +29,21 @@ function Home() {
             <input
               value={nameInput}
               onChange={(event) => handleChange(event, setNameInput)}
+              onKeyPress={(event) => {
+                if (event.code === 'Enter') {
+                  if (!nameInput) {
+                    return;
+                  }
+                  toggleEditName(false);
+                  handleClickUpdate(dispatch, nameInput, author_id, id);
+                }
+              }}
             ></input>
             <button
               onClick={() => {
+                if (!nameInput) {
+                  return;
+                }
                 toggleEditName(false);
                 handleClickUpdate(dispatch, nameInput, author_id, id);
               }}
@@ -82,11 +96,16 @@ const Div = styled.div`
   }
 
   button {
+    display: flex;
     font-family: 'Varela Round';
     font-weight: 600;
     border: none;
     cursor: pointer;
     background-color: transparent;
+
+    svg {
+      margin: 0 10px 0 0;
+    }
 
     h1 {
       font-size: 32px;

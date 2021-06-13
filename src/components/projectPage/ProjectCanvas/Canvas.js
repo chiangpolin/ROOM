@@ -1,12 +1,14 @@
 import React, {useState, useEffect, useRef} from 'react';
 import styled from 'styled-components';
-import {useSelector} from 'react-redux';
+import {useSelector, useDispatch} from 'react-redux';
 import {useDrop} from 'react-dnd';
 import {ItemTypes} from '../../../app/constants/dragTypes.js';
 import * as theme from '../../../app/constants/theme.js';
 import * as pixi from '../../../app/utils/pixi.js';
+import {selectCanvasElement} from '../../../app/actions/index.js';
 
 function Canvas() {
+  const dispatch = useDispatch();
   const canvasRef = useRef(null);
   const [pixiApp, setApp] = useState('');
   const [pixiOpeningContainer, setOpeningContainer] = useState('');
@@ -130,6 +132,7 @@ function Canvas() {
                     pixiFurnitureContainer.children[i]
                   );
                 }
+              dispatch(selectCanvasElement({}));
               break;
             case 'rotate':
               for (let i = 0; i < pixiFurnitureContainer.children.length; i++)
@@ -167,6 +170,7 @@ function Canvas() {
                   );
                 }
               }
+              dispatch(selectCanvasElement({}));
               break;
             case 'deselect':
               for (let i = 0; i < pixiFloorContainer.children.length; i++)
@@ -193,6 +197,7 @@ function Canvas() {
                   );
                 }
               }
+              dispatch(selectCanvasElement({}));
               break;
             case 'deselect':
               for (let i = 0; i < pixiCoveringContainer.children.length; i++)
@@ -214,6 +219,7 @@ function Canvas() {
                   pixiWallContainer.removeChild(pixiWallContainer.children[i]);
                 }
               }
+              dispatch(selectCanvasElement({}));
               break;
             case 'deselect':
               for (let i = 0; i < pixiWallContainer.children.length; i++)
@@ -240,6 +246,7 @@ function Canvas() {
                   );
                 }
               }
+              dispatch(selectCanvasElement({}));
               break;
             case 'rotate':
               for (let i = 0; i < pixiOpeningContainer.children.length; i++)
