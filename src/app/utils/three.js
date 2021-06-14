@@ -122,6 +122,7 @@ export async function setFurniture(renderer, scene, camera, obj) {
 
   const group = new THREE.Group();
   for (const [key, mesh] of Object.entries(model)) {
+    // mesh.material = new THREE.MeshStandardMaterial({color: 0xffffff});
     group.add(mesh);
   }
   group.scale.set(1, 1, 1);
