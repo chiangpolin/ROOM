@@ -11,11 +11,13 @@ import {
 } from '../../app/actions/index.js';
 import * as theme from '../../app/constants/theme.js';
 import {checkValidation} from '../../app/utils/validate.js';
-import {ReactComponent as GoogleIcon} from '../../static/images/icons/google.svg';
-import {ReactComponent as FacebookIcon} from '../../static/images/icons/facebook.svg';
+import {ReactComponent as GoogleIcon} from '../../static/images/brands/google.svg';
+import {ReactComponent as FacebookIcon} from '../../static/images/brands/facebook.svg';
 import {ReactComponent as PersonIcon} from '../../static/images/icons/person.svg';
 import {ReactComponent as EnvelopeIcon} from '../../static/images/icons/envelope.svg';
 import {ReactComponent as LockIcon} from '../../static/images/icons/lock.svg';
+import signin from '../../static/images/backgrounds/signin.png';
+import signup from '../../static/images/backgrounds/signup.png';
 
 function Form(props) {
   let history = useHistory();
@@ -36,16 +38,18 @@ function Form(props) {
           <h1>Sign In</h1>
           <h2>Room</h2>
           <TPLButtons>
-            <Button onClick={() => handleClickGoogleSignIn(dispatch, history)}>
-              <GoogleIcon width="16" height="16" />
+            <GoogleButton
+              onClick={() => handleClickGoogleSignIn(dispatch, history)}
+            >
+              <GoogleIcon width="20" height="20" />
               <p>Google</p>
-            </Button>
-            <Button
+            </GoogleButton>
+            <FacebookButton
               onClick={() => handleClickFacebookSignIn(dispatch, history)}
             >
-              <FacebookIcon width="24" hieght="24" />
+              <FacebookIcon width="20" height="20" />
               <p>Facebook</p>
-            </Button>
+            </FacebookButton>
           </TPLButtons>
           <h3>or use your email to sign in:</h3>
           <InputDiv>
@@ -68,10 +72,14 @@ function Form(props) {
               <LockIcon></LockIcon>
             </div>
             <p
-              style={{cursor: 'pointer'}}
+              style={{
+                display: 'inline-block',
+                margin: '10px 0 0 5px',
+                cursor: 'pointer',
+              }}
               onClick={() => handleClickForgetPassword(dispatch, email)}
             >
-              Forgot Password?
+              Forget Password?
             </p>
           </InputDiv>
           <Buttons>
@@ -86,7 +94,13 @@ function Form(props) {
           </Buttons>
           <hr></hr>
           <Buttons>
-            <Button onClick={() => props.setType('sign-up')}>
+            <Button
+              onClick={() => {
+                props.setType('sign-up');
+                props.setOrder('row-reverse');
+                props.setSource(signup);
+              }}
+            >
               Create New Account
             </Button>
           </Buttons>
@@ -98,16 +112,18 @@ function Form(props) {
           <h1>Sign Up</h1>
           <h2>Room</h2>
           <TPLButtons>
-            <Button onClick={() => handleClickGoogleSignIn(dispatch, history)}>
-              <GoogleIcon width="16" height="16" />
+            <GoogleButton
+              onClick={() => handleClickGoogleSignIn(dispatch, history)}
+            >
+              <GoogleIcon width="20" height="20" />
               <p>Google</p>
-            </Button>
-            <Button
+            </GoogleButton>
+            <FacebookButton
               onClick={() => handleClickFacebookSignIn(dispatch, history)}
             >
-              <FacebookIcon width="24" hieght="24" />
+              <FacebookIcon width="20" height="20" />
               <p>Facebook</p>
-            </Button>
+            </FacebookButton>
           </TPLButtons>
           <InputDiv>
             <Input
@@ -166,7 +182,13 @@ function Form(props) {
           </Buttons>
           <hr></hr>
           <Buttons>
-            <Button onClick={() => props.setType('sign-in')}>
+            <Button
+              onClick={() => {
+                props.setType('sign-in');
+                props.setOrder('row');
+                props.setSource(signin);
+              }}
+            >
               Use an Existing Account
             </Button>
           </Buttons>
@@ -251,17 +273,18 @@ const Div = styled.div`
   display: flex;
   flex-direction: column;
   width: 360px;
-  height: 90%;
-  border: 1px solid ${theme.GOFUN};
+  height: 100%;
+  border: 1px solid ${theme.WHITE};
   border-radius: 10px;
-  background-color: ${theme.GOFUN};
+  box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
+  background-color: ${theme.WHITE};
 
   h1 {
     font-family: 'Open Sans', sans-serif;
     font-weight: 600;
     font-size: 36px;
     margin: 10px 20px 5px;
-    color: ${theme.MIZU};
+    color: ${theme.KASHMIRBLUE};
   }
 
   h2 {
@@ -273,7 +296,7 @@ const Div = styled.div`
     font-weight: 600;
     font-size: 16px;
     margin: 0 20px;
-    color: ${theme.MIZU};
+    color: ${theme.PALESKY};
   }
 
   p {
@@ -285,7 +308,7 @@ const Div = styled.div`
 
   hr {
     margin: 0 15px;
-    border: 1px solid ${theme.MIZU};
+    border: 1px solid ${theme.IRON};
   }
 
   @media (max-width: 768px) {
@@ -302,6 +325,8 @@ const Div = styled.div`
   @media (max-width: 375px) {
     width: 300px;
     border: none;
+    box-shadow: none;
+    background-color: transparent;
 
     h1 {
       display: none;
@@ -313,7 +338,15 @@ const Div = styled.div`
       font-weight: 600;
       font-size: 36px;
       margin: 10px 20px 5px;
-      color: ${theme.MIZU};
+      color: ${theme.KASHMIRBLUE};
+    }
+
+    h3 {
+      color: ${theme.KASHMIRBLUE};
+    }
+
+    hr {
+      border: 1px solid ${theme.KASHMIRBLUE};
     }
   }
 `;
@@ -322,25 +355,30 @@ const InputDiv = styled.div`
   position: relative;
   margin: 5px 15px 5px;
   font-size: 16px;
-  color: ${theme.MIZU};
+  color: ${theme.PALESKY};
 
   div {
     position: absolute;
-    top: 5px;
+    top: 10px;
     left: 20px;
+  }
+
+  @media (max-width: 375px) {
+    color: ${theme.KASHMIRBLUE};
   }
 `;
 
 const Input = styled.input`
+  margin: 5px 0 0;
   padding: 0 0 0 50px;
   width: 100%;
   height: 30px;
-  border: 1px solid ${theme.MIZU};
+  border: 1px solid ${theme.IRON};
   border-radius: 5px;
   font-family: 'Open Sans', sans-serif;
   font-weight: 400;
   font-size: 16px;
-  color: ${theme.MIZU};
+  color: ${theme.PALESKY};
   background-color: transparent;
 
   :focus {
@@ -348,14 +386,71 @@ const Input = styled.input`
   }
 
   ::placeholder {
-    color: ${theme.MIZU};
+    color: ${theme.PALESKY};
+  }
+
+  @media (max-width: 375px) {
+    border: 1px solid ${theme.KASHMIRBLUE};
+    color: ${theme.KASHMIRBLUE};
+
+    ::placeholder {
+      color: ${theme.KASHMIRBLUE};
+    }
   }
 
   ${(props) =>
     props.invalid &&
     css`
-      background-color: ${theme.RURIKON};
+      background-color: ${theme.KASHMIRBLUE};
     `}
+`;
+
+const GoogleButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0 10px;
+  width: 100%;
+  height: 30px;
+  border: 1px solid ${theme.IRON};
+  border-radius: 5px;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: ${theme.PALESKY};
+  background-color: ${theme.WHITE};
+
+  :hover {
+    cursor: pointer;
+  }
+
+  svg {
+    margin: 0 5px 0 0;
+  }
+`;
+
+const FacebookButton = styled.button`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 0 10px;
+  width: 100%;
+  height: 30px;
+  border: 1px solid ${theme.FACEBOOK};
+  border-radius: 5px;
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
+  font-size: 16px;
+  color: ${theme.WHITE};
+  background-color: ${theme.FACEBOOK};
+
+  :hover {
+    cursor: pointer;
+  }
+
+  svg {
+    margin: 0 5px 0 0;
+  }
 `;
 
 const Button = styled.button`
@@ -365,12 +460,12 @@ const Button = styled.button`
   margin: 0 0 10px;
   width: 100%;
   height: 30px;
-  border: 1px solid ${theme.MIZU};
+  border: 1px solid ${theme.IRON};
   border-radius: 5px;
   font-family: 'Open Sans', sans-serif;
   font-weight: 400;
   font-size: 16px;
-  color: ${theme.MIZU};
+  color: ${theme.PALESKY};
   background-color: transparent;
 
   svg {
@@ -379,16 +474,48 @@ const Button = styled.button`
 
   :hover {
     cursor: pointer;
-    color: ${theme.GOFUN};
-    background-color: ${theme.MIZU};
+    color: ${theme.WHITE};
+    background-color: ${theme.KASHMIRBLUE};
+    border: 1px solid ${theme.KASHMIRBLUE};
+  }
+
+  @media (max-width: 375px) {
+    color: ${theme.KASHMIRBLUE};
+    border: 1px solid ${theme.KASHMIRBLUE};
+
+    :hover {
+      cursor: pointer;
+      color: ${theme.WHITE};
+      background-color: ${theme.KASHMIRBLUE};
+    }
   }
 
   ${(props) =>
     props.primary &&
     css`
       margin: 10px 0 10px;
-      color: ${theme.GOFUN};
-      background-color: ${theme.MIZU};
+      color: ${theme.WHITE};
+      background-color: ${theme.KASHMIRBLUE};
+      border: 1px solid ${theme.KASHMIRBLUE};
+
+      :hover {
+        cursor: pointer;
+        color: ${theme.WHITE};
+        background-color: ${theme.KASHMIRBLUE};
+        border: 1px solid ${theme.KASHMIRBLUE};
+      }
+
+      @media (max-width: 375px) {
+        border: 1px solid ${theme.KASHMIRBLUE};
+        color: ${theme.ATHENSGRAY};
+        background-color: ${theme.KASHMIRBLUE};
+
+        :hover {
+          cursor: pointer;
+          color: ${theme.WHITE};
+          background-color: ${theme.KASHMIRBLUE};
+        }
+      }
     `}
 `;
 

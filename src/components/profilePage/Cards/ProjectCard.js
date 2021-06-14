@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import {useHistory} from 'react-router-dom';
 import {useSelector, useDispatch} from 'react-redux';
 import {
+  alertMessage,
   selectProject,
   cloneProject,
   deleteProject,
@@ -31,18 +32,20 @@ function ProjectCard(props) {
             onClick={() => history.push(`project/${props.id}`)}
           ></ImgContainer>
           <Trash>
-            {props.author_id === id ? (
+            {props.tag === 'author' ? (
               <TrashIcon
                 width="24"
                 height="24"
-                onClick={() => handleClickDelete(dispatch, id, props.id)}
+                onClick={() =>
+                  handleClickDelete(dispatch, id, props.id, props.name)
+                }
               ></TrashIcon>
             ) : (
               ''
             )}
           </Trash>
           <Share>
-            {props.author_id === id ? (
+            {props.tag === 'author' ? (
               <ShareIcon
                 width="24"
                 height="24"
@@ -53,13 +56,19 @@ function ProjectCard(props) {
             )}
           </Share>
           <Stickies>
-            <div className="step-3">
-              <StickiesIcon
-                width="24"
-                height="24"
-                onClick={() => handleClickClone(dispatch, id, props.id)}
-              ></StickiesIcon>
-            </div>
+            {props.tag === 'author' || props.tag === 'shared' ? (
+              <div className="step-3">
+                <StickiesIcon
+                  width="24"
+                  height="24"
+                  onClick={() =>
+                    handleClickClone(dispatch, id, props.id, props.name)
+                  }
+                ></StickiesIcon>
+              </div>
+            ) : (
+              ''
+            )}
           </Stickies>
         </ImgDiv>
         <p>{props.name}</p>
@@ -74,17 +83,20 @@ function handleClickShare(dispatch, props) {
       id: props.id,
       name: props.name,
       author_id: props.author_id,
+      share_id: props.share_id,
     })
   );
   props.handleToggleShare(true);
 }
 
-async function handleClickClone(dispatch, user_id, project_id) {
+async function handleClickClone(dispatch, user_id, project_id, project_name) {
   dispatch(cloneProject(user_id, project_id));
+  dispatch(alertMessage(`Clone ${project_name}`));
 }
 
-async function handleClickDelete(dispatch, user_id, project_id) {
+async function handleClickDelete(dispatch, user_id, project_id, project_name) {
   dispatch(deleteProject(user_id, project_id));
+  dispatch(alertMessage(`Delete ${project_name}`));
 }
 
 const Item = styled.div`
@@ -93,10 +105,13 @@ const Item = styled.div`
   width: 100%;
   border: none;
   background-color: '#ffffff';
+  box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
   border-radius: 10px;
   background-color: ${theme.WHITE};
 
   p {
+    height: 24px;
+    line-height: 20px;
     font-family: 'Open Sans', sans-serif;
     font-weight: 400;
     font-size: 16px;
@@ -107,7 +122,7 @@ const Item = styled.div`
   svg {
     color: ${theme.WHITE};
     :hover {
-      color: ${theme.RURI};
+      color: ${theme.KASHMIRBLUE};
       cursor: pointer;
     }
   }

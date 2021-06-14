@@ -14,7 +14,7 @@ import {ReactComponent as PenIcon} from '../../../static/images/icons/vector-pen
 import {ReactComponent as CheckIcon} from '../../../static/images/icons/check.svg';
 
 function UserCard() {
-  const {id, name, email} = useSelector((state) => state.profile);
+  const {id, name, email, photoURL} = useSelector((state) => state.profile);
   const [nameInput, setNameInput] = useState(name);
   const [profileIsEditing, toggleEditProfile] = useState(false);
   const dispatch = useDispatch();
@@ -23,7 +23,7 @@ function UserCard() {
   return (
     <Div>
       <ImgDiv>
-        <img src={avatar} />
+        <img src={photoURL ? photoURL : avatar} />
       </ImgDiv>
       <Content>
         {profileIsEditing ? (
@@ -31,9 +31,22 @@ function UserCard() {
             <input
               value={nameInput}
               onChange={(event) => handleChange(event, setNameInput)}
+              onKeyPress={(event) => {
+                if (event.code === 'Enter') {
+                  if (!nameInput) {
+                    return;
+                  }
+                  toggleEditProfile(false);
+                  dispatch(setUserName(nameInput));
+                  dispatch(updateUserName(id, nameInput));
+                }
+              }}
             ></input>
             <button
               onClick={() => {
+                if (!nameInput) {
+                  return;
+                }
                 toggleEditProfile(false);
                 dispatch(setUserName(nameInput));
                 dispatch(updateUserName(id, nameInput));
@@ -47,9 +60,10 @@ function UserCard() {
         )}
         <p>{email}</p>
       </Content>
-      <ActionDiv>
+      <ActionDiv style={{margin: '15px 15px 0 13px'}}>
         <PenIcon width="24" height="24"></PenIcon>
         <p
+          style={{margin: '0 15px 0 17px'}}
           onClick={() => {
             toggleEditProfile(true);
           }}
@@ -76,12 +90,12 @@ function handleClickSignOut(dispatch, history) {
 
 const Div = styled.div`
   position: sticky;
-  top: 90px;
-  margin: 30px 0 0;
+  top: 140px;
   padding: 15px;
   width: 300px;
   height: 390px;
   border-radius: 10px;
+  box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
   background-color: ${theme.WHITE};
 
   @media (max-width: 1024px) {
@@ -98,7 +112,7 @@ const InputDiv = styled.div`
     font-family: 'Open Sans', sans-serif;
     font-weight: 600;
     font-size: 20px;
-    border: 1px solid ${theme.SUMI};
+    border: 1px solid ${theme.MINESHAFT};
     border-radius: 5px;
   }
 
@@ -110,7 +124,7 @@ const InputDiv = styled.div`
     background-color: transparent;
 
     :hover {
-      color: ${theme.RURI};
+      color: ${theme.KASHMIRBLUE};
       cursor: pointer;
     }
   }
@@ -125,6 +139,7 @@ const ImgDiv = styled.div`
   img {
     width: 150px;
     height: 150px;
+    border: 1px solid ${theme.ATHENSGRAY};
     border-radius: 75px;
   }
 `;
@@ -133,15 +148,19 @@ const Content = styled.div`
   margin: 0 15px 30px;
 
   h3 {
+    color: ${theme.MINESHAFT};
     font-family: 'Open Sans', sans-serif;
     font-weight: 600;
     font-size: 24px;
+    overflow: hidden;
   }
 
   p {
+    color: ${theme.MINESHAFT};
     font-family: 'Open Sans', sans-serif;
     font-weight: 400;
     font-size: 16px;
+    overflow: hidden;
   }
 `;
 
@@ -157,7 +176,7 @@ const ActionDiv = styled.div`
   }
 
   :hover {
-    color: ${theme.RURI};
+    color: ${theme.KASHMIRBLUE};
     cursor: pointer;
   }
 `;

@@ -1,15 +1,18 @@
 import React, {useState, useEffect} from 'react';
-import styled, {css} from 'styled-components';
+import styled from 'styled-components';
 import {useHistory} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
 import {Form} from './Form.js';
 import {fetchAuthState} from '../../app/actions/index.js';
 import * as theme from '../../app/constants/theme.js';
-import room from '../../static/images/backgrounds/room.png';
+import signin from '../../static/images/backgrounds/signin.png';
+import signup from '../../static/images/backgrounds/signup.png';
 
 function Auth() {
   const history = useHistory();
   const [type, setType] = useState('sign-in');
+  const [order, setOrder] = useState('row');
+  const [source, setSource] = useState(signin);
   const dispatch = useDispatch();
 
   useEffect(() => {
@@ -19,7 +22,7 @@ function Auth() {
 
   return (
     <Main>
-      <Div>
+      <Div style={{flexDirection: order}}>
         <VisionDiv>
           <Content>
             <h3>Plan and Draw with Designers</h3>
@@ -28,10 +31,15 @@ function Auth() {
               Your <span>Room</span> Ideas.
             </h1>
           </Content>
-          <Img src={room}></Img>
+          <Img src={source}></Img>
         </VisionDiv>
         <AuthDiv>
-          <Form type={type} setType={setType} />
+          <Form
+            type={type}
+            setType={setType}
+            setOrder={setOrder}
+            setSource={setSource}
+          />
         </AuthDiv>
       </Div>
     </Main>
@@ -43,15 +51,17 @@ const Main = styled.main`
   align-items: center;
   justify-content: center;
   height: 100%;
-  background-color: ${theme.MIZU};
+  background-color: ${theme.KASHMIRBLUE};
 
   @media (max-width: 375px) {
     width: 100%;
+    background-color: ${theme.ATHENSGRAY};
   }
 `;
 
 const Div = styled.div`
   display: flex;
+
   max-width: 1200px;
 
   @media (max-width: 768px) {
@@ -61,7 +71,7 @@ const Div = styled.div`
 
 const VisionDiv = styled.div`
   justify-content: center;
-  margin: 0 60px 0 0;
+  margin: 0 30px 0 30px;
 
   @media (max-width: 1024px) {
     margin: 0 auto 0 0;
@@ -118,6 +128,7 @@ const Img = styled.img`
 const AuthDiv = styled.div`
   align-items: center;
   justify-content: center;
+  margin: 0 30px 0 30px;
 `;
 
 export {Auth};

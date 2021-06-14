@@ -2,11 +2,12 @@ import React from 'react';
 import styled from 'styled-components';
 import {useHistory} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
-import {searchProjects} from '../../app/actions/index.js';
+import {searchProjects, filterProjects} from '../../app/actions/index.js';
 import * as theme from '../../app/constants/theme.js';
 import {ReactComponent as LightBulbIcon} from '../../static/images/icons/lightbulb.svg';
 import {ReactComponent as SearchIcon} from '../../static/images/icons/search.svg';
 import {ReactComponent as PersonIcon} from '../../static/images/icons/person-fill.svg';
+import {ReactComponent as RoomIcon} from '../../static/images/brands/room-white.svg';
 
 function Header(props) {
   let history = useHistory();
@@ -16,6 +17,7 @@ function Header(props) {
     <Div>
       <Navbar>
         <NavbarBrand>
+          <RoomIcon width="36" height="36"></RoomIcon>
           <button onClick={() => history.push('/profile')}>Room</button>
         </NavbarBrand>
         <SearchBar>
@@ -42,6 +44,13 @@ function Header(props) {
 function handleKeyPress(event, dispatch) {
   if (event.code === 'Enter') {
     dispatch(searchProjects(event.target.value));
+    dispatch(
+      filterProjects({
+        shared: false,
+        author: false,
+        searched: true,
+      })
+    );
   }
 }
 
@@ -52,18 +61,17 @@ const Div = styled.header`
   display: flex;
   justify-content: center;
   width: 100%;
-  color: ${theme.WHITESMOKE};
-  background-color: ${theme.RURIKON};
+  color: ${theme.ATHENSGRAY};
+  background-color: ${theme.KASHMIRBLUE};
 `;
 
 const Navbar = styled.div`
   display: flex;
   align-items: center;
-  margin: 10px 0 0 0;
-  padding: 30px;
+  padding: 10px 30px 0 30px;
   width: 100%;
   max-width: 1200px;
-  height: 80px;
+  height: 70px;
   background-color: transparent;
 `;
 
@@ -72,10 +80,14 @@ const NavbarBrand = styled.div`
   z-index: 10;
   display: flex;
   align-items: center;
-  padding: 0 225px 0 0;
+  padding: 0 181px 0 0;
   height: 60px;
   border: none;
   background-color: transparent;
+
+  svg {
+    margin: 0 10px 0 0;
+  }
 
   button {
     font-family: 'Varela Round';
@@ -83,7 +95,7 @@ const NavbarBrand = styled.div`
     font-size: 36px;
     border: none;
     cursor: pointer;
-    color: ${theme.WHITESMOKE};
+    color: ${theme.ATHENSGRAY};
     background-color: transparent;
 
     :hover {
@@ -110,7 +122,7 @@ const SearchBar = styled.div`
     position: absolute;
     top: 22px;
     left: 20px;
-    color: ${theme.SUMI};
+    color: ${theme.MINESHAFT};
   }
 
   input {
@@ -123,7 +135,7 @@ const SearchBar = styled.div`
     border: none;
     border-radius: 5px;
     outline: none;
-    background-color: ${theme.WHITESMOKE};
+    background-color: ${theme.ATHENSGRAY};
   }
 
   @media (max-width: 575px) {

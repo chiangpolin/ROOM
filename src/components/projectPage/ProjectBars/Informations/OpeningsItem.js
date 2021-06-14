@@ -39,7 +39,7 @@ function OpeningsItem(props) {
   return (
     <Item>
       <img
-        src={noimage}
+        src={props.opening.main_image ? props.opening.main_image : noimage}
         ref={drag}
         style={{opacity: isDragging ? 0.5 : 1}}
       ></img>

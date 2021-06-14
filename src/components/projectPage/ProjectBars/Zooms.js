@@ -54,7 +54,7 @@ const Div = styled.div`
     :hover {
       cursor: pointer;
       color: white;
-      background-color: ${theme.RURI};
+      background-color: ${theme.KASHMIRBLUE};
     }
   }
 `;

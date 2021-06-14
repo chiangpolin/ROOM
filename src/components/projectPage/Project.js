@@ -11,6 +11,7 @@ import {
   projectSteps,
   defaultOptions,
 } from '../../app/constants/joyrideSettings.js';
+import {Alert} from '../Notification/Alert.js';
 import {Canvas} from './ProjectCanvas/Canvas.js';
 import {Rendering} from './ProjectCanvas/Rendering.js';
 import {Home} from './ProjectBars/Home.js';
@@ -38,6 +39,7 @@ function Project() {
 
   return dataIsFetched ? (
     <Main>
+      <Alert></Alert>
       <Joyride
         run={run}
         steps={steps}
@@ -55,9 +57,9 @@ function Project() {
             setRun={setRun}
           ></Navbar>
           <Userbar userIsClicked={userIsClicked}></Userbar>
-          <Sidebar></Sidebar>
           <Infobar></Infobar>
-          <Tools></Tools>
+          <Sidebar renderIsClicked={renderIsClicked}></Sidebar>
+          <Tools renderIsClicked={renderIsClicked}></Tools>
           {renderIsClicked ? '' : <Zooms></Zooms>}
           {renderIsClicked ? <Rendering /> : <Canvas />}
           <CameraReels

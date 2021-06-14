@@ -122,6 +122,7 @@ export async function setFurniture(renderer, scene, camera, obj) {
 
   const group = new THREE.Group();
   for (const [key, mesh] of Object.entries(model)) {
+    // mesh.material = new THREE.MeshStandardMaterial({color: 0xffffff});
     group.add(mesh);
   }
   group.scale.set(1, 1, 1);
@@ -135,7 +136,6 @@ export async function setFurniture(renderer, scene, camera, obj) {
 }
 
 export async function setWall(renderer, scene, camera, wall, openings) {
-  console.log(openings);
   const line = wall.graphic;
   const color = RGBToHex(wall.color.r, wall.color.g, wall.color.b);
   const subtractCubes = [];

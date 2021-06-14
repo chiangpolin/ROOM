@@ -1,5 +1,5 @@
 import {configureStore, getDefaultMiddleware} from '@reduxjs/toolkit';
-import landingReducer from '../reducers/landingReducer';
+import authReducer from '../reducers/authReducer';
 import profileReducer from '../reducers/profileReducer';
 import projectReducer from '../reducers/projectReducer';
 import thunk from 'redux-thunk';
@@ -7,7 +7,7 @@ import thunk from 'redux-thunk';
 export const store = configureStore(
   {
     reducer: {
-      auth: landingReducer,
+      auth: authReducer,
       profile: profileReducer,
       project: projectReducer,
     },

@@ -46,6 +46,10 @@ const Div = styled.div`
   box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
   background-color: ${theme.WHITE};
   overflow-y: scroll;
+
+  @media (max-width: 767px) {
+    display: none;
+  }
 `;
 
 const Container = styled.div`
@@ -61,14 +65,14 @@ const Item = styled.button`
   border: 1px solid transparent;
 
   :hover {
-    border: 1px solid ${theme.SUMI};
+    border: 1px solid ${theme.MINESHAFT};
     cursor: pointer;
   }
 
   ${(props) =>
     props.primary &&
     css`
-      border: 1px solid ${theme.SUMI};
+      border: 1px solid ${theme.MINESHAFT};
     `}
 
   img {
