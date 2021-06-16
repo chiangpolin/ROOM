@@ -15,14 +15,21 @@ function Controls() {
   const {selectedGroup} = useSelector((state) => state.project);
   const dispatch = useDispatch();
 
+  const getDisabled = (type) => {
+    switch (type) {
+      case 'furniture':
+      case 'door':
+      case 'window':
+        return false;
+      default:
+        return true;
+    }
+  };
+
   return selectedGroup.id ? (
     <Div>
       <Button
-        disabled={
-          selectedGroup.type !== 'furniture' &&
-          selectedGroup.type !== 'window' &&
-          selectedGroup.type !== 'door'
-        }
+        disabled={getDisabled(selectedGroup.type)}
         onClick={() => handleClickRotate(dispatch, selectedGroup)}
       >
         <ClockwiseIcon
@@ -33,9 +40,7 @@ function Controls() {
       </Button>
       <Button
         disabled={
-          selectedGroup.type !== 'furniture' &&
-          selectedGroup.type !== 'window' &&
-          selectedGroup.type !== 'door'
+          ['furniture', 'window', 'door'].indexOf(selectedGroup.type) < 0
         }
         onClick={() => handleClickRotate(dispatch, selectedGroup)}
       >
