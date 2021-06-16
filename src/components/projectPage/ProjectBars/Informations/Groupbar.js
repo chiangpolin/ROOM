@@ -18,7 +18,7 @@ function Groupbar() {
   return selectedGroup.id ? (
     <Div>
       <ImgDiv>
-        <img src={main_image} />
+        <img src={main_image} alt="main" />
       </ImgDiv>
       <Content>
         <h3>{selectedGroup.name}</h3>
