@@ -1,8 +1,8 @@
 import React from 'react';
-import styled from 'styled-components';
-import * as theme from '../../../../app/constants/theme.js';
 import {useSelector, useDispatch} from 'react-redux';
+import styled from 'styled-components';
 import {setCameraPosition} from '../../../../app/actions/index.js';
+import * as theme from '../../../../app/constants/theme.js';
 
 function Camerabar() {
   const {d_cameras} = useSelector((state) => state.project);

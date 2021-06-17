@@ -1,12 +1,12 @@
 import React from 'react';
-import styled from 'styled-components';
-import * as theme from '../../../app/constants/theme.js';
 import {useSelector, useDispatch} from 'react-redux';
+import styled from 'styled-components';
 import {
   setFurnitureRotation,
   setOpeningRotation,
   removeCanvasElement,
 } from '../../../app/actions/index.js';
+import * as theme from '../../../app/constants/theme.js';
 import {ReactComponent as ClockwiseIcon} from '../../../static/images/icons/arrow-clockwise.svg';
 import {ReactComponent as CounterClockwiseIcon} from '../../../static/images/icons/arrow-counterclockwise.svg';
 import {ReactComponent as TrashIcon} from '../../../static/images/icons/trash.svg';
@@ -15,21 +15,12 @@ function Controls() {
   const {selectedGroup} = useSelector((state) => state.project);
   const dispatch = useDispatch();
 
-  const getDisabled = (type) => {
-    switch (type) {
-      case 'furniture':
-      case 'door':
-      case 'window':
-        return false;
-      default:
-        return true;
-    }
-  };
-
   return selectedGroup.id ? (
     <Div>
       <Button
-        disabled={getDisabled(selectedGroup.type)}
+        disabled={
+          ['furniture', 'window', 'door'].indexOf(selectedGroup.type) < 0
+        }
         onClick={() => handleClickRotate(dispatch, selectedGroup)}
       >
         <ClockwiseIcon

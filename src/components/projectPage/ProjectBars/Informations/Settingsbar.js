@@ -1,13 +1,13 @@
 import React, {useState} from 'react';
-import styled from 'styled-components';
-import * as theme from '../../../../app/constants/theme.js';
 import {useSelector, useDispatch} from 'react-redux';
+import styled from 'styled-components';
 import {
   setCanvasScale,
   setDirectionalLight,
   setHemisphereLight,
   setBackgroundColor,
 } from '../../../../app/actions/index.js';
+import * as theme from '../../../../app/constants/theme.js';
 
 function Settingsbar() {
   const {

@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import styled from 'styled-components';
 import {useHistory} from 'react-router-dom';
 import {useSelector, useDispatch} from 'react-redux';
+import styled from 'styled-components';
 import {
   setUserName,
   updateUserName,
@@ -17,13 +17,13 @@ function UserCard() {
   const {id, name, email, photoURL} = useSelector((state) => state.profile);
   const [nameInput, setNameInput] = useState(name);
   const [profileIsEditing, toggleEditProfile] = useState(false);
+  const history = useHistory();
   const dispatch = useDispatch();
-  let history = useHistory();
 
   return (
     <Div>
       <ImgDiv>
-        <img src={photoURL ? photoURL : avatar} />
+        <img src={photoURL || avatar} alt="" />
       </ImgDiv>
       <Content>
         {profileIsEditing ? (
@@ -32,24 +32,18 @@ function UserCard() {
               value={nameInput}
               onChange={(event) => handleChange(event, setNameInput)}
               onKeyPress={(event) => {
-                if (event.code === 'Enter') {
-                  if (!nameInput) {
-                    return;
-                  }
-                  toggleEditProfile(false);
-                  dispatch(setUserName(nameInput));
-                  dispatch(updateUserName(id, nameInput));
-                }
+                handleKeyPress(
+                  event,
+                  dispatch,
+                  id,
+                  nameInput,
+                  toggleEditProfile
+                );
               }}
             ></input>
             <button
               onClick={() => {
-                if (!nameInput) {
-                  return;
-                }
-                toggleEditProfile(false);
-                dispatch(setUserName(nameInput));
-                dispatch(updateUserName(id, nameInput));
+                handleClickCheck(dispatch, id, nameInput, toggleEditProfile);
               }}
             >
               <CheckIcon width="24" height="24"></CheckIcon>
@@ -86,6 +80,26 @@ function handleChange(event, setValue) {
 function handleClickSignOut(dispatch, history) {
   dispatch(signOut());
   history.push('/');
+}
+
+function handleKeyPress(event, dispatch, id, nameInput, toggleEditProfile) {
+  if (event.code === 'Enter') {
+    if (!nameInput) {
+      return;
+    }
+    toggleEditProfile(false);
+    dispatch(setUserName(nameInput));
+    dispatch(updateUserName(id, nameInput));
+  }
+}
+
+function handleClickCheck(dispatch, id, nameInput, toggleEditProfile) {
+  if (!nameInput) {
+    return;
+  }
+  toggleEditProfile(false);
+  dispatch(setUserName(nameInput));
+  dispatch(updateUserName(id, nameInput));
 }
 
 const Div = styled.div`

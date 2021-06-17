@@ -1,9 +1,9 @@
 import React from 'react';
-import styled from 'styled-components';
 import {useDispatch} from 'react-redux';
+import styled from 'styled-components';
 import {removeMessage} from '../../app/actions/index.js';
 import * as theme from '../../app/constants/theme.js';
-import {ReactComponent as XIcon} from '../../static/images/icons/x.svg';
+import {ReactComponent as X} from '../../static/images/icons/x.svg';
 
 function AlertCard(props) {
   const dispatch = useDispatch();
@@ -12,7 +12,7 @@ function AlertCard(props) {
     <Div>
       <p>{props.message.text}</p>
       <button onClick={() => dispatch(removeMessage(props.message))}>
-        <XIcon width="24" height="24"></XIcon>
+        <X width="24" height="24"></X>
       </button>
     </Div>
   );

@@ -121,7 +121,7 @@ export async function setFurniture(renderer, scene, camera, obj) {
   const model = await loadModel(loader, path.default);
 
   const group = new THREE.Group();
-  for (const [key, mesh] of Object.entries(model)) {
+  for (const [, mesh] of Object.entries(model)) {
     // mesh.material = new THREE.MeshStandardMaterial({color: 0xffffff});
     group.add(mesh);
   }
@@ -148,7 +148,7 @@ export async function setWall(renderer, scene, camera, wall, openings) {
       const model = await loadModel(loader, path.default);
 
       const group = new THREE.Group();
-      for (const [key, mesh] of Object.entries(model)) {
+      for (const [, mesh] of Object.entries(model)) {
         group.add(mesh);
       }
       group.scale.set(1, 1, 1);

@@ -1,17 +1,10 @@
 import React, {useState, useEffect} from 'react';
-import styled from 'styled-components';
 import {useParams} from 'react-router';
 import {useDispatch, useSelector} from 'react-redux';
 import Joyride from 'react-joyride';
 import {DndProvider} from 'react-dnd';
 import {HTML5Backend} from 'react-dnd-html5-backend';
-import {fetchProjectData} from '../../app/actions/index.js';
-import {handleJoyrideCallback} from '../../app/utils/joyride.js';
-import {
-  projectSteps,
-  defaultOptions,
-} from '../../app/constants/joyrideSettings.js';
-import {Alert} from '../Notification/Alert.js';
+import styled from 'styled-components';
 import {Canvas} from './ProjectCanvas/Canvas.js';
 import {Rendering} from './ProjectCanvas/Rendering.js';
 import {Home} from './ProjectBars/Home.js';
@@ -22,11 +15,17 @@ import {Infobar} from './ProjectBars/Informations/Infobar.js';
 import {Zooms} from './ProjectBars/Zooms.js';
 import {Tools} from './ProjectBars/Tools.js';
 import {CameraReels} from './ProjectBars/CameraReels.js';
+import {Alert} from '../Notification/Alert.js';
+import {fetchProjectData} from '../../app/actions/index.js';
+import {handleJoyrideCallback} from '../../app/utils/joyride.js';
+import {
+  projectSteps,
+  defaultOptions,
+} from '../../app/constants/joyrideSettings.js';
 
 function Project() {
   let {id} = useParams();
   const [run, setRun] = useState(false);
-  const [steps, setSteps] = useState(projectSteps);
   const [renderIsClicked, handleClickRender] = useState(false);
   const [userIsClicked, handleClickUser] = useState(false);
   const {dataIsFetched} = useSelector((state) => state.project);
@@ -42,7 +41,7 @@ function Project() {
       <Alert></Alert>
       <Joyride
         run={run}
-        steps={steps}
+        steps={projectSteps}
         continuous={true}
         callback={(data) => handleJoyrideCallback(data, setRun)}
         styles={{options: defaultOptions}}

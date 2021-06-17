@@ -1,6 +1,6 @@
 import React from 'react';
-import styled, {css} from 'styled-components';
 import {useSelector, useDispatch} from 'react-redux';
+import styled, {css} from 'styled-components';
 import {setCanvasTool, setCanvasOrtho} from '../../../app/actions';
 import * as theme from '../../../app/constants/theme.js';
 import {ReactComponent as BoxIcon} from '../../../static/images/icons/box.svg';
@@ -10,7 +10,6 @@ import {ReactComponent as SquareFillIcon} from '../../../static/images/icons/squ
 import {ReactComponent as PentagonFillIcon} from '../../../static/images/icons/pentagon-fill.svg';
 import {ReactComponent as SlashIcon} from '../../../static/images/icons/slash-lg.svg';
 import {ReactComponent as PencilIcon} from '../../../static/images/icons/pencil.svg';
-import {ReactComponent as XIcon} from '../../../static/images/icons/x.svg';
 import {ReactComponent as RulersIcon} from '../../../static/images/icons/rulers.svg';
 
 function Tools(props) {

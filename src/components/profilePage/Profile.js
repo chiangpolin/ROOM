@@ -1,8 +1,15 @@
 import React, {useState, useEffect} from 'react';
-import styled, {css} from 'styled-components';
 import {useHistory} from 'react-router-dom';
 import {useSelector, useDispatch} from 'react-redux';
 import Joyride from 'react-joyride';
+import styled, {css} from 'styled-components';
+import {Header} from './Header.js';
+import {UserCard} from './Cards/UserCard.js';
+import {NewCard} from './Cards/NewCard.js';
+import {ProjectCard} from './Cards/ProjectCard.js';
+import {Modal} from './Modals/Modal.js';
+import {UserModal} from './Modals/UserModal.js';
+import {Alert} from '../Notification/Alert.js';
 import {fetchProfileData, filterProjects} from '../../app/actions/index.js';
 import * as theme from '../../app/constants/theme.js';
 import {
@@ -19,36 +26,50 @@ import jungle from '../../static/images/backgrounds/jungle.jpg';
 import living from '../../static/images/backgrounds/living.jpg';
 import single from '../../static/images/backgrounds/single.jpg';
 import suite from '../../static/images/backgrounds/suite.jpg';
-import {Alert} from '../Notification/Alert.js';
-import {Header} from './Header.js';
-import {UserCard} from './Cards/UserCard.js';
-import {NewCard} from './Cards/NewCard.js';
-import {ProjectCard} from './Cards/ProjectCard.js';
-import {Modal} from './Modals/Modal.js';
-import {UserModal} from './Modals/UserModal.js';
 
 function Profile() {
-  const history = useHistory();
   const [run, setRun] = useState(false);
-  const [steps, setSteps] = useState(profileSteps);
   const [userIsToggled, handleToggleUser] = useState(false);
   const [shareIsToggled, handleToggleShare] = useState(false);
   const {id, projects, sharedProjects, searchedProjects, filter} = useSelector(
     (state) => state.profile
   );
+  const history = useHistory();
   const dispatch = useDispatch();
+
+  const newCards = [
+    {name: 'New Project', imageURL: newroom},
+    {name: 'Single Bedroom', imageURL: single},
+    {name: 'Owners Suite', imageURL: suite},
+    {name: 'Jungle', imageURL: jungle},
+    {name: 'Living Room', imageURL: living},
+  ];
+
+  const getMainTitle = (filter) => {
+    switch (true) {
+      case filter.author && filter.shared && filter.searched:
+        return 'All Projects';
+      case filter.author:
+        return 'My Projects';
+      case filter.shared:
+        return 'Shared with me';
+      case filter.searched:
+        return 'Search Results';
+      default:
+        return null;
+    }
+  };
 
   useEffect(() => {
     dispatch(fetchProfileData(history));
-    // eslint-disable-next-line
-  }, []);
+  }, [history, dispatch]);
 
   return id ? (
     <Main>
       <Alert></Alert>
       <Joyride
         run={run}
-        steps={steps}
+        steps={profileSteps}
         continuous={true}
         callback={(data) => handleJoyrideCallback(data, setRun)}
         styles={{options: defaultOptions}}
@@ -64,13 +85,7 @@ function Profile() {
             <div className="step-1">
               <h1>Create New Project</h1>
               <AddContainer>
-                {[
-                  {name: 'New Project', imageURL: newroom},
-                  {name: 'Single Bedroom', imageURL: single},
-                  {name: 'Owners Suite', imageURL: suite},
-                  {name: 'Jungle', imageURL: jungle},
-                  {name: 'Living Room', imageURL: living},
-                ].map((item, index) => (
+                {newCards.map((item, index) => (
                   <NewCard
                     key={index}
                     name={item.name}
@@ -82,104 +97,53 @@ function Profile() {
           </AddDiv>
           <div>
             <MainTitle>
-              {filter.author === true &&
-              filter.shared === true &&
-              filter.searched === true ? (
-                <h1>All Projects</h1>
-              ) : (
-                ''
-              )}
-              {filter.author === true &&
-              filter.shared === false &&
-              filter.searched === false ? (
-                <h1>My Projects</h1>
-              ) : (
-                ''
-              )}
-              {filter.author === false &&
-              filter.shared === true &&
-              filter.searched === false ? (
-                <h1>Shared with me</h1>
-              ) : (
-                ''
-              )}
-              {filter.author === false &&
-              filter.shared === false &&
-              filter.searched === true ? (
-                <h1>Search Results</h1>
-              ) : (
-                ''
-              )}
+              <h1>{getMainTitle(filter)}</h1>
               <FilterDiv>
                 <div className="step-4">
                   <FilterButton
-                    active={
-                      filter.author === true &&
-                      filter.shared === true &&
-                      filter.searched === true
-                    }
+                    active={filter.author && filter.shared && filter.searched}
                     onClick={() =>
-                      dispatch(
-                        filterProjects({
-                          shared: true,
-                          author: true,
-                          searched: true,
-                        })
-                      )
+                      handleToggleFilter(dispatch, {
+                        shared: true,
+                        author: true,
+                        searched: true,
+                      })
                     }
                   >
                     <FolderIcon width="24" height="24"></FolderIcon>
                   </FilterButton>
                   <FilterButton
-                    active={
-                      filter.author === true &&
-                      filter.shared === false &&
-                      filter.searched === false
-                    }
+                    active={filter.author && !filter.shared && !filter.searched}
                     onClick={() =>
-                      dispatch(
-                        filterProjects({
-                          shared: false,
-                          author: true,
-                          searched: false,
-                        })
-                      )
+                      handleToggleFilter(dispatch, {
+                        shared: false,
+                        author: true,
+                        searched: false,
+                      })
                     }
                   >
                     <PersonIcon width="24" height="24"></PersonIcon>
                   </FilterButton>
                   <FilterButton
-                    active={
-                      filter.author === false &&
-                      filter.shared === true &&
-                      filter.searched === false
-                    }
+                    active={!filter.author && filter.shared && !filter.searched}
                     onClick={() =>
-                      dispatch(
-                        filterProjects({
-                          shared: true,
-                          author: false,
-                          searched: false,
-                        })
-                      )
+                      handleToggleFilter(dispatch, {
+                        shared: true,
+                        author: false,
+                        searched: false,
+                      })
                     }
                   >
                     <PeopleIcon width="24" height="24"></PeopleIcon>
                   </FilterButton>
                   <FilterButton
-                    active={
-                      filter.author === false &&
-                      filter.shared === false &&
-                      filter.searched === true
-                    }
+                    active={!filter.author && !filter.shared && filter.searched}
                     onClick={() =>
-                      dispatch(
-                        filterProjects({
-                          shared: false,
-                          author: false,
-                          searched: true,
-                        })
-                      )
+                      handleToggleFilter(dispatch, {
+                        shared: false,
+                        author: false,
+                        searched: true,
+                      })
                     }
                   >
                     <CompassIcon width="24" height="24"></CompassIcon>
@@ -201,7 +165,7 @@ function Profile() {
                       handleToggleShare={handleToggleShare}
                     ></ProjectCard>
                   ))
-                : ''}
+                : null}
               {filter.shared
                 ? sharedProjects.map((project) => (
                     <ProjectCard
@@ -214,7 +178,7 @@ function Profile() {
                       handleToggleShare={handleToggleShare}
                     ></ProjectCard>
                   ))
-                : ''}
+                : null}
               {filter.searched
                 ? searchedProjects.map((project) => (
                     <ProjectCard
@@ -227,7 +191,7 @@ function Profile() {
                       handleToggleShare={handleToggleShare}
                     ></ProjectCard>
                   ))
-                : ''}
+                : null}
             </MainContainer>
           </div>
         </Content>
@@ -235,12 +199,20 @@ function Profile() {
       {shareIsToggled ? <Modal handleToggleShare={handleToggleShare} /> : ''}
       {userIsToggled ? (
         <UserModal handleToggleUser={handleToggleUser}></UserModal>
-      ) : (
-        ''
-      )}
+      ) : null}
     </Main>
   ) : (
     <Main></Main>
+  );
+}
+
+function handleToggleFilter(dispatch, filter) {
+  dispatch(
+    filterProjects({
+      shared: filter.shared,
+      author: filter.author,
+      searched: filter.searched,
+    })
   );
 }
 

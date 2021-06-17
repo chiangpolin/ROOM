@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
-import styled, {css} from 'styled-components';
 import {useSelector, useDispatch} from 'react-redux';
+import styled, {css} from 'styled-components';
 import {
   resetSearchTargets,
   fetchSearchTargets,
@@ -23,8 +23,7 @@ function Modal(props) {
   useEffect(() => {
     dispatch(resetSearchTargets());
     dispatch(fetchSearchTargets(selectedProject.share_id));
-    // eslint-disable-next-line
-  }, []);
+  }, [dispatch, selectedProject]);
 
   return (
     <Div>
@@ -49,7 +48,7 @@ function Modal(props) {
           <Targets>
             {searchTargets.map((target) => (
               <Target>
-                <img src={avatar}></img>
+                <img src={avatar} alt=""></img>
                 <p>{target.name}</p>
                 <ShareButton
                   disabled={

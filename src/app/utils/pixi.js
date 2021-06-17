@@ -8,7 +8,6 @@ import {
   deselectCanvasElement,
   setInformation,
 } from '../actions/index.js';
-import * as theme from '../constants/theme.js';
 import {store} from '../store/index.js';
 
 export function outlineFilter() {

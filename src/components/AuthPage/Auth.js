@@ -1,29 +1,29 @@
 import React, {useState, useEffect} from 'react';
-import styled from 'styled-components';
 import {useHistory} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
+import styled from 'styled-components';
 import {Form} from './Form.js';
 import {fetchAuthState} from '../../app/actions/index.js';
 import * as theme from '../../app/constants/theme.js';
-import signin from '../../static/images/backgrounds/signin.png';
-import signup from '../../static/images/backgrounds/signup.png';
+import signInImage from '../../static/images/backgrounds/signin.png';
+import signUpImage from '../../static/images/backgrounds/signup.png';
 
 function Auth() {
   const history = useHistory();
   const [type, setType] = useState('sign-in');
-  const [order, setOrder] = useState('row');
-  const [source, setSource] = useState(signin);
   const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(fetchAuthState(history));
-    // eslint-disable-next-line
-  }, []);
+  }, [history, dispatch]);
 
   return (
     <Main>
-      <Div style={{flexDirection: order}}>
-        <VisionDiv>
+      <Div>
+        <VisualDiv
+          display={type === 'sign-in' ? 'block' : 'none'}
+          opacity={type === 'sign-in' ? '100%' : '0'}
+        >
           <Content>
             <h3>Plan and Draw with Designers</h3>
             <h3>Anywhere, and Everywhere,</h3>
@@ -31,15 +31,23 @@ function Auth() {
               Your <span>Room</span> Ideas.
             </h1>
           </Content>
-          <Img src={source}></Img>
-        </VisionDiv>
-        <AuthDiv>
-          <Form
-            type={type}
-            setType={setType}
-            setOrder={setOrder}
-            setSource={setSource}
-          />
+          <Img src={signInImage} alt=""></Img>
+        </VisualDiv>
+        <VisualDiv
+          display={type === 'sign-up' ? 'block' : 'none'}
+          opacity={type === 'sign-up' ? '100%' : '0'}
+        >
+          <Content>
+            <h3>Start Creating Room Plan with</h3>
+            <h3>Canvas and Instant Rendering</h3>
+            <h1>
+              As a <span>Room</span> User.
+            </h1>
+          </Content>
+          <Img src={signUpImage} alt=""></Img>
+        </VisualDiv>
+        <AuthDiv shift={type === 'sign-in' ? '50%' : '0'}>
+          <Form type={type} setType={setType} />
         </AuthDiv>
       </Div>
     </Main>
@@ -53,6 +61,10 @@ const Main = styled.main`
   height: 100%;
   background-color: ${theme.KASHMIRBLUE};
 
+  @media (max-width: 1023px) {
+    min-height: 600px;
+  }
+
   @media (max-width: 375px) {
     width: 100%;
     background-color: ${theme.ATHENSGRAY};
@@ -60,25 +72,30 @@ const Main = styled.main`
 `;
 
 const Div = styled.div`
+  position: relative;
   display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 900px;
+  height: 100%;
+  max-height: 450px;
 
-  max-width: 1200px;
-
-  @media (max-width: 768px) {
-    display: block;
+  @media (max-width: 1023px) {
+    margin: 0;
+    flex-direction: column;
+    width: 100%;
   }
 `;
 
-const VisionDiv = styled.div`
+const VisualDiv = styled.div`
+  position: relative;
   justify-content: center;
-  margin: 0 30px 0 30px;
+  margin: 0 auto;
+  opacity: ${(props) => props.opacity};
+  transition: opacity 0.5s ease;
 
-  @media (max-width: 1024px) {
-    margin: 0 auto 0 0;
-  }
-
-  @media (max-width: 768px) {
-    margin: 0;
+  @media (max-width: 1023px) {
+    display: ${(props) => props.display};
   }
 `;
 
@@ -105,7 +122,7 @@ const Content = styled.div`
     font-size: 36px;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 1023px) {
     h1 {
       font-weight: 400;
     }
@@ -118,17 +135,33 @@ const Content = styled.div`
 
 const Img = styled.img`
   height: 100%;
-  max-height: 300px;
+  max-height: 285px;
 
-  @media (max-width: 768px) {
+  @media (max-width: 1023px) {
     display: none;
   }
 `;
 
 const AuthDiv = styled.div`
+  position: absolute;
+  top: 0;
+  left: ${(props) => props.shift};
+  display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 30px 0 30px;
+  padding: 0 30px;
+  width: 50%;
+  transition: left 0.5s ease;
+
+  @media (max-width: 1023px) {
+    position: static;
+    padding: 0;
+    width: 360px;
+  }
+
+  @media (max-width: 375px) {
+    width: 100%;
+  }
 `;
 
 export {Auth};

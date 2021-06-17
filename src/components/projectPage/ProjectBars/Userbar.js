@@ -9,13 +9,13 @@ import {ReactComponent as SignOutIcon} from '../../../static/images/icons/box-ar
 
 function Userbar(props) {
   let history = useHistory();
-  const {id, name, email, photoURL} = useSelector((state) => state.profile);
+  const {name, email, photoURL} = useSelector((state) => state.profile);
   const dispatch = useDispatch();
 
   return props.userIsClicked ? (
     <Div>
       <ImgDiv>
-        <img src={photoURL ? photoURL : avatar}></img>
+        <img src={photoURL || avatar} alt=""></img>
       </ImgDiv>
       <UserDiv>
         <h3>{name}</h3>
@@ -26,9 +26,7 @@ function Userbar(props) {
         <p>Sign Out</p>
       </SignOutDiv>
     </Div>
-  ) : (
-    ''
-  );
+  ) : null;
 }
 
 function handleClickSignOut(dispatch, history) {

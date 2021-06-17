@@ -8,6 +8,10 @@ export const ATHENSGRAY = '#edf1f5';
 export const IRON = '#d5d5d5';
 export const MINESHAFT = '#2f3031';
 
+export const SAKURA = '#FEDFE1';
+export const TAIKOH = '#F8C3CD';
+export const IMAYOH = '#D05A6E';
+
 export const PRIMARY = '#0275d8';
 export const DANGER = '#d9534f';
 export const SUCCESS = '#5cb85c';

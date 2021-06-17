@@ -41,6 +41,7 @@ function FurnituresItem(props) {
         src={props.furniture.main_image ? props.furniture.main_image : noimage}
         ref={drag}
         style={{opacity: isDragging ? 0.5 : 1}}
+        alt=""
       ></img>
       <p>{props.furniture.name}</p>
     </Item>

@@ -1,7 +1,8 @@
-import React, {useState} from 'react';
-import styled, {css} from 'styled-components';
+import React from 'react';
 import {useLocation, useParams} from 'react-router';
 import {useSelector, useDispatch} from 'react-redux';
+import styled, {css} from 'styled-components';
+import {Controls} from './Controls.js';
 import {
   alertMessage,
   updateProject,
@@ -13,7 +14,6 @@ import {ReactComponent as LinkIcon} from '../../../static/images/icons/link.svg'
 import {ReactComponent as SdCardIcon} from '../../../static/images/icons/sd-card.svg';
 import {ReactComponent as CameraIcon} from '../../../static/images/icons/camera.svg';
 import {ReactComponent as PersonIcon} from '../../../static/images/icons/person-fill.svg';
-import {Controls} from './Controls.js';
 
 function Navbar(props) {
   let location = useLocation();
@@ -78,9 +78,7 @@ function Navbar(props) {
           <RightDiv onClick={() => props.handleClickUser(!props.userIsClicked)}>
             <PersonIcon width="24" height="24"></PersonIcon>
           </RightDiv>
-        ) : (
-          ''
-        )}
+        ) : null}
       </div>
       <Controls></Controls>
     </Div>

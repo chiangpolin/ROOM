@@ -14,9 +14,10 @@ export const alertMessage = (text) => (dispatch) => {
   }, 5000);
 };
 
-export const signUp = (name, email, password) => async (dispatch) => {
+export const signUp = (name, email, password) => async () => {
   const credential = await auth.signUp(email, password);
   auth.sendEmailVerification();
+
   const data = {name: name, email: credential.user.email};
   if (credential.user.uid) {
     const id = await firestore.postUser(data);
@@ -27,12 +28,12 @@ export const signUp = (name, email, password) => async (dispatch) => {
   }
 };
 
-export const signIn = (email, password) => async (dispatch) => {
+export const signIn = (email, password) => async () => {
   const credential = await auth.signIn(email, password);
   return credential;
 };
 
-export const googleSignIn = () => async (dispatch) => {
+export const googleSignIn = () => async () => {
   const provider = auth.googleProvider();
   const result = await auth.googleSignInPopup(provider);
   const user = await firestore.getUserByEmail(result.user.email);
@@ -54,7 +55,7 @@ export const googleSignIn = () => async (dispatch) => {
   return result;
 };
 
-export const facebookSignIn = () => async (dispatch) => {
+export const facebookSignIn = () => async () => {
   const provider = auth.facebookProvider();
   const result = await auth.facebookSignInPopup(provider);
   const user = await firestore.getUserByEmail(result.user.email);
@@ -82,20 +83,20 @@ export const signOut = () => async (dispatch) => {
   // alert('Sign out!');
 };
 
-export const forgetPassword = (email) => async (dispatch) => {
+export const forgetPassword = (email) => async () => {
   auth.sendPasswordResetEmail(email);
 };
 
-export const updateUserName = (user_id, name) => async (dispatch) => {
+export const updateUserName = (user_id, name) => async () => {
   await firestore.putUserName(user_id, name);
 };
 
-export const uploadRenderingImage = (project_id, url) => async (dispatch) => {
+export const uploadRenderingImage = (project_id, url) => async () => {
   const downloadURL = await storage.putFile(project_id, url);
   firestore.putProjectImageURL(project_id, {imageURL: downloadURL});
 };
 
-export const fetchAuthState = (history) => async (dispatch) => {
+export const fetchAuthState = (history) => async () => {
   const credentialUser = await auth.getAuthState();
   if (credentialUser.uid) {
     history.push('/profile');
@@ -578,7 +579,7 @@ export const setInstruction = (instruction) => ({
 // pixi-canvas
 export const addCanvasElement = (target, group) => ({
   type: actionTypes.ADD_CANVAS_ELEMENT,
-  payload: {target, group},
+  payload: {target, group: {...group, id: _uuid()}},
 });
 
 export const removeCanvasElement = (target, uuid) => ({

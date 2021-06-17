@@ -1,8 +1,8 @@
 import React from 'react';
-import styled, {css} from 'styled-components';
-import * as theme from '../../../app/constants/theme.js';
 import {useSelector, useDispatch} from 'react-redux';
+import styled, {css} from 'styled-components';
 import {setInformation} from '../../../app/actions/index.js';
+import * as theme from '../../../app/constants/theme.js';
 import {ReactComponent as GearIcon} from '../../../static/images/icons/gear.svg';
 import {ReactComponent as InfoCircleIcon} from '../../../static/images/icons/info.svg';
 import {ReactComponent as ShopIcon} from '../../../static/images/icons/shop.svg';

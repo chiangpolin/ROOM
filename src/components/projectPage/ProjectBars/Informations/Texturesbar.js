@@ -1,8 +1,8 @@
 import React from 'react';
-import styled, {css} from 'styled-components';
-import * as theme from '../../../../app/constants/theme.js';
 import {useSelector, useDispatch} from 'react-redux';
+import styled, {css} from 'styled-components';
 import {setCoveringTexture} from '../../../../app/actions/index.js';
+import * as theme from '../../../../app/constants/theme.js';
 
 function Texturesbar() {
   const {setting, selectedGroup} = useSelector((state) => state.project);
@@ -22,7 +22,7 @@ function Texturesbar() {
               dispatch(setCoveringTexture(selectedGroup.id, texture.path))
             }
           >
-            <img src={texture.main_image}></img>
+            <img src={texture.main_image} alt=""></img>
             <h3>{texture.name}</h3>
             <p>
               {0} x {0}

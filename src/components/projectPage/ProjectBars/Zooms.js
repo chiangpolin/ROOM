@@ -1,6 +1,6 @@
 import React from 'react';
-import styled from 'styled-components';
 import {useDispatch, useSelector} from 'react-redux';
+import styled from 'styled-components';
 import * as theme from '../../../app/constants/theme.js';
 import {setCanvasScale} from '../../../app/actions/index.js';
 import {ReactComponent as PlusIcon} from '../../../static/images/icons/plus.svg';

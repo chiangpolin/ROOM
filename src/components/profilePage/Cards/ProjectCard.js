@@ -1,7 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
 import {useHistory} from 'react-router-dom';
 import {useSelector, useDispatch} from 'react-redux';
+import styled from 'styled-components';
 import {
   alertMessage,
   selectProject,
@@ -12,7 +12,7 @@ import * as theme from '../../../app/constants/theme.js';
 import {ReactComponent as StickiesIcon} from '../../../static/images/icons/stickies.svg';
 import {ReactComponent as ShareIcon} from '../../../static/images/icons/share.svg';
 import {ReactComponent as TrashIcon} from '../../../static/images/icons/trash.svg';
-import blank from '../../../static/images/backgrounds/default.jpg';
+import defaultImage from '../../../static/images/backgrounds/default.jpg';
 
 function ProjectCard(props) {
   let history = useHistory();
@@ -27,7 +27,7 @@ function ProjectCard(props) {
             style={
               props.imageURL
                 ? {backgroundImage: `url(${props.imageURL})`}
-                : {backgroundImage: `url(${blank})`}
+                : {backgroundImage: `url(${defaultImage})`}
             }
             onClick={() => history.push(`project/${props.id}`)}
           ></ImgContainer>
@@ -77,16 +77,16 @@ function ProjectCard(props) {
   );
 }
 
-function handleClickShare(dispatch, props) {
+function handleClickShare(dispatch, project) {
   dispatch(
     selectProject({
-      id: props.id,
-      name: props.name,
-      author_id: props.author_id,
-      share_id: props.share_id,
+      id: project.id,
+      name: project.name,
+      author_id: project.author_id,
+      share_id: project.share_id,
     })
   );
-  props.handleToggleShare(true);
+  project.handleToggleShare(true);
 }
 
 async function handleClickClone(dispatch, user_id, project_id, project_name) {

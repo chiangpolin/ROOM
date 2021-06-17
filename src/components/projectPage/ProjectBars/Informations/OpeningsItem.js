@@ -1,7 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
 import {useSelector, useDispatch} from 'react-redux';
 import {useDrag} from 'react-dnd';
+import styled from 'styled-components';
 import {addCanvasElement} from '../../../../app/actions/index.js';
 import {ItemTypes} from '../../../../app/constants/dragTypes.js';
 import noimage from '../../../../static/images/backgrounds/noimage.png';
@@ -42,6 +42,7 @@ function OpeningsItem(props) {
         src={props.opening.main_image ? props.opening.main_image : noimage}
         ref={drag}
         style={{opacity: isDragging ? 0.5 : 1}}
+        alt=""
       ></img>
       <p>{props.opening.name}</p>
     </Item>

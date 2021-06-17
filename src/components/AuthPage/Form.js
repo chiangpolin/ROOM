@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import styled, {css} from 'styled-components';
 import {useHistory} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
+import styled, {css} from 'styled-components';
 import {
   signUp,
   signIn,
@@ -16,19 +16,17 @@ import {ReactComponent as FacebookIcon} from '../../static/images/brands/faceboo
 import {ReactComponent as PersonIcon} from '../../static/images/icons/person.svg';
 import {ReactComponent as EnvelopeIcon} from '../../static/images/icons/envelope.svg';
 import {ReactComponent as LockIcon} from '../../static/images/icons/lock.svg';
-import signin from '../../static/images/backgrounds/signin.png';
-import signup from '../../static/images/backgrounds/signup.png';
 
 function Form(props) {
-  let history = useHistory();
   const [name, setName] = useState('');
   const [nameIsValid, setNameValidation] = useState(true);
-  const [email, setEmail] = useState('user@gmail.com');
-  const [newEmail, setNewEmail] = useState('');
+  const [signInEmail, setSignInEmail] = useState('user@gmail.com');
+  const [signUpEmail, setSignUpEmail] = useState('');
   const [emailIsValid, setEmailValidation] = useState(true);
-  const [password, setPassword] = useState('batch13');
-  const [newPassword, setNewPassword] = useState('');
+  const [signInPassword, setSignInPassword] = useState('batch13');
+  const [signUpPassword, setSignUpPassword] = useState('');
   const [passwordIsValid, setPasswordValidation] = useState(true);
+  const history = useHistory();
   const dispatch = useDispatch();
 
   switch (props.type) {
@@ -55,8 +53,8 @@ function Form(props) {
           <InputDiv>
             <Input
               type="text"
-              value={email}
-              onChange={(event) => handleChange(event, setEmail)}
+              value={signInEmail}
+              onChange={(event) => handleChange(event, setSignInEmail)}
             ></Input>
             <div>
               <EnvelopeIcon></EnvelopeIcon>
@@ -65,8 +63,8 @@ function Form(props) {
           <InputDiv>
             <Input
               type="password"
-              value={password}
-              onChange={(event) => handleChange(event, setPassword)}
+              value={signInPassword}
+              onChange={(event) => handleChange(event, setSignInPassword)}
             ></Input>
             <div>
               <LockIcon></LockIcon>
@@ -77,7 +75,7 @@ function Form(props) {
                 margin: '10px 0 0 5px',
                 cursor: 'pointer',
               }}
-              onClick={() => handleClickForgetPassword(dispatch, email)}
+              onClick={() => handleClickForgetPassword(dispatch, signInEmail)}
             >
               Forget Password?
             </p>
@@ -86,19 +84,22 @@ function Form(props) {
             <Button
               primary
               onClick={() =>
-                handleClickSignIn(dispatch, history, email, password)
+                handleClickSignIn(
+                  dispatch,
+                  history,
+                  signInEmail,
+                  signInPassword
+                )
               }
             >
               Sign In
             </Button>
-          </Buttons>
-          <hr></hr>
-          <Buttons>
+
+            <hr></hr>
+
             <Button
               onClick={() => {
                 props.setType('sign-up');
-                props.setOrder('row-reverse');
-                props.setSource(signup);
               }}
             >
               Create New Account
@@ -141,9 +142,9 @@ function Form(props) {
             <Input
               type="text"
               placeholder="Email"
-              value={newEmail}
+              value={signUpEmail}
               invalid={!emailIsValid}
-              onChange={(event) => handleChange(event, setNewEmail)}
+              onChange={(event) => handleChange(event, setSignUpEmail)}
             ></Input>
             <div>
               <EnvelopeIcon></EnvelopeIcon>
@@ -153,9 +154,9 @@ function Form(props) {
             <Input
               type="password"
               placeholder="Password"
-              value={newPassword}
+              value={signUpPassword}
               invalid={!passwordIsValid}
-              onChange={(event) => handleChange(event, setNewPassword)}
+              onChange={(event) => handleChange(event, setSignUpPassword)}
             ></Input>
             <div>
               <LockIcon></LockIcon>
@@ -169,8 +170,8 @@ function Form(props) {
                   dispatch,
                   history,
                   name,
-                  newEmail,
-                  newPassword,
+                  signUpEmail,
+                  signUpPassword,
                   setNameValidation,
                   setEmailValidation,
                   setPasswordValidation
@@ -179,14 +180,12 @@ function Form(props) {
             >
               Sign Up
             </Button>
-          </Buttons>
-          <hr></hr>
-          <Buttons>
+
+            <hr></hr>
+
             <Button
               onClick={() => {
                 props.setType('sign-in');
-                props.setOrder('row');
-                props.setSource(signin);
               }}
             >
               Use an Existing Account
@@ -195,7 +194,7 @@ function Form(props) {
         </Div>
       );
     default:
-      return <Div></Div>;
+      return null;
   }
 }
 
@@ -232,7 +231,16 @@ async function handleClickSignUp(
   setNameValidation(check.nameIsValid);
   setEmailValidation(check.emailIsValid);
   setPasswordValidation(check.passwordIsValid);
-  if (!check.nameIsValid || !check.emailIsValid || !check.passwordIsValid) {
+
+  if (!check.nameIsValid) {
+    return;
+  }
+
+  if (!check.emailIsValid) {
+    return;
+  }
+
+  if (!check.passwordIsValid) {
     return;
   }
 
@@ -272,8 +280,8 @@ async function handleClickForgetPassword(dispatch, email) {
 const Div = styled.div`
   display: flex;
   flex-direction: column;
-  width: 360px;
-  height: 100%;
+  width: 100%;
+  height: 450px;
   border: 1px solid ${theme.WHITE};
   border-radius: 10px;
   box-shadow: 0 2px 6px 0 hsla(0, 0%, 0%, 0.2);
@@ -299,6 +307,10 @@ const Div = styled.div`
     color: ${theme.PALESKY};
   }
 
+  hr {
+    border: 1px solid ${theme.IRON};
+  }
+
   p {
     font-family: 'Open Sans', sans-serif;
     font-weight: 400;
@@ -306,12 +318,7 @@ const Div = styled.div`
     margin: 0 5px 0;
   }
 
-  hr {
-    margin: 0 15px;
-    border: 1px solid ${theme.IRON};
-  }
-
-  @media (max-width: 768px) {
+  @media (max-width: 1023px) {
     height: 100%;
     hr {
       margin: 0 15px 10px;
@@ -401,7 +408,8 @@ const Input = styled.input`
   ${(props) =>
     props.invalid &&
     css`
-      background-color: ${theme.KASHMIRBLUE};
+      background-color: ${theme.SAKURA};
+      border: 1px solid ${theme.IMAYOH};
     `}
 `;
 
@@ -453,11 +461,15 @@ const FacebookButton = styled.button`
   }
 `;
 
+const Buttons = styled.div`
+  margin: auto 15px 0;
+`;
+
 const Button = styled.button`
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 0 10px;
+  margin: 15px 0 30px;
   width: 100%;
   height: 30px;
   border: 1px solid ${theme.IRON};
@@ -517,12 +529,6 @@ const Button = styled.button`
         }
       }
     `}
-`;
-
-const Buttons = styled.div`
-  align-items: center;
-  justify-content: center;
-  margin: auto 15px 5px;
 `;
 
 const TPLButtons = styled.div`

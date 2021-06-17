@@ -1,11 +1,11 @@
 import React, {useState, useEffect, useRef} from 'react';
-import styled from 'styled-components';
 import {useSelector, useDispatch} from 'react-redux';
 import {useDrop} from 'react-dnd';
+import styled from 'styled-components';
+import {selectCanvasElement} from '../../../app/actions/index.js';
 import {ItemTypes} from '../../../app/constants/dragTypes.js';
 import * as theme from '../../../app/constants/theme.js';
 import * as pixi from '../../../app/utils/pixi.js';
-import {selectCanvasElement} from '../../../app/actions/index.js';
 
 function Canvas() {
   const dispatch = useDispatch();
@@ -16,7 +16,7 @@ function Canvas() {
   const [pixiFurnitureContainer, setFurnitureContainer] = useState('');
   const [pixiCoveringContainer, setCoveringContainer] = useState('');
   const [pixiFloorContainer, setFloorContainer] = useState('');
-  const [{canDrop, isOver}, drop] = useDrop(() => ({
+  const [, drop] = useDrop(() => ({
     accept: [ItemTypes.ELEMENT],
     drop: (item, monitor) => ({
       name: 'Canvas',
@@ -275,7 +275,7 @@ function Canvas() {
       pixiApp.stage.scale.x = scale;
       pixiApp.stage.scale.y = scale;
     }
-  }, [scale]);
+  }, [pixiApp, scale]);
 
   return (
     <Div ref={drop} role={'Canvas'}>

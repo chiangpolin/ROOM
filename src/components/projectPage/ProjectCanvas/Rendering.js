@@ -1,6 +1,6 @@
 import React, {useEffect, useRef} from 'react';
-import styled from 'styled-components';
 import {useSelector} from 'react-redux';
+import styled from 'styled-components';
 import * as three from '../../../app/utils/three.js';
 
 function Rendering() {

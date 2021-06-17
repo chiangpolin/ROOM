@@ -1,11 +1,10 @@
 import React from 'react';
+import {useSelector} from 'react-redux';
 import styled from 'styled-components';
 import * as theme from '../../../../app/constants/theme.js';
-import {useSelector, useDispatch} from 'react-redux';
 
 function Groupbar() {
   const {selectedGroup, setting} = useSelector((state) => state.project);
-  const dispatch = useDispatch();
   const main_groups = setting.furnitures.filter(
     (furniture) => furniture.name === selectedGroup.name
   );

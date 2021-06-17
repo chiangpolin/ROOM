@@ -1,8 +1,8 @@
 import React from 'react';
-import styled, {css} from 'styled-components';
-import * as theme from '../../../../app/constants/theme.js';
 import {useSelector, useDispatch} from 'react-redux';
+import styled, {css} from 'styled-components';
 import {setWallColor} from '../../../../app/actions/index.js';
+import * as theme from '../../../../app/constants/theme.js';
 
 function Paintsbar() {
   const {setting, selectedGroup} = useSelector((state) => state.project);
@@ -24,7 +24,7 @@ function Paintsbar() {
               dispatch(setWallColor(selectedGroup.id, paint.color))
             }
           >
-            <img style={{backgroundColor: `${paint.code}`}}></img>
+            <img style={{backgroundColor: `${paint.code}`}} alt=""></img>
             <h3>{paint.name}</h3>
             <p>{paint.code}</p>
           </Item>

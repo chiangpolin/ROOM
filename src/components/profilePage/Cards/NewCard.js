@@ -1,12 +1,12 @@
 import React from 'react';
-import styled from 'styled-components';
 import {useHistory} from 'react-router';
 import {useSelector, useDispatch} from 'react-redux';
+import styled from 'styled-components';
 import {createProject} from '../../../app/actions/index.js';
 import * as theme from '../../../app/constants/theme.js';
 
 function NewCard(props) {
-  let history = useHistory();
+  const history = useHistory();
   const {id} = useSelector((state) => state.profile);
   const dispatch = useDispatch();
 

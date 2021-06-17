@@ -30,7 +30,7 @@ function UserModal(props) {
         </Button>
         <Container>
           <ImgDiv>
-            <img src={avatar} />
+            <img src={avatar} alt="" />
           </ImgDiv>
           <Content>
             {profileIsEditing ? (

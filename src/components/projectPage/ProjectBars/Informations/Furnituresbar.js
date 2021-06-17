@@ -1,8 +1,8 @@
 import React from 'react';
-import styled from 'styled-components';
 import {useSelector} from 'react-redux';
-import * as theme from '../../../../app/constants/theme.js';
+import styled from 'styled-components';
 import {FurnituresItem} from './FurnituresItem.js';
+import * as theme from '../../../../app/constants/theme.js';
 
 function Furnituresbar() {
   const {setting} = useSelector((state) => state.project);

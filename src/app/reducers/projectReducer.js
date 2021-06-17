@@ -1,5 +1,3 @@
-import {_uuid} from '../utils/general';
-
 const initialState = {
   // profile
   name: '',
@@ -92,7 +90,7 @@ const projectReducer = (state = initialState, action) => {
               ...state.d_furnitures,
               {
                 name: action.payload.group.name,
-                id: _uuid(),
+                id: action.payload.group.id,
                 type: 'furniture',
                 method: 'post',
                 file: action.payload.group.file,
@@ -116,7 +114,7 @@ const projectReducer = (state = initialState, action) => {
               ...state.d_openings,
               {
                 name: action.payload.group.name,
-                id: _uuid(),
+                id: action.payload.group.id,
                 type: action.payload.group.type,
                 method: 'post',
                 file: action.payload.group.file,
@@ -141,7 +139,7 @@ const projectReducer = (state = initialState, action) => {
               ...state.d_walls,
               {
                 name: 'Untitle Wall',
-                id: _uuid(),
+                id: action.payload.group.id,
                 type: 'wall',
                 method: 'post',
                 color: {r: 252, g: 250, b: 242},
@@ -161,8 +159,8 @@ const projectReducer = (state = initialState, action) => {
             d_coverings: [
               ...state.d_coverings,
               {
-                name: 'Bedroom Covering',
-                id: _uuid(),
+                name: 'Untitle Covering',
+                id: action.payload.group.id,
                 type: 'covering',
                 method: 'post',
                 path: 'kitchen-wood.jpg',
@@ -181,8 +179,8 @@ const projectReducer = (state = initialState, action) => {
             d_floors: [
               ...state.d_floors,
               {
-                name: 'Bedroom Floor',
-                id: _uuid(),
+                name: 'Untitle Floor',
+                id: action.payload.group.id,
                 type: 'floor',
                 method: 'post',
                 color: {r: 252, g: 250, b: 242},

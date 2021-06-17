@@ -1,8 +1,8 @@
 import React from 'react';
-import styled from 'styled-components';
 import {useSelector} from 'react-redux';
-import * as theme from '../../../../app/constants/theme.js';
+import styled from 'styled-components';
 import {OpeningsItem} from './OpeningsItem.js';
+import * as theme from '../../../../app/constants/theme.js';
 
 function Openingsbar() {
   const {setting} = useSelector((state) => state.project);

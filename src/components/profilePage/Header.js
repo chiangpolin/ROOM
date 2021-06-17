@@ -1,7 +1,7 @@
 import React from 'react';
-import styled from 'styled-components';
 import {useHistory} from 'react-router-dom';
 import {useDispatch} from 'react-redux';
+import styled from 'styled-components';
 import {searchProjects, filterProjects} from '../../app/actions/index.js';
 import * as theme from '../../app/constants/theme.js';
 import {ReactComponent as LightBulbIcon} from '../../static/images/icons/lightbulb.svg';
