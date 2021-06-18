@@ -412,12 +412,12 @@ export function createBackground(
           );
           store.dispatch(
             addCanvasElement('covering', coveringDots, {
-              type: 'add',
+              tag: 'add',
               target: 'covering',
             })
           );
           store.dispatch(
-            addCanvasElement('wall', dots, {type: 'add', target: 'wall'})
+            addCanvasElement('wall', dots, {tag: 'add', target: 'wall'})
           );
           dots.length = 0;
           background.isDrawing = false;
@@ -440,18 +440,18 @@ export function createBackground(
                 dots.push(dots[0]);
                 store.dispatch(
                   addCanvasElement('floor', floorDots, {
-                    type: 'add',
+                    tag: 'add',
                     target: 'floor',
                   })
                 );
                 store.dispatch(
                   addCanvasElement('covering', coveringDots, {
-                    type: 'add',
+                    tag: 'add',
                     target: 'covering',
                   })
                 );
                 store.dispatch(
-                  addCanvasElement('wall', dots, {type: 'add', target: 'wall'})
+                  addCanvasElement('wall', dots, {tag: 'add', target: 'wall'})
                 );
                 dots.length = 0;
                 drawingLine.length = 0;
@@ -502,18 +502,18 @@ export function createBackground(
                 dots.push(dots[0]);
                 store.dispatch(
                   addCanvasElement('floor', floorDots, {
-                    type: 'add',
+                    tag: 'add',
                     target: 'floor',
                   })
                 );
                 store.dispatch(
                   addCanvasElement('covering', coveringDots, {
-                    type: 'add',
+                    tag: 'add',
                     target: 'covering',
                   })
                 );
                 store.dispatch(
-                  addCanvasElement('wall', dots, {type: 'add', target: 'wall'})
+                  addCanvasElement('wall', dots, {tag: 'add', target: 'wall'})
                 );
                 dots.length = 0;
                 drawingLine.length = 0;
@@ -552,7 +552,7 @@ export function createBackground(
               previewLine.clear();
               background.isDrawing = false;
               store.dispatch(
-                addCanvasElement('wall', dots, {type: 'add', target: 'wall'})
+                addCanvasElement('wall', dots, {tag: 'add', target: 'wall'})
               );
               dots.length = 0;
             } else {
@@ -585,7 +585,7 @@ export function createBackground(
               previewLine.clear();
               background.isDrawing = false;
               store.dispatch(
-                addCanvasElement('wall', dots, {type: 'add', target: 'wall'})
+                addCanvasElement('wall', dots, {tag: 'add', target: 'wall'})
               );
               dots.length = 0;
             } else {
@@ -651,7 +651,7 @@ export function createBackground(
                 drawingLine.length = 0;
                 background.isDrawing = false;
                 store.dispatch(
-                  addCanvasElement('wall', dots, {type: 'add', target: 'wall'})
+                  addCanvasElement('wall', dots, {tag: 'add', target: 'wall'})
                 );
                 dots.length = 0;
               }
@@ -697,7 +697,7 @@ export function createBackground(
                 drawingLine.length = 0;
                 background.isDrawing = false;
                 store.dispatch(
-                  addCanvasElement('wall', dots, {type: 'add', target: 'wall'})
+                  addCanvasElement('wall', dots, {tag: 'add', target: 'wall'})
                 );
                 dots.length = 0;
               }
@@ -715,7 +715,7 @@ export function createBackground(
           dots.push({x: position.x, y: background.startPoint.y});
           store.dispatch(
             addCanvasElement('covering', dots, {
-              type: 'add',
+              tag: 'add',
               target: 'covering',
             })
           );
@@ -737,7 +737,7 @@ export function createBackground(
               ) {
                 store.dispatch(
                   addCanvasElement('covering', dots, {
-                    type: 'add',
+                    tag: 'add',
                     target: 'covering',
                   })
                 );
@@ -788,7 +788,7 @@ export function createBackground(
               ) {
                 store.dispatch(
                   addCanvasElement('covering', dots, {
-                    type: 'add',
+                    tag: 'add',
                     target: 'covering',
                   })
                 );
@@ -815,7 +815,7 @@ export function createBackground(
           dots.push({x: position.x, y: position.y});
           dots.push({x: position.x, y: background.startPoint.y});
           store.dispatch(
-            addCanvasElement('floor', dots, {type: 'add', target: 'floor'})
+            addCanvasElement('floor', dots, {tag: 'add', target: 'floor'})
           );
           dots.length = 0;
           background.isDrawing = false;
@@ -835,7 +835,7 @@ export function createBackground(
               ) {
                 store.dispatch(
                   addCanvasElement('floor', dots, {
-                    type: 'add',
+                    tag: 'add',
                     target: 'floor',
                   })
                 );
@@ -886,7 +886,7 @@ export function createBackground(
               ) {
                 store.dispatch(
                   addCanvasElement('floor', dots, {
-                    type: 'add',
+                    tag: 'add',
                     target: 'floor',
                   })
                 );

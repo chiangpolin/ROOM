@@ -75,7 +75,7 @@ const projectReducer = (state = initialState, action) => {
       return {
         ...state,
         instruction: {
-          type: action.payload.instruction.type,
+          tag: action.payload.instruction.tag,
           target: action.payload.instruction.target,
           group: action.payload.instruction.group,
         },
@@ -90,7 +90,7 @@ const projectReducer = (state = initialState, action) => {
               ...state.d_furnitures,
               {
                 name: action.payload.group.name,
-                id: action.payload.group.id,
+                id: action.payload.id,
                 type: 'furniture',
                 method: 'post',
                 file: action.payload.group.file,
@@ -102,7 +102,7 @@ const projectReducer = (state = initialState, action) => {
               },
             ],
             instruction: {
-              type: 'add',
+              tag: 'add',
               target: 'furniture',
               group: action.payload.group,
             },
@@ -114,7 +114,7 @@ const projectReducer = (state = initialState, action) => {
               ...state.d_openings,
               {
                 name: action.payload.group.name,
-                id: action.payload.group.id,
+                id: action.payload.id,
                 type: action.payload.group.type,
                 method: 'post',
                 file: action.payload.group.file,
@@ -126,7 +126,7 @@ const projectReducer = (state = initialState, action) => {
               },
             ],
             instruction: {
-              type: 'add',
+              tag: 'add',
               target: 'opening',
               group: action.payload.group,
             },
@@ -139,7 +139,7 @@ const projectReducer = (state = initialState, action) => {
               ...state.d_walls,
               {
                 name: 'Untitle Wall',
-                id: action.payload.group.id,
+                id: action.payload.id,
                 type: 'wall',
                 method: 'post',
                 color: {r: 252, g: 250, b: 242},
@@ -148,7 +148,7 @@ const projectReducer = (state = initialState, action) => {
               },
             ],
             instruction: {
-              type: 'add',
+              tag: 'add',
               target: 'wall',
             },
           };
@@ -160,7 +160,7 @@ const projectReducer = (state = initialState, action) => {
               ...state.d_coverings,
               {
                 name: 'Untitle Covering',
-                id: action.payload.group.id,
+                id: action.payload.id,
                 type: 'covering',
                 method: 'post',
                 path: 'kitchen-wood.jpg',
@@ -168,7 +168,7 @@ const projectReducer = (state = initialState, action) => {
               },
             ],
             instruction: {
-              type: 'add',
+              tag: 'add',
               target: 'covering',
             },
           };
@@ -180,7 +180,7 @@ const projectReducer = (state = initialState, action) => {
               ...state.d_floors,
               {
                 name: 'Untitle Floor',
-                id: action.payload.group.id,
+                id: action.payload.id,
                 type: 'floor',
                 method: 'post',
                 color: {r: 252, g: 250, b: 242},
@@ -188,7 +188,7 @@ const projectReducer = (state = initialState, action) => {
               },
             ],
             instruction: {
-              type: 'add',
+              tag: 'add',
               target: 'floor',
             },
           };
@@ -210,7 +210,7 @@ const projectReducer = (state = initialState, action) => {
                 : {...furniture};
             }),
             instruction: {
-              type: 'remove',
+              tag: 'remove',
               target: 'furniture',
             },
           };
@@ -226,7 +226,7 @@ const projectReducer = (state = initialState, action) => {
                 : {...wall};
             }),
             instruction: {
-              type: 'remove',
+              tag: 'remove',
               target: 'wall',
             },
           };
@@ -242,7 +242,7 @@ const projectReducer = (state = initialState, action) => {
                 : {...covering};
             }),
             instruction: {
-              type: 'remove',
+              tag: 'remove',
               target: 'covering',
             },
           };
@@ -258,7 +258,7 @@ const projectReducer = (state = initialState, action) => {
                 : {...opening};
             }),
             instruction: {
-              type: 'remove',
+              tag: 'remove',
               target: 'opening',
             },
           };
@@ -274,7 +274,7 @@ const projectReducer = (state = initialState, action) => {
                 : {...floor};
             }),
             instruction: {
-              type: 'remove',
+              tag: 'remove',
               target: 'floor',
             },
           };
@@ -345,7 +345,7 @@ const projectReducer = (state = initialState, action) => {
             : {...furniture};
         }),
         instruction: {
-          type: 'rotate',
+          tag: 'rotate',
           target: 'furniture',
         },
         selectedGroup: {
@@ -401,7 +401,7 @@ const projectReducer = (state = initialState, action) => {
             : {...opening};
         }),
         instruction: {
-          type: 'rotate',
+          tag: 'rotate',
           target: 'opening',
         },
         selectedGroup: {

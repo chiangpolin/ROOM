@@ -80,7 +80,6 @@ export const facebookSignIn = () => async () => {
 export const signOut = () => async (dispatch) => {
   dispatch(setUser({id: '', name: '', email: '', photoURL: ''}));
   auth.signOut();
-  // alert('Sign out!');
 };
 
 export const forgetPassword = (email) => async () => {
@@ -324,7 +323,6 @@ export const shareProject = (project_id, target_id) => async (dispatch) => {
   }
   share_id.push(target_id);
   firestore.putProjectShareId(project_id, {share_id: share_id});
-  // dispatch(closeShare());
 };
 
 export const updateProject = (project_id, data) => async (dispatch) => {
@@ -477,7 +475,7 @@ export const deselectCanvasElement = (selectedGroup) => async (dispatch) => {
   }
 };
 
-// alert
+// message
 export const addMessage = (message) => ({
   type: actionTypes.ADD_MESSAGE,
   payload: {message},
@@ -579,7 +577,7 @@ export const setInstruction = (instruction) => ({
 // pixi-canvas
 export const addCanvasElement = (target, group) => ({
   type: actionTypes.ADD_CANVAS_ELEMENT,
-  payload: {target, group: {...group, id: _uuid()}},
+  payload: {target, group, id: _uuid()},
 });
 
 export const removeCanvasElement = (target, uuid) => ({

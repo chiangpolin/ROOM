@@ -116,7 +116,7 @@ function Canvas() {
     if (pixiApp) {
       switch (instruction.target) {
         case 'furniture':
-          switch (instruction.type) {
+          switch (instruction.tag) {
             case 'add':
               pixi.createFurniture(
                 pixiFurnitureContainer,
@@ -155,7 +155,7 @@ function Canvas() {
           }
           break;
         case 'floor':
-          switch (instruction.type) {
+          switch (instruction.tag) {
             case 'add':
               pixi.createFloor(
                 pixiFloorContainer,
@@ -182,7 +182,7 @@ function Canvas() {
           }
           break;
         case 'covering':
-          switch (instruction.type) {
+          switch (instruction.tag) {
             case 'add':
               pixi.createCovering(
                 pixiCoveringContainer,
@@ -209,7 +209,7 @@ function Canvas() {
           }
           break;
         case 'wall':
-          switch (instruction.type) {
+          switch (instruction.tag) {
             case 'add':
               pixi.createWall(pixiWallContainer, d_walls[d_walls.length - 1]);
               break;
@@ -231,7 +231,7 @@ function Canvas() {
           }
           break;
         case 'opening':
-          switch (instruction.type) {
+          switch (instruction.tag) {
             case 'add':
               pixi.createOpening(
                 pixiOpeningContainer,
