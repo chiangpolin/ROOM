@@ -1,8 +1,8 @@
 import React from 'react';
 import {BrowserRouter as Router, Switch, Route} from 'react-router-dom';
-import {Auth} from './Components/AuthPage/Auth.js';
-import {Profile} from './Components/ProfilePage/Profile.js';
-import {Project} from './Components/ProjectPage/Project.js';
+import {Auth} from './containers/AuthPage/Auth.js';
+import {Profile} from './containers/ProfilePage/Profile.js';
+import {Project} from './containers/ProjectPage/Project.js';
 
 function App() {
   return (
