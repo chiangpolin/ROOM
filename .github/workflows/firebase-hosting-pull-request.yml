@@ -9,6 +9,11 @@ name: Deploy to Firebase Hosting on PR
       - develop
 jobs:
   build_and_preview:
+    env:
+      REACT_APP_API_KEY: AIzaSyBFm5jjCzty19UxMkhaFt2dwklncPg68yc
+      REACT_APP_MESSAGING_SENDER_ID: 520416433358
+      REACT_APP_ID: 1:520416433358:web:31a99b716c162619216c9f
+      REACT_APP_MEASUREMENT_ID: G-SKW8MVZEKL
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -20,7 +25,3 @@ jobs:
           projectId: room-801fb
         env:
           FIREBASE_CLI_PREVIEWS: hostingchannels
-          REACT_APP_API_KEY: AIzaSyBFm5jjCzty19UxMkhaFt2dwklncPg68yc
-          REACT_APP_MESSAGING_SENDER_ID: 520416433358
-          REACT_APP_ID: 1:520416433358:web:31a99b716c162619216c9f
-          REACT_APP_MEASUREMENT_ID: G-SKW8MVZEKL
