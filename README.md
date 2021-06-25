@@ -1,7 +1,5 @@
 # Room
 
-![ ](https://firebasestorage.googleapis.com/v0/b/room-801fb.appspot.com/o/demo%2Fdemo_main.png?alt=media&token=d89412e1-6619-4775-99c4-414b3cad191a)
-
 An online designing tool integrated with Instant 3D Rendering and Drag & Drop Canvas.
 
 - Applying WebGL including `Pixi.js` & `Three.js`
