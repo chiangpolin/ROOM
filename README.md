@@ -76,6 +76,10 @@ An online designing tool integrated with Instant 3D Rendering and Drag & Drop Ca
 
 ## Future Features
 
+- Estimate cost of a room plan(furnitures, coverings, wall paint)
+- Upload color of wall paints
+- Upload texture of coverings
+
 ## Contact
 
 - Website: <https://chiangpolin.github.io/>
