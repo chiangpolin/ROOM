@@ -459,7 +459,7 @@ export const deselectCanvasElement = (selectedGroup) => async (dispatch) => {
   if (selectedGroup.type === 'window' || selectedGroup.type === 'door') {
     dispatch(
       setInstruction({
-        type: 'deselect',
+        tag: 'deselect',
         target: 'opening',
         group: selectedGroup,
       })
@@ -467,7 +467,7 @@ export const deselectCanvasElement = (selectedGroup) => async (dispatch) => {
   } else if (selectedGroup.type !== undefined) {
     dispatch(
       setInstruction({
-        type: 'deselect',
+        tag: 'deselect',
         target: selectedGroup.type,
         group: selectedGroup,
       })
