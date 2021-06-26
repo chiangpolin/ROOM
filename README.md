@@ -13,8 +13,10 @@ An online designing tool integrated with Instant 3D Rendering and Drag & Drop Ca
 ## Demo
 
 - Link: <https://room-801fb.web.app/>
-- Test Account User: user@gmail.com
-- Test Account Password: batch13
+
+- Test Account
+  - User: user@gmail.com
+  - Password: batch13
 
 ## Technologies
 
@@ -42,7 +44,7 @@ An online designing tool integrated with Instant 3D Rendering and Drag & Drop Ca
 
 ## Flow Chart
 
-![ ](https://firebasestorage.googleapis.com/v0/b/room-801fb.appspot.com/o/demo%2Fdemo_logo.png?alt=media&token=8a7ee94c-8848-4c4e-a5dc-b53722ead935)
+![ ](https://firebasestorage.googleapis.com/v0/b/room-801fb.appspot.com/o/demo%2Fflow_chart.jpeg?alt=media&token=f0740417-de48-40d2-9da8-63b5e49f2dd3)
 
 ## Features
 
@@ -77,8 +79,7 @@ An online designing tool integrated with Instant 3D Rendering and Drag & Drop Ca
 ## Future Features
 
 - Estimate cost of a room plan(furnitures, coverings, wall paint)
-- Upload color of wall paints
-- Upload texture of coverings
+- Upload texture of customized coverings
 
 ## Contact
 
